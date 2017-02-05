@@ -1,0 +1,88 @@
+<!-- logo -->
+<div class="row top-nav-bar">
+    <div class="text-left">
+    </div>
+    <div class="col-xs-9 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h4 class="text-center">学生统计</h4>
+    </div>
+</div>
+<!-- /.logo -->
+
+<div class="row user-profile-body  margin-lr-none">
+
+    <div class="row  margin-lr-none" style="margin-bottom:10px;">
+        <form id="sh_form" name="sh_form" method="get" action="?c=school&a=studentStatistic">
+            <input type="hidden" name="c" value="school"/>
+            <input type="hidden" name="a" value="studentStatistic"/>
+            
+            <input id="sh_date" class="form-control al-border-color" type="text" name="sh[date]" value="" placeholder="点击选择查看其它日期记录"/>
+        </form>
+    </div>
+
+  <div class="panel panel-default no-margin" style="padding: 0px;">
+    <div class="panel-heading al-border-color">
+        <h4><{$date|date_format:'Y年m月d日'}>学生统计</h4>
+    </div>
+    
+    <div class="panel-heading al-border-color" style="margin: 5px;">
+        <div class="row student-row  margin-lr-none">
+            <div class="form-group">
+                <label class="col-xs-6 parent-student" >到校人数：<{if $dayArriveSchoolNum}><span style="font-weight: bold;"><{$dayArriveSchoolNum}></span>人<{else}>暂无数据<{/if}></label>
+                <div class="col-xs-6 text-right"><a href="?c=school&a=classArriveStatistic&date=<{$sh.date}>" class="btn btn-info al-btn-color">详情</a></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="panel-heading no-bottom" style="margin: 5px;">
+        <div class="row student-row  margin-lr-none">
+            <div class="form-group">
+                <label class="col-xs-6 parent-student" >离校人数：<{if $dayLeaveSchoolNum}><span style="font-weight: bold;"><{$dayLeaveSchoolNum}></span>人<{else}>暂无数据<{/if}></label>
+                <div class="col-xs-6 text-right"><a href="?c=school&a=classLeaveStatistic&date=<{$sh.date}>" class="btn btn-info al-btn-color">详情</a></div>
+            </div>
+        </div>
+    </div>
+  </div>
+  
+    <div style="margin-top: 10px;">
+        <input type="button" class="btn width-100 btn-primary al-btn-color" value="签到二维码" onclick="window.location.href='?c=staff&a=signQrcode&staff_id=<{$loginUser.id}>'"/>
+    </div>
+</div>
+
+<!-- <div class="text-center" style="padding: 0px 10px;"><a href="?c=html&a=monitor" class="btn btn-info" style="width: 100%;">视频监控管理</a></div> -->
+
+<script type="text/javascript">
+
+var old_date = '<{$sh.date}>';
+
+$(function() {
+    //初始化日期控件
+    var opt = {
+        preset: 'date', //日期
+        theme: 'android-ics light', //皮肤样式
+        display: 'modal', //显示方式
+        mode: 'scroller', //日期选择模式
+        lang:'zh',
+        dateFormat: 'yyyy-mm-dd', // 日期格式
+        setText: '确定', //确认按钮名称
+        cancelText: '取消',//取消按钮名籍我
+        dateOrder: 'yyyymmdd', //面板中日期排列格式
+        showNow: false,
+        maxDate: new Date(),
+    };
+    $("#sh_date").mobiscroll(opt);
+    
+    $('#sh_date').change(function() {
+        var new_date = $('#sh_date').val();
+        
+        if (new_date != old_date) {
+            old_date = new_date;
+            $('#sh_form').submit();
+        }
+        
+    });
+    
+});
+</script>

@@ -1,0 +1,80 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li>
+      <a href="?c=school&=index">学校一览</a>
+    </li>
+    <li class="active"><{if $smarty.get.id}>编辑<{else}>新增<{/if}>学校</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <form name="data_form" method="post">
+          <table class="table table-bordered table-form">
+              <tr>
+                <th class="must">名称：</th>
+                <td>
+                  <input type="text" name="form[title]" size="30" class="form-control text" value="<{$form.title|escape}>"/>
+                  <{brave_error_hint errors=$errors name=title}>
+                </td>
+              </tr>
+              <tr>
+                <th class="must">电话：</th>
+                <td>
+                  <input type="text" name="form[phone]" size="30" class="form-control text" value="<{$form.phone|escape}>"/>
+                  <{brave_error_hint errors=$errors name=phone}>
+                </td>
+              </tr>
+              <tr>
+                <th class="must">地址：</th>
+                <td>
+                  <input type="text" name="form[address]" size="30" class="form-control text" value="<{$form.address|escape}>"/>
+                  <{brave_error_hint errors=$errors name=address}>
+                </td>
+              </tr>
+              <tr>
+                <th class="must">超级管理员名称：</th>
+                <td>
+                  <input type="text" name="form[admin_login]" size="30" class="form-control text" value="<{$form.admin_login|escape}>"/>
+                  <{brave_error_hint errors=$errors name=admin_login}>
+                  <span id="helpBlock" class="help-block">学校端管理系统登录使用，如：admin</span>
+                </td>
+              </tr>
+              <tr>
+                <th class="<{if !$smarty.get.id}>must<{/if}>">超级管理员密码：</th>
+                <td>
+                  密码：<input type="password" name="form[admin_password]" size="30" class="form-control text" value="<{$form.admin_password|escape}>"/>
+                  <{brave_error_hint errors=$errors name=admin_password}>
+                  <br>
+                  确认：<input type="password" name="form[admin_password_confirm]" size="30" class="form-control text" value="<{$form.admin_password_confirm|escape}>"/>
+                  <{brave_error_hint errors=$errors name=admin_password_confirm}>
+                  <span id="helpBlock" class="help-block">不修改情况下可留空</span>
+                </td>
+              </tr>
+              <tr>
+                  <th class="must">有效状态：</th>
+                  <td>
+                    <{ace_switch name="form[status]" value=$form.status code="1"}>
+                  </td>
+              </tr>
+              <tr class="option">
+                <th></th>
+                <td>
+                  <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                </td>
+              </tr>
+          </table>
+      </form>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->

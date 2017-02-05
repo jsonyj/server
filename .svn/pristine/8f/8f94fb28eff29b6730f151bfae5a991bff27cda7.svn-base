@@ -1,0 +1,110 @@
+<!-- logo -->
+<div class="row top-nav-bar">
+    <div class="text-left">
+    </div>
+    <div class="col-xs-9 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h4 class="text-center">领取页面</h4>
+    </div>
+</div>
+<!-- /.logo -->
+
+<div class="row user-profile-body">
+
+  <div class="panel panel-default no-margin">
+    <div class="panel-heading no-bottom">
+            <div class="row">
+            <{if $detectionClaimSchoolList}>
+                <{foreach from=$detectionClaimSchoolList item=claim}>
+                <div class="col-xs-6" style="padding-bottom: 10px;">
+                    <img class="img-responsive img-circle-avatar1" onclick="claim(<{$claim.id}>);" src="<{if $claim.file_path}><{$smarty.const.APP_OSS_URL}><{$claim.file_path}><{else}>http://tse1.mm.bing.net/th?id=OIP.M76446756dcb348b279464f77687a43b9o0&pid=15.1<{/if}>">
+                </div>
+                <{/foreach}>
+            <{else}>
+                <div class="alert alert-danger text-center" role="alert" style="font-size: 15px;">暂无数据</div>
+            <{/if}>
+            </div>
+            <br />
+    </div>
+    
+  </div>
+  <br>
+
+</div>
+
+<!-- 绑定学生信息 -->
+<div class="modal fade msg-modal" id="claim_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+          <div class="panel-heading no-bottom">
+            <form id="claim_form" method="post">
+                <input type="hidden" name="complete" value="complete">
+                <input id="claim-id" type="hidden" name="form[id]" >
+                
+                <div id="parent-role">
+                    <div class="form-group">
+                        <label for="relation-select">班级：</label>
+                        <select class="form-control" id="class" onchange="selectClass(this.value)" name="form[class_id]">
+                            <{brave_html_select code=$classList value=$form.value|escape empty=true}>
+                        </select>
+                    </div>
+                    <div class="form-group" id="relation_title_div">
+                      <label for="form-relation-title">学生姓名：</label>
+                      <select id="student" class="form-control" name="form[student_id]">
+                          <option value="">------</option>
+                      </select>
+                    </div>
+                </div>
+            </form>
+          </div>
+      </div>
+      <div class="dialog-footer text-center" style="padding-bottom: 15px;">
+        <button type="button" class="btn btn-md btn-default" id="comment-close" onclick="cancel(event);" >取消</button> 
+        <button type="button" class="btn btn-md btn-danger" id="comment_button" onclick="commentAjax();" >确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+function claim(id){
+    $('#claim-id').val(id);
+    $('#claim_modal').modal('show');
+}
+
+function selectClass(class_id,callFunction) {
+    $.get('?c=claim&a=selectStudent', {'class_id': class_id}, function(html){
+        $("#student").html('<option value="">------</option>' + html);
+        if(typeof(callFunction) !="undefined" &&  typeof(callFunction)=='function'){
+            callFunction();
+        }
+    });
+}
+
+function cancel(){
+    $('#claim_modal').modal('hide');
+}
+
+function commentAjax(){
+    $.ajax({
+        type: "post",
+        url: "?c=claim&a=claimReceiveAjax",
+        data: $("#claim_form").serialize(),
+        dataType: "json",
+        success:function(data){
+            if(data.code == 0){
+                //关闭模态框
+                $("#claim_modal").modal('hide');
+                window.location.reload();
+            }else{
+                $.notify(data.errors); //回填错误信息
+            }
+        }
+    });
+}
+
+</script>

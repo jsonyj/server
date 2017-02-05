@@ -1,0 +1,133 @@
+<!-- logo -->
+<div class="row top-nav-bar">
+    <div class="text-left">
+    </div>
+    <div class="col-xs-9 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h4 class="text-center">签到统计</h4>
+    </div>
+</div>
+<!-- /.logo -->
+
+<div class="row user-profile-body  margin-lr-none">
+
+    <div class="row  margin-lr-none" style="margin-bottom:10px;">
+        <form id="sh_form" name="sh_form" method="get" action="?c=school&a=schoolMonthSignStatistic">
+            <input type="hidden" name="c" value="school"/>
+            <input type="hidden" name="a" value="schoolMonthSignStatistic"/>
+            
+            <input id="sh_date" class="form-control" type="text" name="sh[date]" value="" placeholder="点击选择查看其它日期记录"/>
+        </form>
+    </div>
+
+    <div class="panel-default no-margin">
+        <div class="text-center">
+            <h4><{$date|date_format:'Y年m月'}>职工签到情况</h4>
+        </div>
+    </div>
+
+    <div class="panel-group" id="accordion">
+        <table class="table table-bordered text-center" style="font-size: 14px;">
+            <tr>
+                <th colspan="2" class="text-center">角色</th>
+                <th class="text-center">迟到</th>
+                <th class="text-center">早退</th>
+                <th class="text-center">缺勤</th>
+                <th class="text-center">异常</th>
+            </tr>
+            
+            <{foreach from=$monthSignStatisticList item=sign}>
+            
+            <{if $sign.type == $smarty.const.ACT_SCHOOL_DOCTOR}>
+            <tr>
+                <td colspan="2">保健医生（<{$sign.name}>）</td>
+                <td>
+                    <{if $sign.monthLateNum}><{$sign.monthLateNum}><{else}>0<{/if}>
+                </td>
+                <td>
+                    <{if $sign.monthEarlyNum}><{$sign.monthEarlyNum}><{else}>0<{/if}>
+                </td>
+                <td>
+                    <{if $sign.monthUninNum}><{$sign.monthUninNum}><{else}>0<{/if}>
+                </td>
+                <td>
+                    <{if $sign.monthUnoutNum}><{$sign.monthUnoutNum}><{else}>0<{/if}>
+                </td>
+            </tr>
+            <{/if}>
+            
+            <{if $sign.type == $smarty.const.ACT_SCHOOL_SUPPORTER}>
+            <tr>
+                <td colspan="2">后勤人员（<{$sign.name}>）</td>
+                <td>
+                    <{if $sign.monthLateNum}><{$sign.monthLateNum}><{else}>0<{/if}>
+                </td>
+                <td>
+                    <{if $sign.monthEarlyNum}><{$sign.monthEarlyNum}><{else}>0<{/if}>
+                </td>
+                <td>
+                    <{if $sign.monthUninNum}><{$sign.monthUninNum}><{else}>0<{/if}>
+                </td>
+                <td>
+                    <{if $sign.monthUnoutNum}><{$sign.monthUnoutNum}><{else}>0<{/if}>
+                </td>
+            </tr>
+            <{/if}>
+            
+            <{if $sign.type == $smarty.const.ACT_SCHOOL_TEACHER}>
+            <tr>
+                <td><{$sign.title}></td>
+                <td><{$sign.name}></td>
+                <td>
+                    <{if $sign.monthLateNum}><{$sign.monthLateNum}><{else}>0<{/if}>
+                </td>
+                <td>
+                    <{if $sign.monthEarlyNum}><{$sign.monthEarlyNum}><{else}>0<{/if}>
+                </td>
+                <td>
+                    <{if $sign.monthUninNum}><{$sign.monthUninNum}><{else}>0<{/if}>
+                </td>
+                <td>
+                    <{if $sign.monthUnoutNum}><{$sign.monthUnoutNum}><{else}>0<{/if}>
+                </td>
+            </tr>
+            <{/if}>
+            <{/foreach}>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+var old_date = '<{$sh.date}>';
+
+$(function() {
+    //初始化日期控件
+    var opt = {
+        preset: 'date', //日期
+        theme: 'android-ics light', //皮肤样式
+        display: 'modal', //显示方式
+        mode: 'scroller', //日期选择模式
+        lang:'zh',
+        dateFormat: 'yyyy-mm', // 日期格式
+        setText: '确定', //确认按钮名称
+        cancelText: '取消',//取消按钮名籍我
+        dateOrder: 'yyyymm', //面板中日期排列格式
+        showNow: false,
+        maxDate: new Date(),
+    };
+    $("#sh_date").mobiscroll(opt);
+    
+    $('#sh_date').change(function() {
+        var new_date = $('#sh_date').val();
+        
+        if (new_date != old_date) {
+            old_date = new_date;
+            $('#sh_form').submit();
+        }
+        
+    });
+    
+});
+</script>

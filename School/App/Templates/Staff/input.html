@@ -1,0 +1,139 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'><i class="fa fa-arrow-left"></i></a>&nbsp;&nbsp;
+    <li>
+      <a href="?c=staff&a=index">职工一览</a>
+    </li>
+    <li class="active"><{if $smarty.get.id}>编辑<{else}>新增<{/if}>职工</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <form name="data_form" method="post">
+          <{if $form.id}><input type="hidden" name="form[id]" value="<{$form.id|escape}>" /><{/if}>
+          <table class="table table-bordered table-form">
+              <tr>
+                <th class="must">姓名：</th>
+                <td>
+                  <input type="text" name="form[name]" size="30" class="form-control text" value="<{$form.name|escape}>"/>
+                  <{brave_error_hint errors=$errors name=name}>
+                </td>
+              </tr>
+              <tr>
+                  <th class="must">电话：</th>
+                  <td>
+                    <input type="text" name="form[phone]" size="30" class="form-control text" value="<{$form.phone|escape}>"/>
+                  <{brave_error_hint errors=$errors name=phone}>
+                  </td>
+              </tr>
+              <tr>
+                  <th class="must">职工类型：</th>
+                  <td>
+                      <select name="form[type]" class="form-control text" onchange="signshowhidde(this);">
+                          <{brave_html_select maxSize='30' code=$code.staff_type value=$form.type empty=true}>
+                      </select>
+                      <{brave_error_hint errors=$errors name=type}>
+                  </td>
+              </tr>
+              <tr id ="class-id">
+                  <th class="must">班级：</th>
+                  <td>
+                      <select name="form[class_id]" class="form-control text">
+                          <{brave_html_select maxSize='30' code=$class value=$form.class_id empty=true}>
+                      </select>
+                      <{brave_error_hint errors=$errors name=class_id}>
+                  </td>
+              </tr>
+<!--               <tr id="sign-type">
+                  <th class="must">签到类型：</th>
+                  <td>
+                      <select name="form[sign_type_id]" class="form-control text">
+                          <{brave_html_select maxSize='30' code=$sign_type value=$form.sign_type_id empty=true}>
+                      </select>
+                      <{brave_error_hint errors=$errors name=sign_type_id}>
+                  </td>
+              </tr> -->
+              <tr>
+                  <th class="must">签到时间：</th>
+                  <td>
+                      <input type="text" readonly="readonly" class="form-control text" name="form[in_time]" value="<{$form.in_time|date_format:'H:i'}>" id="input-daterange-in"/>
+                      <{brave_error_hint errors=$errors name=in_time}>
+                  </td>
+              </tr>
+              <tr>
+                  <th class="must">签退时间：</th>
+                  <td>
+                      <input type="text" readonly="readonly" class="form-control text" name="form[out_time]" value="<{$form.out_time|date_format:'H:i'}>"  id="input-daterange-out"/>
+                      <{brave_error_hint errors=$errors name=out_time}>
+                  </td>
+              </tr>
+              <tr id="sign-type">
+                  <th class="must">有效状态：</th>
+                  <td>
+                    <{ace_switch name="form[status]" value=$form.status code="1"}>
+                  </td>
+              </tr>
+              <tr class="option">
+                <th></th>
+                <td>
+                  <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                </td>
+              </tr>
+          </table>
+      </form>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+$(function(){
+    var type = '<{$form.type}>';
+    if(type != ''){
+        if(type == <{$smarty.const.ACT_SCHOOL_HEADMASTER}>){
+            // $('#sign-type').hide();
+            $('#class-id').hide();
+        }else if(type == <{$smarty.const.ACT_SCHOOL_TEACHER}>){
+            // $('#sign-type').show();
+            $('#class-id').show();
+        }else{
+            // $('#sign-type').show();
+            $('#class-id').hide();
+        }
+    }
+
+
+    $('#input-daterange-in, #input-daterange-out').datetimepicker({
+        autoclose:true,
+        format:"hh:ii",
+        language:"zh-CN",
+        todayBtn:true,
+        minuteStep:1,
+        startView:1,
+        maxView:0,
+    });
+});
+
+function signshowhidde(e){
+    if(e.value == <{$smarty.const.ACT_SCHOOL_HEADMASTER}>){
+        // $('#sign-type').hide();
+        $('#class-id').hide();
+    }else if(e.value == <{$smarty.const.ACT_SCHOOL_TEACHER}>){
+        // $('#sign-type').show();
+        $('#class-id').show();
+    }else{
+        // $('#sign-type').show();
+        $('#class-id').hide();
+    }
+}
+</script>

@@ -1,0 +1,54 @@
+<!-- logo -->
+<div class="row top-nav-bar">
+    <div class="text-left">
+    </div>
+    <div class="col-xs-9 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h4 class="text-center">选择学生</h4>
+    </div>
+</div>
+<!-- /.logo -->
+
+<div class="row row-content">
+    <div class="panel-heading" style="border-bottom: 1px solid;padding: 0px;">
+            <div class="form-group">
+                <h4>学生姓名：<{$student_name}></h4>
+            </div>
+    </div>
+    <h4 style="margin-top: 10px;">请选择</h4>
+    <div class="text-center col-xs-12">
+        <{foreach from=$student_list item=student}>
+            <a href="javascript:void(0);" onclick="javascript:chooseStudent(<{$student.id}>, '<{$student.school_title}><{$student.class_title}>', this)"><div class="alert alert-success binding-div" role="alert"><{$student.school_title}> <{$student.class_title}></div></a>
+        <{/foreach}>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+function chooseStudent(sid, class_title ,btn) {
+    showConfirmDialog('确定绑定'+class_title+'的小孩吗？', function() {
+        var l = Ladda.create(btn);
+        l.start();
+        $.post('?c=bind&a=confirmStudent', {'sid': sid}, function(resp) {
+            if(resp.code == 0) {
+                location.href = '?c=index&a=message';
+            }
+            else if(resp.code == 302) {
+                location.href = '?c=bind&a=validParentPhone&sid='+resp.sid+'&pid='+resp.pid;
+            }
+            else {
+                toast(resp.message);
+            }
+        }, 'json').always(function() {
+            l.stop();
+        });
+    }, function() {
+
+    });
+
+}
+
+</script>

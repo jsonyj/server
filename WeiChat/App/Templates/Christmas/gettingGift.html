@@ -1,0 +1,98 @@
+    <div class="gift-list-top">
+        <img src="img/gift_top.jpg" class="gift-img"/>
+    </div>
+    <div class="gift-list-body"style="top:140px;">
+        <div class="al-gift-list">
+            <{foreach from=$gettingGiftList item=gettingGift name=gettingGifts}>
+
+                <div class="col-xs-12 text-center rlb-padding-5">
+                    <div class="col-xs-3 rl-padding-5">
+                        <img src="<{if $gettingGift.giving_studentImg}><{$smarty.const.APP_OSS_URL}><{$gettingGift.giving_studentImg}><{else}>img/baby_img.png<{/if}>" class="gift-img gift-shape"/>
+                        <span><{$gettingGift.giving_studentName}></span>
+                    </div>
+                    <div class="col-xs-3 magrin-top15 giving-row">
+                        <!-- <span class="giving-row">
+                            <img src="img/row1.png" class="gift-img">
+                        </span> -->
+                        <!-- <p class="tips1">赠送了</p> -->
+                        赠送了
+                    </div>
+                    <div class="col-xs-3 rl-padding-5">
+                        <img src="<{$smarty.const.APP_OSS_URL}><{$gettingGift.gift_img}>" class="gift-img gift-shape"/>
+                        <span><{$gettingGift.gift_name}></span>
+                    </div>
+                        
+                    <div class="col-xs-2 btn <{if $getGivingNum>0}>
+                        btn-green-bk<{else}>btn-gray-bk<{/if}> giving-btn rl-padding-5 magrin-top15" onclick="<{if $getGivingNum>0}>window.location.href='?c=christmas&a=givingGift&studentId=<{$studentId}>&classId=<{$classId}>&returnStudentId=<{$gettingGift.giving_studentId}>&type=1'<{else}>tips()<{/if}>">回赠
+                    </div>        
+                </div>
+                <div class="col-xs-12 al-border-1 <{if $smarty.foreach.gettingGifts.iteration==count($gettingGiftList)}>hidden<{/if}>"></div> 
+            <{/foreach}>
+        </div>
+        <{if count($gettingGiftList)>3}>
+            <div class="col-xs-12 rl-padding-0">
+                <img src="img/gift_bottom.png" class="gift-img"/>
+                <div class="gettingGift-num col-xs-7">总共收到了<{$gettingGiftNum.gift_num}>份礼物</div>
+                <div class="gettingGift-tips col-xs-5">圣诞快乐</div>
+            </div>
+        <{/if}>
+    </div>
+
+
+    <{if count($gettingGiftList) <= 3}>
+        <div class="gift-list-bottom">
+            <img src="img/gift_bottom.png" class="gift-img"/>
+            <div class="gettingGift-num col-xs-7">总共收到了<{$gettingGiftNum.gift_num}>份礼物</div>
+            <div class="gettingGift-tips col-xs-5">圣诞快乐</div>
+        </div>
+    <{/if}>
+
+
+    <div class="modal fade " id="classmates-tips" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <span class="close_bi hidden" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></span>
+                <div class="modal-body" style="height:50px;text-indent: 1em;">
+                </div>
+                <div class="dialog-footer text-center" style="padding-bottom: 15px;padding-bottom: 20px;">
+                <button type="button" class="btn btn-md btn-default" id="comment-close" onclick="cancel(event);" >取消</button> 
+                </div>
+            </div>
+        </div>
+    </div>
+        <!--底部导航条-->
+    <footer class="footer">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+            <a href="?c=parent&a=index&studentId=<{$student.id}>" class="<{if $smarty.get.a ==index && $smarty.get.c == parent}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+
+            <!--跳转到接送报告-->
+            <a href="?c=parent&a=report&studentId=<{$student.id}>&type=<{$smarty.const.REPORT_TYPE_DAY}>" class="<{if $smarty.get.a ==report}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe616;</i><div>报告</div></a>
+
+
+            <!--跳转到查询-->
+            <a href="?c=query&a=index&studentId=<{$student.id}>" class="<{if $smarty.get.a ==index && $smarty.get.c==query}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe617;</i><div>查询</div></a>
+
+
+            <!--跳转到关系绑定-->
+            <a href="?c=group&a=index&id=<{$student.id}>" class="<{if $smarty.get.a ==index && $smarty.get.c==group}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>家庭管理</div></a>
+            
+            <!--跳转到电话绑定-->
+            <a href="?c=public&a=messageIndex&studentId=<{$student.id}>"><span class="xiaoxi-tishi hidden"></span><i class="iconfont iconfont-color-hei">&#xe614;</i><div>消息</div></a>
+        </div>
+    </footer>
+
+    <script>
+        function tips(){
+            $("#classmates-tips").modal('show');
+                $('#classmates-
+                    ').find('.modal-dialog').css({  
+                'margin-top':'150px'});
+                $('.modal-body').html("亲爱的，你的礼物已经赠送完，不能再赠送了哦。");
+        }
+
+        function cancel(){
+          $('#classmates-tips').modal('hide');
+        }
+    </script>

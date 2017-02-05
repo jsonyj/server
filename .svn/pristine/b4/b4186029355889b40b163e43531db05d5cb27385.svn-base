@@ -1,0 +1,337 @@
+<div class="row top-nav-bar">
+    <div class="col-xs-1 text-left">
+        <a class="btn btn-sm on-active padding-left-0" href="?c=user"><i class="iconfont">&#xe600;</i></a>
+    </div>
+    <div class="col-xs-8 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h5 class="text-center margin-bottom-0">宝贝留言</h5>
+    </div>
+</div>
+
+<div class="panel panel-default panel-margin">
+    <div class="panel-heading padding-left-0 padding-right-0">
+        <div class="row">
+            <div class="col-xs-3 padding-5"><img src="<{if $student.studentDetectionImg.file_path}><{$smarty.const.APP_OSS_URL}><{$student.studentDetectionImg.file_path}><{else}>http://tse1.mm.bing.net/th?id=OIP.M76446756dcb348b279464f77687a43b9o0&pid=15.1<{/if}>" class=" img-circle-avatar" ></div>
+             <div class="col-xs-9 padding-5">
+                 <p><{$student.name}> <{$student.school_title}> <{$student.class_title}></p>
+                 <hr>
+                 <p>身高：<{if $student.studentDetection.height}><{$student.studentDetection.height/10}>厘米<{else}>暂无数据<{/if}></p>
+                 <hr>
+                 <p>体重：<{if $student.studentDetection.weight}><{$student.studentDetection.weight/1000}>公斤<{else}>暂无数据<{/if}></p>
+             </div>
+         </div>
+    </div>
+</div>
+
+<div class="btn-group width-100" role="group" aria-label="...">
+  <button type="button" class="btn btn-default width-50 border-radius-0" onclick="textMessage()"><i class="iconfont">&#xe60f;</i> 文字留言</button>
+  <button type="button" class="btn btn-default width-50 border-radius-0" onclick="audioMessage()"><i class="iconfont">&#xe60b;</i> 语音留言</button>
+</div>
+
+<div class="list-group list-group-message" id="message-list">
+  <{if $messageList}>
+    <{foreach from=$messageList item=message}>
+      <{if $message.type == $smarty.const.MESSAGE_TYPE_TEXT}>
+        <{include file="text_item.html"}>
+      <{else if $message.type == $smarty.const.MESSAGE_TYPE_VOICE}>
+        <{include file="voice_item.html"}>
+      <{/if}>
+    <{/foreach}>
+  <{else}>
+    <div class="row row-content" id="empty-message-list">
+      <div class="alert alert-info" role="alert">暂无宝贝留言，请点击按钮添加</div>
+    </div>
+  <{/if}>
+</div>
+
+<div id="audio-player" class="hidden"></div>
+
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script>
+
+var recoderStatus = false;
+var audioPlayStatus = false;
+var audioPlayer = null;
+var audioLocalId = null;
+var recorderDialog = null;
+var textDialog = null;
+
+<{if $signPackage}>
+
+wx.config({
+    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+    appId: '<{$smarty.const.WX_APP_ID}>', // 必填，公众号的唯一标识
+    timestamp: <{$signPackage.timestamp}>, // 必填，生成签名的时间戳
+    nonceStr: '<{$signPackage.nonceStr}>', // 必填，生成签名的随机串
+    signature: '<{$signPackage.signature}>',// 必填，签名，见附录1
+    jsApiList: ['startRecord', 'stopRecord', 'playVoice', 'pauseVoice', 'stopVoice', 'onVoicePlayEnd', 'uploadVoice', 'onVoiceRecordEnd', 'downloadVoice'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+});
+
+<{/if}>
+
+function textMessage() {
+  textDialog = BootstrapDialog.show({
+    title: '',
+    cssClass: 'dialog-no-title',
+    message: '<div><textarea id="textarea-message-text" class="text-message-textarea" placeholder="小诺会把这个留言在晨检时告诉宝贝，请限制在20字以内" onkeyup="checkTextMessage(this)"></textarea></div>',
+    onshow: function(dialog) {
+        dialog.getButton('text-message-btn-ok').disable();
+    },
+    buttons: [{
+      id: 'btn-cancel',
+      label: '取消',
+      cssClass: 'btn btn-default',
+      autospin: false,
+      action: function(dialogRef){
+          dialogRef.close();
+      }
+    },
+    {
+      id: 'text-message-btn-ok',
+      label: '确定',
+      cssClass: 'btn btn-danger', 
+      autospin: false,
+      action: function(dialogRef){
+          $.post('?c=message&a=saveMessage', {'form[student_id]':<{$student.id}>, 'form[content]':$('#textarea-message-text').val()}, function(resp) {
+              if(resp.code == 0) {
+                  //增加文本消息
+                  $('#empty-message-list').remove();
+                  $('#message-list').prepend(resp.html);
+              } else {
+                  alert(resp.message);
+              }
+          }, 'json');
+
+          dialogRef.close();
+      }
+    }]
+  });
+}
+
+function audioMessage() {
+
+  recorderDialog = BootstrapDialog.show({
+    title: '',
+    cssClass: 'dialog-no-title',
+    message: '<div id="dialog-audio-recorder"><div id="recorder-audio-player">请点击按钮开始录音（请限制在 5 秒以内，超出部分，小诺说不完哦）</div><div id="dialog-audio-recorder-btn" class="width-100 text-center"><button type="button" class="btn btn-lg btn-default" onclick="recorder(this)"><i class="iconfont">&#xe610;</i> 开始录音</button></div></div>',
+    onshow: function(dialog) {
+        dialog.getButton('voice-message-btn-ok').disable();
+    },
+    buttons: [{
+      id: 'btn-cancel',
+      label: '取消',
+      cssClass: 'btn btn-default',
+      autospin: false,
+      action: function(dialogRef){
+          if(audioPlayStatus) {
+            audioPlayStatus = false;
+            wx.stopVoice({
+                localId: audioLocalId // 需要停止的音频的本地ID，由stopRecord接口获得
+            });
+          }
+          dialogRef.close();
+      }
+    },
+    {
+      id: 'voice-message-btn-ok',
+      label: '确定',
+      cssClass: 'btn btn-danger', 
+      autospin: false,
+      action: function(dialogRef){
+          if(audioPlayStatus) {
+            audioPlayStatus = false;
+            wx.stopVoice({
+                localId: audioLocalId // 需要停止的音频的本地ID，由stopRecord接口获得
+            });
+          }
+          wx.uploadVoice({
+              localId: audioLocalId, // 需要上传的音频的本地ID，由stopRecord接口获得
+              isShowProgressTips: 1, // 默认为1，显示进度提示
+              success: function (res) {
+                  var serverId = res.serverId; // 返回音频的服务器端ID
+                  $.get('?c=message&a=downloadVoice&studentId=<{$student.id}>&serverId=' + serverId, function(resp) {
+                      if(resp.code == 0) {
+                          //增加语音消息
+                          $('#empty-message-list').remove();
+                          $('#message-list').prepend(resp.html);
+                      } else {
+                          alert(resp.message);
+                      }
+                  }, 'json');
+                  
+              }
+          });
+          dialogRef.close();
+      }
+    }]
+  });
+}
+
+function recorder(btn) {
+  if(recoderStatus) {
+    recoderStatus = false;
+    $(btn).removeClass('btn-danger');
+    $(btn).addClass('btn-default');
+    $(btn).html('<i class="iconfont">&#xe610;</i> 开始录音</button>');
+
+    wx.stopRecord({
+        success: function (res) {
+            audioLocalId = res.localId;
+            $('#recorder-audio-player').html('<div class="audio-message" onclick="audioPlay(this, \'' + audioLocalId + '\')"><img src="img/audio.gif"></div>');
+            recorderDialog.enableButtons(true);
+        }
+    });
+  } else {
+    recoderStatus = true;
+    $(btn).removeClass('btn-default');
+    $(btn).addClass('btn-danger');
+    $(btn).html('<i class="iconfont">&#xe611;</i> 停止录音</button>');
+    $('#recorder-audio-player').html('录音中...');
+
+    wx.startRecord();
+
+    wx.onVoiceRecordEnd({
+        // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+        complete: function (res) {
+            audioLocalId = res.localId;
+            $('#recorder-audio-player').html('<div class="audio-message" onclick="audioPlay(this, \'' + audioLocalId + '\')"><img src="img/audio.gif"></div>');
+            recorderDialog.enableButtons(true);
+
+            recoderStatus = false;
+            $(btn).removeClass('btn-danger');
+            $(btn).addClass('btn-default');
+            $(btn).html('<i class="iconfont">&#xe610;</i> 开始录音</button>');
+        }
+    });
+  }
+}
+
+function audioPlay(o, id) {
+  
+  if(audioPlayer == null) {
+    audioPlayer = o;
+  } else {
+    $(audioPlayer).html('<img src="img/audio.gif">');
+    audioPlayer = o;
+  }
+  
+  if(audioPlayStatus) {
+    audioPlayStatus = false;
+    wx.stopVoice({
+        localId: id // 需要停止的音频的本地ID，由stopRecord接口获得
+    });
+  } else {
+    audioPlayStatus = true;
+    $(o).html('<img src="img/audio-ani.gif">');
+    wx.playVoice({
+        localId: id // 需要播放的音频的本地ID，由stopRecord接口获得
+    });
+
+    wx.onVoicePlayEnd({
+      success: function (res) {
+        if(audioPlayer != null) {
+          $(audioPlayer).html('<img src="img/audio.gif">');
+        }
+      }
+    });
+  }
+}
+
+function checkTextMessage(o) {
+  if($(o).val() == null || $(o).val().trim().length == 0) {
+    textDialog.getButton('text-message-btn-ok').disable();
+  } else {
+    textDialog.enableButtons(true);
+  }
+}
+
+function downloadAudioPlay(o, serverId) {
+  if(audioPlayer == null) {
+    audioPlayer = o;
+  } else {
+    $(audioPlayer).html('<img src="img/audio.gif">');
+    if(audioPlayStatus && audioPlayer != o) {
+      wx.stopVoice({
+        localId: audioLocalId // 需要停止的音频的本地ID，由stopRecord接口获得
+      });
+      audioPlayStatus = false;
+    }
+    audioPlayer = o;
+  }
+  
+  if(audioPlayStatus) {
+    audioPlayStatus = false;
+    wx.stopVoice({
+        localId: audioLocalId // 需要停止的音频的本地ID，由stopRecord接口获得
+    });
+  } else {
+    wx.downloadVoice({
+        serverId: serverId, // 需要下载的音频的服务器端ID，由uploadVoice接口获得
+        isShowProgressTips: 1, // 默认为1，显示进度提示
+        success: function (res) {
+            audioLocalId = res.localId; // 返回音频的本地ID
+
+            audioPlayStatus = true;
+            $(o).html('<img src="img/audio-ani.gif">');
+            wx.playVoice({
+                localId: audioLocalId // 需要播放的音频的本地ID，由stopRecord接口获得
+            });
+
+            wx.onVoicePlayEnd({
+              success: function (res) {
+                if(audioPlayer != null) {
+                  $(audioPlayer).html('<img src="img/audio.gif">');
+                }
+              }
+            });
+        }
+    });
+  }
+
+}
+
+function audioPlayFromUrl(o, url) {
+  if(audioPlayer == null) {
+    audioPlayer = o;
+  } else {
+    $(audioPlayer).html('<img src="img/audio.gif">');
+    if(audioPlayStatus && audioPlayer != o) {
+      $('#audio-player').html('');
+      audioPlayStatus = false;
+    }
+    audioPlayer = o;
+  }
+  
+  if(audioPlayStatus) {
+    audioPlayStatus = false;
+    $('#audio-player').html('');
+    $(o).html('<img src="img/audio.gif">')
+  } else {
+    audioPlayStatus = true;
+    $('#audio-player').html('<audio src="' + url + '" autoplay="autoplay"></audio>');
+    $(o).html('<img src="img/audio-ani.gif">')
+  }
+}
+
+function deleteMessage(messageId, btn) {
+  showConfirmDialog('确定删除留言？', function() {
+    var l = Ladda.create(btn);
+    l.start();
+    $.post('?c=message&a=delete&', {messageId:messageId, studentId:<{$student.id}>}, function(resp) {
+      if(resp.code == 0) {
+        $('#list-group-item-message-' + messageId).remove();
+      } else {
+        toast(resp.message);
+      }
+    }, 'json').always(function() {
+      l.stop();
+    });
+  }, function() {
+    
+  });
+}
+
+</script>

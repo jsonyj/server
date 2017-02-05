@@ -1,0 +1,46 @@
+   <div class="al-noticeDiv">
+      <hr class="al-hr-bottom">
+      <{foreach from=$schoolTeacherList item=val}>
+       <div class="container">
+        <a class="al-a-color" href="?c=school&a=staffMessageHistory&staff_id=<{$val.staff_id}>">
+          <div class="col-xs-12 al-noticeInfo al-classNotice">
+              <div class="col-xs-5">
+                <{$val.title}>：
+              </div>
+              <div class="col-xs-7">
+                <{$val.name}>老师
+              </div>              
+          </div>
+        </a>
+      </div>
+      <hr class="al-hr-bottom">
+      <{/foreach}>
+    </div>
+    
+
+    
+    
+    
+    <div id="audio-player" class="hidden"></div>
+
+
+    <div class="margin-top-50 height-di-w  clear-both"></div>
+    <!--底部导航条-->
+    <footer class="footer footer_school">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+            <a href="?c=school&a=schoolStatistic&statistic_id=<{$loginUser.id}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+            <!--跳转到发布通知-->
+            <a href="?c=school&a=deliverNotice&statistic_id=<{$loginUser.id}>" class="<{if $smarty.get.a ==deliverNotice && $smarty.get.c==school}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>发送通知</div></a>
+
+            <!--跳转到留言消息-->
+        </div>
+    </footer>
+    
+    
+    <!-- 退回 -->
+
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script>

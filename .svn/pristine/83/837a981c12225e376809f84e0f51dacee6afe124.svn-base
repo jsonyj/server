@@ -1,0 +1,77 @@
+<div class="row top-nav-bar">
+    <div class="col-xs-1 text-left">
+        <a class="btn btn-sm on-active padding-left-0" href="?c=index&a=bind"><i class="iconfont">&#xe600;</i></a>
+    </div>
+    <div class="col-xs-8 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h4 class="text-center margin-top-15 margin-bottom-0"></h4>
+    </div>
+</div>
+
+<div class="padding-5">
+    <{foreach from=$bind_list item=role key=key}>
+    <input type="button" key="<{$key}>" class="bind_list btn width-100 <{if $key == 0}>btn-danger<{else}>btn-info<{/if}>" id="role_<{$key}>" value="<{$role.role_name}>"/>
+
+    <div id="qrcode_<{$key}>" class="qrcode_list panel-margin panel-align <{if $key == 0}> divShow <{else}> divHidden <{/if}>">
+        <div class="panel-heading no-bottom">
+            <div class="row">
+                <div class="col-xs-6 text-center">
+                    <div style="padding-top: 70%"><{if $role.role_type == $smarty.const.ACT_PARENT_ROLE}>二维码接送，方便<{else}>签到二维码<{/if}></div>
+                </div>
+                <div class="col-xs-6 text-center">
+                    <img style="width: 100%" class="imgs" src="<{$smarty.const.APP_RESOURCE_URL}><{$role.qrcode_url}>?rand=<{$random_num}>" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-3 text-center"></div>
+                <div class="col-xs-6 text-center">
+                    <img style="width: 100%" class="imgs"  src="<{$smarty.const.APP_RESOURCE_URL}><{$role.qrcode_url}>?rand=<{$random_num}>" />
+                </div>
+                <div class="col-xs-3 text-center"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6 text-center">
+                    <img style="width: 100%" class="imgs"  src="<{$smarty.const.APP_RESOURCE_URL}><{$role.qrcode_url}>?rand=<{$random_num}>" />
+                </div>
+                <div class="col-xs-6 text-center">
+                    <div style="padding-top: 20%"><{if $role.role_type == $smarty.const.ACT_PARENT_ROLE}>二维码实时更新，安全<{else}>签到二维码<{/if}></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <{/foreach}>
+</div>
+
+<script type="text/javascript">
+
+$('.bind_list').click(function() {
+    
+    var key = $(this).attr('key');
+    $('.bind_list').removeClass('btn-danger');
+    $('.bind_list').addClass('btn-info');
+    $(this).removeClass('btn-info');
+    $(this).addClass('btn-danger');
+    
+    $('.qrcode_list').removeClass('divShow');
+    $('.qrcode_list').addClass('divHidden');
+    $('#qrcode_' + key).removeClass('divHidden');
+    $('#qrcode_' + key).addClass('divShow');
+    
+})
+    $(function(){
+        codeImg();
+    });
+    function codeImg(){
+         $('.imgs').each(function(){
+            var src = $(this).attr('src');
+            $(this).attr('src', src+Math.random());
+         });
+        // imgs.src="?c=codeImg&a=img&?a="+Math.random();
+    }
+
+</script>

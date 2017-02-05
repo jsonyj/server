@@ -1,0 +1,133 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li><a href="?c=help&a=index">帮助一览</a></li>
+    <li class="active"><{if $smarty.get.id}>编辑<{else}>新增<{/if}>帮助</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+      <div class="tabbable">
+        <ul id="myTab" class="nav nav-tabs">
+          <li class="active">
+            <a href="#basic-tab" data-toggle="tab" aria-expanded="true">
+              <i class="green ace-icon fa fa-file-text bigger-120"></i>
+              基本信息
+            </a>
+          </li>
+
+          <li class="disable">
+            <a href="#file-tab" data-toggle="tab" aria-expanded="false">
+              <i class="green ace-icon fa fa-cloud-upload bigger-120"></i>
+              资源文件
+            </a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane fade active in" id="basic-tab">
+
+            <form name="expert_form" method="post">
+              <table class="table table-bordered table-form">
+                  <tr>
+                    <th class="must">标题：</th>
+                    <td colspan="3">
+                      <input type="text" name="form[title]" size="30" class="form-control text" value="<{$form.title|escape}>"/>
+                      <{brave_error_hint errors=$errors name=title}>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th class="must">链接地址：</th>
+                    <td colspan="3"> 
+                      <input type="text" name="form[link]" size="30" class="form-control text" value="<{$form.link|escape}>" placeholder="http://"/>
+                      <{brave_error_hint errors=$errors name=link}>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>排序：</th>
+                    <td colspan="3"> 
+                      <input type="text" name="form[weight]" size="30" class="form-control text" value="<{$form.weight|escape}>" />
+                      <{brave_error_hint errors=$errors name=weight}>
+                    </td>
+                  </tr>
+                  <tr>
+                      <th class="must">有效状态：</th>
+                      <td>
+                          <{ace_switch name="form[status]" value=$form.status code="1"}>
+                      </td>
+                  </tr>
+                  <tr class="option">
+                      <th></th>
+                      <td>
+                        <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                      </td>
+                  </tr>
+              </table>
+          </form>
+        </div>
+
+        <div class="tab-pane" id="file-tab">
+           <{if $form.id}>
+              <table class="table table-bordered table-form">
+                  <tr>
+                    <th class="must">图片：
+                        <span class="help-block"><{$code.page_type_wh[$form.type].name}></span>
+                    </th>
+                    <td>
+                      <form action="?c=help&a=upload&id=<{$form.id}>" class="dropzone" id="dropzone-help-image" enctype="multipart/form-data">
+                        <div class="fallback">
+                          <input name="help[file]" type="file" multiple="" />
+                        </div>
+                      </form>
+                    </td>
+                  </tr>
+              </table>
+          <{else}>
+            <div class="alert alert-danger">
+              <i class="ace-icon fa fa-warning"></i>
+              请先填写并保存基本信息。
+            </div>
+          <{/if}>
+        </div>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<!-- <script src="js/jquery.ztree.core-3.5.js"></script> -->
+<!-- <script src="js/jquery.ztree.excheck-3.5.min.js"></script> -->
+<!-- <script src="js/jquery.ztree.exedit-3.5.min.js"></script> -->
+<!-- <link href="css/zTreeStyle/zTreeStyle.css" type="text/css" rel="stylesheet" /> -->
+
+<script type="text/javascript">
+
+jQuery(function($) {
+  <{if $form.id}>
+  try {
+    Dropzone.autoDiscover = false;
+
+    var helpImage = createDropZone("#dropzone-help-image", 'help[file]', ".jpeg,.jpg,.png,.gif", 2, 1, '?c=help&a=getHelpImg&id=<{$smarty.get.id}>', '?c=help&a=deleteHelpImg&id=<{$smarty.get.id}>');
+    
+    $(document).one('ajaxloadstart.page', function(e) {
+      try {
+          helpImage.destroy();
+      } catch(e) {}
+    });
+
+  } catch(e) {
+    alert('请升级浏览器版本。');
+  }
+  <{/if}>
+
+});
+
+</script>

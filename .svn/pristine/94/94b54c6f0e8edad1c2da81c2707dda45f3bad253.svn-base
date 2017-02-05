@@ -1,0 +1,68 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li class="active">活动一览</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <div class='clearfix'></div>
+      <div class="text-right toolbar">
+        <a style="width:80px;" class="btn btn-info btn-sm" href="?c=activity&a=input&pc=activity&pa=index">新增</a>
+      </div>
+      <div class="table-responsive">
+      <table class="table table-bordered table-hover text-center">
+
+          <col width="180" />
+          <col width="180" />
+          <col width="180" />
+          <col width="180" />
+          <col width="180" />
+          <col width="180" />
+
+
+          <tr>
+            <th class="text-center">活动名称</th>
+            <th class="text-center">开始时间</th>
+            <th class="text-center">结束时间</th>
+            <th class="text-center">活动描述</th>
+            <th class="text-center">创建时间</th>
+            <th class="text-center">操作</th>
+          </tr>
+
+          <{foreach from=$activityList item=activity key=key}>
+            <tr id="row_<{$admin.id}>">
+              <td><{$activity.name}></td>
+              <td><{$activity.start_time}></td>
+              <td><{$activity.end_time}></td>
+              <td><{$activity.activity_des}></td>
+              <td><{$activity.created}></td>
+              <td>
+                <a class="btn btn-xs btn-danger" href="javascript:void(0);" onclick="linkConfirm('确定删除吗？', '?c=activity&a=delete&id=<{$activity.id}>')">删除</a>
+                <a class="btn btn-xs btn-primary" href="?c=activity&a=input&pc=activity&pa=index&id=<{$activity.id}>">编辑</a>
+
+              </td>
+            </tr>
+          <{/foreach}>
+
+      </table>
+  
+      </div>
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+  $("#export_button").click(function(){
+    $("#submit_action").attr("value", "exportImg");
+    $("#search-form").submit();
+});
+</script>

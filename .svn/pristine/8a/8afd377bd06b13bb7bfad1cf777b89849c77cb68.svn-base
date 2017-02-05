@@ -1,0 +1,76 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'><i class="fa fa-arrow-left"></i></a>&nbsp;&nbsp;
+    <li>
+      <a href="?c=student&a=index">学生一览</a>
+    </li>
+    <li class="active">导入</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form method="post" name="search_form" class="search-form" id="data-form" enctype="multipart/form-data">
+          <input type="hidden" name="complete" value="complete" />
+          
+          <table class="table table-bordered table-form">
+
+            <!-- <tr>
+              <th class="must">班级：</th>
+              <td>
+                <select  name="form[class_id]" style='width:330px;' id="select-class">
+                  <{brave_html_select maxSize='30' code=$classList value=$form.class_id empty=true}>
+                </select>
+                <{brave_error_hint errors=$errors name=class_id}>
+              </td>
+            </tr>
+ -->
+            <tr>
+              <th class="must">数据文件：</th>
+              <td>
+                <div class="form-group" style="margin-bottom:0px;">
+                  <label class="ace-file-input" style='width:330px;'>
+                    <input type="file" id="import-file" name="file">
+                  </label>
+                </div>
+                <{brave_error_hint errors=$errors name=file}>
+                <div><a href="/res/didano-template.xlsx" >下载模板</a></div>
+              </td>
+            </tr>
+
+            <tr class="option">
+              <th></th>
+              <td>
+                <input type="submit" class="btn btn-primary" name="complete" value="提交" />
+              </td>
+            </tr>
+
+          </table>
+      </form>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+$('#import-file').ace_file_input({
+  no_file:'请选择 ...',
+  btn_choose:'选择',
+  btn_change:'修改',
+  droppable:false,
+  onchange:null,
+  thumbnail:false //| true | large
+  //whitelist:'xls|xlsx'
+  //blacklist:'exe|php'
+  //onchange:''
+  //
+});
+</script>

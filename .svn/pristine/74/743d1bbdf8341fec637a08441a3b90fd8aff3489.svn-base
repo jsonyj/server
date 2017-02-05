@@ -1,0 +1,60 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li class="active">图片管理</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form method="get" name="search_form" class="search-form" id="search-form">
+          <input type="hidden" name="c" value="downimg" />
+          <input type="hidden" name="a" value="index" />
+        <{include file="../Common/paginate.html"}>
+      </form>
+      
+      <div class='clearfix'></div>
+      <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+
+          <col width="260" />
+          <col width="120" />
+          <col />
+          <col width="70" />
+          <col width="150" />
+          <col width="101" />
+
+          <tr>
+            <th>学校名称</th>
+            <th>有效状态</th>
+            <th <{brave_order code=$code.order.default array=sh key='a' name='field' txt="创建时间"}>></th>
+            <th>操作</th>
+          </tr>
+
+          <{foreach from=$schoolList item=school key=key}>
+          <tr id="row_<{$admin.id}>">
+            <td><{$school.title}></td>
+            <td class="text-center"><{$code.status[$school.status].name}></td>
+            <td><{$school.created}></td>
+            <td>
+              <a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="linkConfirm('确定导出该学校学生照片吗？', '?c=downimg&a=downImg&id=<{$school.id}>')">导出</a>
+            </td>
+          </tr>
+          <{/foreach}>
+
+      </table>
+      </div>
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+
+</script>

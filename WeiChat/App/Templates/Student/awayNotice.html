@@ -1,0 +1,39 @@
+<style type="text/css">
+.panel.panel-default.panel-margin .panel-heading.padding-left-0.padding-right-0 .row .col-xs-5.padding-2 p {
+	font-size: 15px;
+}
+</style>
+<div class="row top-nav-bar">
+    <div class="col-xs-8 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h5 class="text-center margin-bottom-0">安全报告</h5>
+    </div>
+    <div class="col-xs-1 text-left logo-title">
+        <a class="btn btn-sm on-active padding-right-0" href="?c=index&a=bind"><i class="iconfont">&#xe609;</i></a>
+    </div>
+</div>
+
+<div class="report-body padding-bottom-0">
+  <h4>今日接送信息</h4>
+</div>
+
+<div class="panel panel-default panel-margin">
+    <div class="panel-heading padding-left-0 padding-right-0">
+        <div class="row">
+            <div class="col-xs-7 padding-2">
+                <img class="img-circle-avatar1" src="<{if $awayNotice.img}><{$smarty.const.APP_OSS_URL}><{$awayNotice.img}><{else}>http://tse1.mm.bing.net/th?id=OIP.M76446756dcb348b279464f77687a43b9o0&pid=15.1<{/if}>" />
+            </div>
+            <div class="col-xs-5 padding-2">
+                <br/>
+                <p>姓名：<{if $awayNotice.student}><{$awayNotice.student}><{else}>暂无数据<{/if}></p>
+                <p>放学时间： <{if $awayNotice.time}><{$awayNotice.time}><{else}>暂无数据<{/if}></p>
+                <p>接送人：<{if $awayNotice.parent}><{$awayNotice.parent}><{else}>暂无数据<{/if}></p>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<!--更多精彩部分-->
+<{include file="../Report/article_list.html"}>

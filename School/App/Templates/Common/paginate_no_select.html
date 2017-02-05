@@ -1,0 +1,36 @@
+<div class="pagination">
+    <ul>
+        <li class="total"><{$paging.count|number_format}></li>
+        <li>件</li>
+
+<{if $paging.count}>
+        <{if $paging.start}>
+        <li><a href="<{brave_uri_replace array=sh page=1}>"><{$paging.start}>...</a></li>
+        <{/if}>
+
+        <{if $paging.pre}>
+        <li><a href="<{brave_uri_replace array=sh page=$paging.pre}>">&lt; 前</a></li>
+        <{else}>
+        <li class="invalid"><span>&lt; 前</span></li>
+        <{/if}>
+
+        <{section name=main start=$paging.main.start loop=$paging.main.start + $paging.main.count}>
+        <{if $smarty.section.main.index eq $paging.page}>
+        <li class="active"><span><{$smarty.section.main.index}></span></li>
+        <{else}>
+        <li><a href="<{brave_uri_replace array=sh page=$smarty.section.main.index}>"><{$smarty.section.main.index}></a></li>
+        <{/if}>
+        <{/section}>
+        
+        <{if $paging.next}>
+        <li><a href="<{brave_uri_replace array=sh page=$paging.next}>">次 &gt;</a></li>
+        <{else}>
+        <li class="invalid"><span>次 &gt;</span></li>
+        <{/if}>
+
+        <{if $paging.end}>
+        <li><a href="<{brave_uri_replace array=sh page=$paging.pages}>">...<{$paging.end}></a></li>
+        <{/if}>
+<{/if}>
+    </ul>
+</div>

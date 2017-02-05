@@ -1,0 +1,45 @@
+<div class="row top-nav-bar">
+    <div class="col-xs-8 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h5 class="text-center margin-bottom-0">健康月报</h5>
+    </div>
+    <div class="col-xs-1 text-left logo-title">
+        <a class="btn btn-sm on-active padding-right-0" href="<{if $smarty.get.full}>?c=user<{else}>javascript:void(0)<{/if}>" <{if !$smarty.get.full}>onclick="closeReport();"<{/if}>><i class="iconfont">&#xe609;</i></a>
+    </div>
+</div>
+
+<div class="panel panel-default panel-margin">
+    <div class="panel-heading padding-left-0 padding-right-0">
+        <div class="row">
+            <div class="col-xs-6 padding-5"><img src="<{if $student.studentDetectionImg.file_path}><{$smarty.const.APP_OSS_URL}><{$student.studentDetectionImg.file_path}><{else}>http://tse1.mm.bing.net/th?id=OIP.M76446756dcb348b279464f77687a43b9o0&pid=15.1<{/if}>" class=" img-circle-avatar"></div>
+             <div class="col-xs-6 padding-5">
+                 <p><{$student.name}> <{$student.school_title}> <{$student.class_title}></p>
+                 <hr>
+                 <p>身高增长：<{if $maxHeight-$minHeight >= 0}><{$maxHeight-$minHeight}>厘米<{else}>暂无数据<{/if}></p>
+                 <hr>
+                 <p>体重增长：<{if $maxWeight-$minWeight >= 0}><{($maxWeight-$minWeight)/1000}>公斤<{else}>暂无数据<{/if}></p>
+             </div>
+         </div>
+    </div>
+</div>
+
+<div class="report-body padding-bottom-0">
+  <h4>当月身高曲线图</h4>
+</div>
+
+<div class="panel panel-default panel-margin">
+  <img class="img-rounded width-100" src="?c=report&a=chart&studentId=<{$student.id}>&type=2&start=<{$report.reported}>">
+</div>
+
+<div class="report-body padding-bottom-0">
+  <h4>当月体重曲线图</h4>
+</div>
+
+<div class="panel panel-default panel-margin">
+  <img class="img-rounded width-100" src="?c=report&a=chart&studentId=<{$student.id}>&type=3&start=<{$report.reported}>">
+</div>
+
+
+<{include file="article_list.html"}>

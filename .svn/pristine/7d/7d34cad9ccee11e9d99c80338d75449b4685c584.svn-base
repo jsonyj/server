@@ -1,0 +1,119 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li>
+      <a href="?c=student&a=dreamIndex&pc=student&pa=dreamIndex">学生梦想</a>
+    </li>
+    <li class="active"><{if $smarty.get.id}>修改<{else}>新增<{/if}>梦想</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <div class="tabbable">
+
+          <ul id="myTab" class="nav nav-tabs">
+            <li class="<{if $smarty.get.tab == ''}>active<{else}>disable<{/if}>">
+              <a href="#base-tab" data-toggle="tab" aria-expanded="false">
+                <i class="green ace-icon fa fa-table bigger-120"></i>
+                梦想描述
+              </a>
+            </li>
+
+            <li class="<{if $smarty.get.tab == 'other-tab'}>active<{else}>disable<{/if}>">
+              <a href="#other-tab" data-toggle="tab" aria-expanded="false">
+                <i class="green ace-icon fa fa-user bigger-120"></i>
+                选择梦想上传
+              </a>
+            </li>
+          </ul>
+        </div>
+
+          <div class="tab-content">
+
+            <div class="tab-pane fade in <{if $smarty.get.tab == ''}>active<{/if}>" id="base-tab">
+
+                <form name="data_form" method="post">
+                  <table class="table table-bordered table-form">
+                      <tr>
+                        <th class="must">梦想描述:</th>
+                        <td>
+                          <input type="text" name="form[name]" size="30" class="form-control text" value="<{$form.name|escape}>"/>
+                          <{brave_error_hint errors=$errors name=name}>
+                        </td>
+                      </tr>
+
+                      <tr class="option">
+                        <th></th>
+                        <td>
+                          <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                        </td>
+                      </tr>
+                  </table>
+                </form>
+
+              </div>
+
+              <div class="tab-pane fade in <{if $smarty.get.tab == 'other-tab'}>active<{/if}>" id="other-tab">
+                <{if $smarty.get.id}>
+
+                <table class="table table-bordered table-form">
+                    <tr>
+                    <th class="must">图片：</th>
+                      <td>
+                        <form action="?c=student&a=upload&id=<{$smarty.get.id}>" class="dropzone" id="dropzone-icon-img" enctype="multipart/form-data">
+                          <div class="fallback">
+                           <input name="dream[file]" type="file" multiple="" />
+                          </div>
+                        </form>
+                      </td>
+                    </tr>
+                </table>
+
+                <{else}>
+                  <div class="alert alert-danger">
+                    <i class="ace-icon fa fa-warning"></i>
+                    请先保存梦想基本信息
+                  </div>
+                <{/if}>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+jQuery(function($) {
+    <{if $smarty.get.id}>
+        try {
+            Dropzone.autoDiscover = false;
+
+            var topImage = createDropZone("#dropzone-icon-img", 'dream[file]', ".jpeg,.jpg,.png,.gif", 1, 1, '?c=student&a=getDreamImg&id=<{$smarty.get.id}>', '?c=student&a=deleteDreamImg&id=<{$smarty.get.id}>');
+
+            $(document).one('ajaxloadstart.page', function(e) {
+                try {
+                    topImage.destroy();
+                } catch(e) {}
+            });
+
+        } catch(e) {
+            alert('请使用谷歌或者火狐浏览器。');
+        }
+    <{/if}>
+});
+</script>

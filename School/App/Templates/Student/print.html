@@ -1,0 +1,47 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'><i class="fa fa-arrow-left"></i></a>&nbsp;&nbsp;
+    <li class="active">学生一览</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+<div class="page-content">
+<div class="row">
+<div>
+<!--startprint-->
+<table border="1px" cellspacing="0" cellpadding="0" style="width: 100%;">
+    <tr>
+        <{foreach from=$print_title item=title key=key}>
+            <th class="text-center"><{$title}></th>
+        <{/foreach}>
+    </tr>
+    <{foreach from=$printList item=print_arr key=key}>
+        <tr>
+            <{foreach from=$print_arr item=print key=key}>
+                <{if $key == 'gender'}>
+                    <td class="text-center"><{$code.gender[$print.gender].name}></td>
+                <{else}>
+                    <td class="text-center"><{$print}></td>
+                <{/if}>
+            <{/foreach}>
+        </tr>
+    <{/foreach}>
+</table>
+<!--endprint-->
+</div>
+</div>
+</div>
+<script type="text/javascript">
+    bdhtml=window.document.body.innerHTML;
+    sprnstr="<!--startprint-->";
+    eprnstr="<!--endprint-->";
+    prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr));
+    prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));
+    window.document.body.innerHTML=prnhtml; 
+    window.print();
+    // window.close();
+</script>

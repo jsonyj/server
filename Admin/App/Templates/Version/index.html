@@ -1,0 +1,80 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li class="active">版本一览</li>
+  </ul><!-- /.breadcrumb -->
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->     
+       <form method="get" name="search_form" class="search-form" id="search-form">
+          <input type="hidden" name="c" value="version" />
+          <input type="hidden" name="a" value="index" />
+        <{include file="../Common/paginate.html"}>
+      </form>
+      
+      <div class='clearfix'></div>
+      <div class="text-right toolbar">
+        <a style="width:80px;" class="btn btn-info btn-sm" href="?c=version&a=input">新增</a>
+      </div>
+      <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+
+          <col width="180" />
+          <col width="180" />
+          <col width="180" />
+          <col width="180" />
+          <col width="180" />
+          <col width="180" />
+          <col width="180" />
+          <col width="180" />
+          <col width="180" />
+          <col width="180" />
+
+          <tr>
+            <th class="text-center">主版本号</th>
+            <th class="text-center">群名称</th>
+            <th class="text-center">群版本号</th>
+            <th class="text-center">设备类型</th>
+            <th class="text-center">设备型号</th>
+            <th class="text-center">下载地址</th>
+            <th class="text-center">版本说明</th>
+            <th class="text-center">创建时间</th>
+            <th class="text-center">更新时间</th>
+            <th class="text-center">操作</th>
+          </tr>
+
+          <{foreach from=$versionList item=version key=key}>        
+            <tr id="row_<{$admin.id}>">
+              <td class="text-center"><{$version.main_version}></td>
+              <td class="text-center">
+                <{$version.branch_name}>
+              </td>
+              <td class="text-center"><{$version.branch_version}></td>
+              <td class="text-center">
+                <{if $version.device_type == 1}>robot_android<{else if $version.device_type == 2}>robot_linux<{else $version.device_type == 3}>gates_linux<{/if}>
+                </td>
+              <td class="text-center">
+                <{$version.model_no}>
+              </td>
+              <td class="text-center"><a href="<{$smarty.const.APP_OSS_URL}><{$version.version_url}>">点击下载</a></td>
+              <td class="text-center"><{$version.version_des}></td>
+              <td class="text-center"><{$version.created}></td>
+              <td class="text-center"><{$version.updated}></td>
+              <td class="text-center">
+                <a class="btn btn-xs btn-primary" href="?c=version&a=input&pc=version&pa=index&id=<{$version.id}>">编辑</a>
+                <a class="btn btn-xs btn-danger" href="javascript:void(0);" onclick="linkConfirm('确定删除吗？', '?c=version&a=delete&id=<{$version.id}>')">删除</a>
+              </td>              
+            </tr>
+          <{/foreach}>
+      </table>
+      </div>
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->

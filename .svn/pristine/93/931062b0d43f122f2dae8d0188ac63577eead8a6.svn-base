@@ -1,0 +1,62 @@
+<!-- logo -->
+<div class="row top-nav-bar">
+    <div class="text-left">
+    </div>
+    <div class="col-xs-9 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h4 class="text-center">人员详情</h4>
+    </div>
+</div>
+<!-- /.logo -->
+
+<div class="row user-profile-body  margin-lr-none">
+
+    <div class="panel-default no-margin">
+        <div class="text-center">
+            <h4><{$date|date_format:'Y年m月d日'}>离校人员详情</h4>
+        </div>
+    </div>
+
+    <div class="panel-group" id="accordion">
+        <{if $classLeaveSchoolNumList}>
+            <{foreach from=$classLeaveSchoolNumList item=leave}>
+            <div class="panel panel-default">
+                <div class="panel-heading panel-background">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse_<{$leave.class_id}>">
+                            <div class="row  margin-lr-none">
+                                <div class="form-group">
+                                    <label class="col-xs-7 parent-student" >班级：<{$leave.title}></label>
+                                    <label class="col-xs-5 parent-student" >离校人数：<{$leave.num}>人</label>
+                                </div>
+                            </div>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_<{$leave.class_id}>" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <table class="table table-bordered text-center">
+                            <{foreach from=$leave.classLeaveStudentList item=student}>
+                            <tr>
+                                <td><{$student.name}></td>
+                                <td><{$student.title}></td>
+                                <td><{$student.created}></td>
+                            </tr>
+                            <{/foreach}>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <{/foreach}>
+        <{else}>
+        <div class="alert alert-danger text-center" role="alert" style="font-size: 15px;">暂无数据</div>
+        <{/if}>
+    </div>
+    
+</div>
+
+<script type="text/javascript">
+
+</script>

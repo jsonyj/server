@@ -1,0 +1,70 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li class="active">学生梦想</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form method="get" name="search_form" class="search-form" id="search-form">
+          <input type="hidden" name="c" value="student" />
+          <input type="hidden" name="a" value="dreamIndex" />
+        <{include file="../Common/paginate.html"}>
+      </form>
+
+      <div class='clearfix'></div>
+      <div class="text-right toolbar">
+        <a style="width:80px;" class="btn btn-info btn-sm" href="?c=student&a=dreamInput&pc=student&pa=dreamInput">新增</a>
+      </div>
+      <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+
+          <col />
+          <col />
+          <col width="170" />
+          <col width="121" />
+
+          <tr>
+            <th>梦想名称</th>
+            <th>梦想图片(点击可放大)</th>
+            <th <{brave_order code=$code.order.default array=sh key='a' name='field' txt="创建时间"}>></th>
+            <th class="text-center">操作</th>
+          </tr>
+
+          <{foreach from=$dream_list item=dream}>
+          <tr>
+            <td><{$dream.name}></td>
+            <{if $dream.img_url eq ''}>
+                <td></td>
+            <{else}>
+                <td><a href="?c=student&a=imgListOne&id=<{$dream.id}>"><img src="<{$smarty.const.APP_OSS_URL}><{$dream.img_url}>"  class="img_little"></a></td>
+            <{/if}>
+            <td class="text-center"><{$dream.created}></td>
+            <td class="text-center">
+              <a class="btn btn-xs btn-danger" href="javascript:void(0);" onclick="linkConfirm('确定删除吗？', '?c=student&a=deleteDream&id=<{$dream.id}>')">删除</a>
+              <a class="btn btn-xs btn-primary" href="?c=student&a=dreamInput&pc=student&pa=dreamInput&id=<{$dream.id}>">编辑</a>
+            </td>
+          </tr>
+          <{/foreach}>
+
+      </table>
+      </div>
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script>
+function exportExcel() {
+  var form = $('#search-form');
+  location.href= '?' + form.serialize() + '&export=excel';
+}
+
+</script>

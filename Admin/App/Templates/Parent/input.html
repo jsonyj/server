@@ -1,0 +1,159 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li>
+      <a href="?c=parent&a=index">家长一览</a>
+    </li>
+    <li class="active"><{if $smarty.get.id}>编辑<{else}>新增<{/if}>家长</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <div class="tabbable">
+          <ul id="myTab" class="nav nav-tabs">
+            <li class="<{if $smarty.get.tab == ''}>active<{else}>disable<{/if}>">
+              <a href="#base-tab" data-toggle="tab" aria-expanded="false">
+                <i class="green ace-icon fa fa-table bigger-120"></i>
+                基本信息
+              </a>
+            </li>
+  
+            <li class="<{if $smarty.get.tab == 'student-tab'}>active<{else}>disable<{/if}>">
+              <a href="#student-tab" data-toggle="tab" aria-expanded="false">
+                <i class="green ace-icon fa fa-user bigger-120"></i>
+                学生信息
+              </a>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <div class="tab-pane fade in <{if $smarty.get.tab == ''}>active<{/if}>" id="base-tab">
+
+              <form name="data_form" method="post">
+                <{if $form.id}><input type="hidden" name="form[id]" value="<{$form.id|escape}>" /><{/if}>
+                <table class="table table-bordered table-form">
+                    <tr>
+                      <th <{if !$smarty.get.id}>class="must"<{/if}>>所属学校：</th>
+                      <td>
+                        <{if $smarty.get.id}>
+                        <p class="form-control-static"><{$form.school_title}></p>
+                        <{else}>
+                        <select  name="form[school_id]" style='width:330px;' id="select-school">
+                          <{brave_html_select maxSize='30' code=$schoolList value=$form.school_id empty=true}>
+                        </select>
+                        <{brave_error_hint errors=$errors name=school_id}>
+                        <{/if}>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="must">姓名：</th>
+                      <td>
+                        <input type="text" name="form[name]" size="30" class="form-control text" value="<{$form.name|escape}>"/>
+                        <{brave_error_hint errors=$errors name=name}>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="must">手机号码：</th>
+                      <td>
+                        <input type="text" name="form[phone]" size="30" class="form-control text" value="<{$form.phone|escape}>"/>
+                        <{brave_error_hint errors=$errors name=phone}>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>账户类型：</th>
+                      <td>
+                        <select  name="form[type]" style='width:330px;' id="select-class">
+                          <{brave_html_select maxSize='30' code=$code.parentType value=$form.type empty=true}>
+                        </select>
+                        <{brave_error_hint errors=$errors name=type}>
+                      </td>
+                    </tr>
+                    <tr>
+                        <th class="must">有效状态：</th>
+                        <td>
+                          <{ace_switch name="form[status]" value=$form.status code="1"}>
+                        </td>
+                    </tr>
+                    <tr class="option">
+                      <th></th>
+                      <td>
+                        <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                      </td>
+                    </tr>
+                </table>
+              </form>
+
+            </div>
+
+            <div class="tab-pane fade in <{if $smarty.get.tab == 'student-tab'}>active<{/if}>" id="student-tab">
+              <{if $form.id}>
+
+                <div class="text-right toolbar">
+                  <a style="width:80px;" class="btn btn-info btn-sm" href="?c=parent&a=inputStudent&pc=parent&pa=index&parentId=<{$form.id}>">新增</a>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-bordered table-hover">
+
+                      <col width="100" />
+                      <col width="180" />
+                      <col width="50" />
+                      <col width="80" />
+                      <col width="260" />
+                      <col />
+                      <col width="150" />
+                      <col width="100" />
+
+                      <tr>
+                        <th>称谓</th>
+                        <th>学生名称</th>
+                        <th>性别</th>
+                        <th>生日</th>
+                        <th>学校名称</th>
+                        <th>班级名称</th>
+                        <th <{brave_order code=$code.order.default array=sh key='a' name='field' txt="创建时间"}>></th>
+                        <th>操作</th>
+                      </tr>
+
+                      <{foreach from=$parentStudentList item=parentStudent key=key}>
+                      <tr id="row_<{$admin.id}>">
+                        <td><{$parentStudent.relation_title}></td>
+                        <td><{$parentStudent.student_name}></td>
+                        <td class="text-center"><{$code.gender[$parentStudent.student_gender].name}></td>
+                        <td><{$parentStudent.student_birthday}></td>
+                        <td><{$parentStudent.school_title}></td>
+                        <td><{$parentStudent.class_title}></td>
+                        <td><{$parentStudent.created}></td>
+                        <td>
+                          <a class="btn btn-xs btn-danger" href="javascript:void(0);" onclick="linkConfirm('确定删除吗？', '?c=parent&a=deleteStudent&id=<{$parentStudent.id}>')">删除</a>
+                          <a class="btn btn-xs btn-primary" href="?c=parent&a=inputStudent&pc=parent&pa=index&parentId=<{$form.id}>&id=<{$parentStudent.id}>">编辑</a>
+                        </td>
+                      </tr>
+                      <{/foreach}>
+
+                  </table>
+                </div>
+
+              <{else}>
+                <div class="alert alert-danger">
+                  <i class="ace-icon fa fa-warning"></i>
+                  请先填写并保存基本信息。
+                </div>
+              <{/if}>
+            </div>
+
+          </div>
+
+        </div>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->

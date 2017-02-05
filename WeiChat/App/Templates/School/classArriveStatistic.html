@@ -1,0 +1,61 @@
+<!-- logo -->
+<div class="row top-nav-bar">
+    <div class="text-left">
+    </div>
+    <div class="col-xs-9 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h4 class="text-center">人员详情</h4>
+    </div>
+</div>
+<!-- /.logo -->
+
+<div class="row user-profile-body margin-lr-none">
+
+    <div class="panel-default no-margin">
+        <div class="text-center">
+            <h4><{$date|date_format:'Y年m月d日'}>到校人员详情</h4>
+        </div>
+    </div>
+
+    <div class="panel-group" id="accordion">
+        <{if $classArriveSchoolNumList}>
+            <{foreach from=$classArriveSchoolNumList item=arrive}>
+            <div class="panel panel-default">
+                <div class="panel-heading panel-background">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse_<{$arrive.class_id}>">
+                            <div class="row  margin-lr-none">
+                                <div class="form-group">
+                                    <label class="col-xs-4 parent-student" >班级:<{$arrive.title}></label>
+                                    <label class="col-xs-4 parent-student" >应到人数:<{$arrive.mum}>人</label>
+                                    <label class="col-xs-4 parent-student" >到校人数:<{$arrive.num}>人</label>
+                                </div>
+                            </div>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_<{$arrive.class_id}>" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <table class="table table-bordered text-center">
+                            <{foreach from=$arrive.classArriveStudentList item=student}>
+                            <tr>
+                                <td><{$student.name}></td>
+                                <td><{$student.created}></td>
+                            </tr>
+                            <{/foreach}>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <{/foreach}>
+        <{else}>
+        <div class="alert alert-danger text-center" role="alert" style="font-size: 15px;">暂无数据</div>
+        <{/if}>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+</script>

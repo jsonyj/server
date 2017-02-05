@@ -1,0 +1,73 @@
+<div class="alert alert-warning" role="alert">
+  <ol>
+    <li>除上传文件接口外，其它接口所有参数采用 json 格式提交，如：{"key":"value", "lng":31.1234, "lat":141.1234}</li>
+    <li>设备ID需要在每次请求的 http header 中上传，key 为 device_no</li>
+  </ol>
+</div>
+
+<div class="panel panel-default">
+
+  <div class="panel-heading"><strong>接口一览</strong></div>
+
+  <div class="panel-body">
+  <{foreach from=$classes item=class}>
+  <div class="panel panel-default">
+    <div class="panel-heading"><strong><{$class.description}></strong></div>
+    <ul class="list-group">
+      <{foreach from=$class.method item=method}>
+      <li class="list-group-item">
+        <a href="#<{$class.name|replace:'Controller':''|lcfirst}>-<{$method.name|replace:'Action':''|lcfirst}>" >
+          <div><{$method.description}></div>
+          <span>地址：http://<{$smarty.server.SERVER_NAME}><{$port}>/api/<{$class.name|replace:'Controller':''|lcfirst}>/<{$method.name|replace:'Action':''|lcfirst}></span>
+        </a>
+        <a target="_blank" href="<{$class.name|replace:'Controller':''|lcfirst}>/<{$method.name|replace:'Action':''|lcfirst}>"><span class="glyphicon glyphicon-new-window"></span></a>
+      </li>
+      <{/foreach}>
+    </ul>
+  </div>
+  <{/foreach}>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>接口详细</strong></div>
+  <div class="panel-body">
+  <{foreach from=$classes item=class}>
+
+    <{foreach from=$class.method item=method}>
+    <a name="<{$class.name|replace:'Controller':''|lcfirst}>-<{$method.name|replace:'Action':''|lcfirst}>" ></a>
+    <table class="table table-bordered">
+      <tr>
+        <th>API说明</th>
+        <td colspan="4"><{$method.description}></td>
+      <tr>
+      <tr>
+        <th>请求地址</th>
+        <td colspan="4">
+          <span>http://<{$smarty.server.SERVER_NAME}><{$port}>/api/<{$class.name|replace:'Controller':''|lcfirst}>/<{$method.name|replace:'Action':''|lcfirst}></span>
+          <a target="_blank" href="<{$class.name|replace:'Controller':''|lcfirst}>/<{$method.name|replace:'Action':''|lcfirst}>"><span class="glyphicon glyphicon-new-window"></span></a>
+        </td>
+      <tr>
+      <th width="15%">项目名</th>
+      <th width="15%">变量名</th>
+      <th width="10%">类型</th>
+      <th width="10%">必须</th>
+      <th width="50%">备注</th>
+      <{foreach from=$method.param item=param}>
+        <tr>
+          <td><{$param.name}></td>
+          <td><{$param.var}></td>
+          <td><{$param.type}></td>
+          <td><{$param.required}></td>
+          <td><{$param.remark}></td>
+        </tr>
+      <{/foreach}>
+      <tr><th colspan="5">返回值</th><tr>
+      <tr><th>说明</th><td colspan="4"><pre><{$method.return.array}></pre></td><tr>
+      <tr><th>JSON</a></th><td colspan="4"><{$method.return.json}></td><tr>
+    </table>
+    <{/foreach}>
+
+  <{/foreach}>
+  </div>
+</div>

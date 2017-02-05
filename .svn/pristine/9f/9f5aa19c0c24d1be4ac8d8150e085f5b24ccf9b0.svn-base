@@ -1,0 +1,340 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'><i class="fa fa-arrow-left"></i></a>&nbsp;&nbsp;
+    <li class="active">学生一览</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form method="get" name="search_form" class="search-form" id="search-form">
+          <input type="hidden" name="c" value="student" />
+          <input type="hidden" name="a" value="index" id="submit_action" />
+
+          <table class="table table-bordered table-condensed ">
+              <tr>
+                <th>学生名称：</th>
+                <td><input type="text" name="sh[name]" value="<{$sh.name}>" size="30" id="student_name"></td>
+                <th>班级：</th>
+                <td>
+                  <select name="sh[class_id]" style="width:230px;" id="select-class">
+                    <{brave_html_select maxSize='30' code=$classList value=$sh.class_id empty=true}>
+                  </select>
+                </td>
+                <td class="button" style="width:130px">
+                    <div><button type="submit" class="btn btn-primary btn-xs" id="search_button"><i class="ace-icon fa fa-search"></i> 搜索</button>
+                    <a href="?c=student&a=index" class="btn btn-default btn-xs"><i class="ace-icon fa fa-undo"></i> 重置</a></div>
+                </td>
+              </tr>
+              <tr>
+                <th>电话号码：</th>
+                <td colspan="3"><input type="text" name="sh[phone]" value="<{$sh.phone}>" size="30"></td>
+              </tr>
+          </table>
+
+        <{include file="../Common/paginate.html"}>
+      
+      <div class='clearfix'></div>
+      <div class="text-right toolbar">
+        <a style="width:80px;" class="btn btn-info btn-sm" href="javascript:void(0);" id="delete_button1">批量删除</a>
+
+        <a style="width:80px;" class="btn btn-info btn-sm" href="?c=student&a=input&pc=student&pa=index">新增</a>
+        <a style="width:80px;" class="btn btn-info btn-sm" href="?c=student&a=import&pc=student&pa=index">导入</a>
+        <!-- <a style="width:80px;" class="btn btn-info btn-sm" href="javascript:void(0);" id="export_button">导出</a> -->
+        <!-- <a style="width:80px;" class="btn btn-info btn-sm" href="javascript:void(0);" id="print_button">打印</a> -->
+      </div>
+      <div class="export_select" id="export_select">
+          <div class="export_select_title">请选择要导出的学生信息：</div>
+          <div class="export_select_form">
+              <div>
+                  <tr>
+                      <td><input type="checkbox" name="export_title[height]" value="身高/cm" checked="checked" /></td>
+                      <td>身高/cm</td>
+                  </tr>
+              </div>
+              <div>
+                  <tr>
+                      <td><input type="checkbox" name="export_title[weight]" value="体重/kg" checked="checked" /></td>
+                      <td>体重/kg</td>
+                  </tr>
+              </div>
+              <div>
+                  <tr>
+                      <td><input type="checkbox" name="export_title[temperature]" value="体温/℃" checked="checked" /></td>
+                      <td>体温/℃</td>
+                  </tr>
+              </div>
+             <!--  <table>
+                  <tr>
+                      <td>开始日期：</td>
+                      <td><input id="al_start_date"  type="text" name="export_title[start_time]" style="height:30px; width:120px;" class="form-control text" value="<{$export_title.start_time|date_format:'Y-m-d'}>"  />
+                      <span style="color:red">*必选开始时间</span>
+                      </td>
+                  </tr>
+              </table>
+              <table class="al_date_tab">
+                  <tr>
+                      <td>结束日期：</td>
+                      <td><input id="al_end_date"  type="text" name="export_title[end_time]" style="height:30px;width:120px;" class="form-control text" value="<{$export_title.end_time|date_format:'Y-m-d'}>"  />
+                      </td>
+                  </tr>
+              </table> -->
+              
+          </div>
+          <div class="export_select_button">
+              <a href="javascript:void(0)" style="text-decoration:none;"><span id="export_select_confirm">确定</span></a>
+              <a href="javascript:void(0)" style="text-decoration:none;"><span id="export_select_cancel">取消</span></a>
+          </div>
+      </div>
+      
+      <div class="print_select" id="print_select">
+          <div class="print_select_title">请选择要打印的学生信息：</div>
+          <div class="print_select_form">
+              <div>
+                  <tr>
+                      <td><input type="checkbox" name="print_title_height" value="身高/cm" checked="checked" id="print_title_height" /></td>
+                      <td>身高/cm</td>
+                  </tr>
+              </div>
+              <div>
+                  <tr>
+                      <td><input type="checkbox" name="print_title_weight" value="体重/kg" checked="checked" id="print_title_weight" /></td>
+                      <td>体重/kg</td>
+                  </tr>
+              </div>
+              <div>
+                  <tr>
+                      <td><input type="checkbox" name="print_title_temperature" value="体温/℃" checked="checked" id="print_title_temperature" /></td>
+                      <td>体温/℃</td>
+                  </tr>
+              </div>
+          </div>
+          <div class="print_select_button">
+              <a href="javascript:void(0)" style="text-decoration:none;"><span id="print_select_confirm">确定</span></a>
+              <a href="javascript:void(0)" style="text-decoration:none;"><span id="print_select_cancel">取消</span></a>
+          </div>
+          </form>
+      </div>
+      
+      <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+
+          <col width="180" />
+          <col width="50" />
+          <col width="150" />
+          <col width="120" />
+          <col />
+          <col width="70" />
+          <col width="200" />
+          <col width="101" />
+
+          <tr>
+            <th>学生名称</th>
+            <th>性别</th>
+            <th>生日</th>
+            <th>班级名称</th>
+            <th>家长信息</th>
+            <th>有效状态</th>
+            <th <{brave_order code=$code.order.default array=sh key='a' name='field' txt="创建时间"}>></th>
+            <th>操作</th>
+          </tr>
+
+          <{foreach from=$studentList item=student key=key}>
+          <tr id="row_<{$admin.id}>">
+            <td><input name="studentId" type="checkbox" class="hidden studentCB" value="<{$student.id}>"/><{$student.name}></td>
+            <td class="text-center"><{$code.gender[$student.gender].name}></td>
+            <td><{if $student.birthday == '0000-00-00'}><{else}><{$student.birthday|escape}><{/if}></td>
+            <td><{$student.class_title}></td>
+            <td>
+              <table class="table table-striped table-condensed">
+
+              <col width="60">
+              <col />
+              <col width="120">
+              <col width="60">
+              <col width="60">
+
+              <{foreach from=$student.parentList item=parent}>
+                <tr>
+                  <td><{$parent.relation_title}></td>
+                  <!-- <td><{$parent.name}></td> -->
+                  <td><{$parent.phone}></td>
+                  <td><{$code.parentType[$parent.type].name}></td>
+                  <td><a class="btn btn-xs btn-danger eachDelete" href="javascript:void(0);" onclick="deleteParent(this)" name="<{$parent.id}>">x</a></td>
+                </tr>
+              <{/foreach}>
+              </table>
+            </td>
+            <td class="text-center"><{$code.status[$student.status].name}></td>
+            <td><{$student.created}></td>
+            <td>
+              <!-- <a class="btn btn-xs btn-danger" href="javascript:void(0);" onclick="linkConfirm('确定删除吗？', '?c=student&a=delete&id=<{$student.id}>')">删除</a> -->
+              <a class="btn btn-xs btn-danger eachDelete" href="javascript:void(0);" onclick="deleteEach(this)" name="<{$student.id}>">删除</a>
+              <a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="deleteEdit(this)" name="<{$student.id}>">编辑</a>
+              <!-- <a class="btn btn-xs btn-primary" href="?c=student&a=input&pc=student&pa=index&id=<{$student.id}>">编辑</a> -->
+            </td>
+          </tr>
+          <{/foreach}>
+          
+
+      </table>
+      <div class='clearfix'></div>
+      <div class="text-right toolbar">
+        <a style="width:80px;" class="btn btn-info btn-sm btn-danger hidden" href="javascript:void(0);" id="delete_button2">删除</a>
+      </div>
+      </div>
+      <div style="display: none;">
+          <!--print_start-->
+          <table style="border: #000 1px solid; align: center; width: 100%;" cellpadding="0" cellspacing="0">
+              <tr>
+                  <th>历史记录</th>
+                  <th>日志类型</th>
+                  <th>操作人</th>
+                  <th>操作时间</th>
+              </tr>
+              <{foreach from=$log_operation_print_list item=log_operation_print}>
+                  <tr>
+                      <td style="border:solid #add9c0; border-width:1px; text-align: center;"><{$log_operation_print.detail}></td>
+                      <td style="border:solid #add9c0; border-width:1px; text-align: center;"><{$code_sub_type.<{$log_operation_print.sub_type}>.name}></td>
+                      <td style="border:solid #add9c0; border-width:1px; text-align: center;"><{$log_operation_print.user_name}></td>
+                      <td style="border:solid #add9c0; border-width:1px; text-align: center;"><{$log_operation_print.created}></td>
+                  </tr>
+              <{/foreach}>
+          </table>
+          <!--print_end-->
+      </div>
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+
+
+$('#select-school').change(function() {
+  $.get('?c=class&a=getClassOption&id=' + $(this).val(), function(resp) {
+    if(resp.code == 0) {
+      var html = '<option selected="selected" value="">------</option>';
+      $.each(resp.optionList, function(n, o) {
+        html += '<option value="' + o.value + '">' + o.name + '</option>';
+      })
+      $('#select-class').html(html);
+    } else {
+      alert(resp.message);
+    }
+  }, 'json');
+});
+
+$("#export_button").click(function(){
+    $("#export_select").css("display", "block");
+});
+$("#search_button").click(function(){
+    $("#submit_action").attr("value", "index");
+    $("#search-form").submit();
+});
+$("#export_select_confirm").click(function(){
+    $("#submit_action").attr("value", "export");
+    $("#search-form").submit();
+    $("#export_select").css("display", "none");
+});
+$("#export_select_cancel").click(function(){
+    $("#export_select").css("display", "none");
+});
+
+$("#print_button").click(function(){
+    $("#print_select").css("display", "block");
+});
+$("#print_select_confirm").click(function(){
+    var print_title_height = null;
+    var print_title_weight = null;
+    var print_title_temperature = null;
+    var sh_name = $("#student_name").val();
+    var sh_class_id = $("#select-class").val();
+    
+    if ($("#print_title_height").is(":checked")) {
+        print_title_height = $("#print_title_height").attr('value');
+    }
+    if ($("#print_title_weight").is(":checked")) {
+        print_title_weight = $("#print_title_weight").attr('value');
+    }
+    if ($("#print_title_temperature").is(":checked")) {
+        print_title_temperature = $("#print_title_temperature").attr('value');
+    }
+    
+    var newWindow=window.open('?c=student&a=print&print_title_height='+print_title_height+'&print_title_weight='+print_title_weight+'&print_title_temperature='+print_title_temperature+'&sh[name]='+sh_name+'&sh[class_id]='+sh_class_id, function(){}, "_blank");
+      $("#print_select").css("display", "none");
+});
+$("#print_select_cancel").click(function(){
+      $("#print_select").css("display", "none");
+});
+
+$("#delete_button1").click(function(){
+    $(".studentCB").removeClass("hidden");
+    $("#delete_button2").removeClass("hidden");
+});
+$("#delete_button2").click(function(){
+    var tips = confirm("确定要删除选中的小朋友吗？");
+    if(tips){
+      var url = window.location.href;
+      var urlArr = url.split("]=");
+      var pageNum = urlArr[1];
+      var checkedList = new Array();
+      $("input[name = 'studentId']:checked").each(function(){
+        checkedList.push($(this).val());
+      });
+      var checkedStr = checkedList.toString();
+      if(pageNum){  
+        window.location.href="?c=student&a=batchDelete&page="+pageNum+"&id="+checkedStr;
+      }else{
+        window.location.href="?c=student&a=batchDelete&id="+checkedStr;
+      }
+    }
+});
+
+function deleteEach(obj){
+  var id = $(obj).attr("name");
+  var tips = confirm("确定要删除该小朋友吗?");
+  if(tips){
+      var url = window.location.href;
+      var urlArr = url.split("]=");
+      var pageNum = urlArr[1];
+      if(pageNum){  
+        window.location.href="?c=student&a=delete&page="+pageNum+"&id="+id;
+      }else{
+        window.location.href="?c=student&a=delete&id="+id;
+      }
+  }
+}
+  function deleteParent(obj){
+    var parentId = $(obj).attr("name");
+    var tips = confirm("确定要删除该家长吗?");
+    if(tips){
+        var url = window.location.href;
+        var urlArr = url.split("]=");
+        var pageNum = urlArr[1];
+        if(pageNum){  
+          window.location.href="?c=parent&a=delete&page="+pageNum+"&id="+parentId;
+        }else{
+          window.location.href="?c=parent&a=delete&id="+parentId;
+        }
+    }
+  }
+  function deleteEdit(obj){
+    var id = $(obj).attr("name");
+    var url = window.location.href;
+    var urlArr = url.split("]=");
+    var pageNum = urlArr[1];
+    if(pageNum){  
+      window.location.href="?c=student&a=input&pc=student&pa=index&page="+pageNum+"&id="+id;
+    }else{
+      window.location.href="?c=student&a=input&pc=student&pa=index&id="+id;
+    }
+  }
+</script>

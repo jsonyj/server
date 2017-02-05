@@ -1,0 +1,123 @@
+
+    <div class="container padding-rl-0">
+		<div class="col-xs-12 padding-rl-0">
+			<video controls="controls" autoplay="autoplay" class="width-100 video" id="<{$opendId}>" >
+  				<!-- <source src="./img/V60616-184413.mp4"/> -->
+  			</video>
+            <div class="stop-video hidden">
+                该频道暂时不能播放
+            </div>
+            <div class="stop-video hidden" id = "<{$os}>">
+                为了保证观看质量，请使用移动设备进行观看
+            </div>
+
+  		</div>
+		<!-- <div class="col-xs-12 bgcolor-white state-height">
+		</div>
+        <div class="col-xs-12 bgcolor-white padding-r-0 padding-b-5">
+            开放时间：<span class="timeQuantum"></span>
+        </div> -->
+        <div class="col-xs-12 bgcolor-white top-5 padding-tb-8">
+            <p class="video-name margin-b-0"></p>
+            <p class="margin-b-0">开放时间：<span class="timeQuantum"></span></p>
+        </div>
+	</div>
+	  <!-- 底部 -->
+    <!-- <div class="margin-top-100 height-di-w"></div> -->
+    <!--底部导航条-->
+    <footer class="footer">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+            <a href="?c=parent&a=index&studentId=<{$studentId}>" class="<{if $smarty.get.a ==videoDetails}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+
+            <!--跳转到接送报告-->
+            <a href="?c=parent&a=report&studentId=<{$studentId}>&type=<{$smarty.const.REPORT_TYPE_DAY}>" class="<{if $smarty.get.a ==report}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe616;</i><div>报告</div></a>
+
+
+            <!--跳转到查询-->
+            <a href="?c=query&a=index&studentId=<{$studentId}>" class="<{if $smarty.get.a ==index && $smarty.get.c==query}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe617;</i><div>查询</div></a>
+
+
+            <!--跳转到关系绑定-->
+            <a href="?c=group&a=index&id=<{$studentId}>" class="<{if $smarty.get.a ==index && $smarty.get.c==group}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>家庭管理</div></a>
+            
+            <!--跳转到电话绑定-->
+            <a href="?c=public&a=messageIndex&studentId=<{$studentId}>"><span class="xiaoxi-tishi hidden"></span><i class="iconfont iconfont-color-hei">&#xe614;</i><div>消息</div></a>
+        </div>
+    </footer>
+
+
+    <script> 
+        $(document).ready(function(){
+
+            var ws;
+            var channelId = <{$channelId}>;
+            var sourceStr = "";
+            var os = $('.stop-video').eq(1).attr('id');
+            $.ajax({
+                type: "POST",
+                url:"http://video.didano.com/video/client/post/channel_get_by_student/"+<{$studentId}>,
+                dataType: "json",
+                async: false,
+                success: function(rs){
+                    $.each(rs.data, function(idx, obj) {
+                        for(var i = 0; i < obj.length; i++){
+                            if(obj[i].channelId == channelId){
+                                if(os == 'phone'){ 
+                                    sourceStr = obj[i].ossPlayUrl;
+                                    $(".video").attr('src',sourceStr);
+                                }else{
+                                     console.log(os);
+                                    $('video').addClass("hidden");
+                                    $('.stop-video').eq(1).removeClass("hidden");
+                                }
+                                $(".video-name").html(obj[i].name);
+                                var timeStr = obj[i].start_ends.join("，")
+                                $(".timeQuantum").html(timeStr);
+                                break;
+                            }
+                        }
+                    });
+                },
+                error: function(){
+                    alert("找不到该视频通道");
+                }
+            });
+
+        
+
+            /*获取openid*/
+            var opendid = $("video").attr("id");
+            ws = new WebSocket("ws://www.didano.com:8080/video/ws/video_auth/"+channelId+"/"+<{$studentId}>+"/"+opendid);
+            ws.onopen = function (event) { 
+                console.log("已经与服务器建立了连接\r\n当前连接状态：" + this.readyState); 
+            };
+            ws.onmessage = function(event) {
+                var rsArr = JSON.parse(event.data);
+                if(rsArr.data['status'] == 1 && rsArr.data['open'] == 1){
+                    console.log(event+"222");
+                    $('video').removeClass("hidden");
+                    $('.stop-video').eq(0).addClass("hidden");
+                    $('.video').trigger('play');
+                    $('.video').attr('src',sourceStr);
+                    // $('.video').requestFullscreen();  
+                }else{
+                    console.log(event+"111");
+                    $(".stop-video").eq(0).removeClass("hidden");
+                    $('video').addClass('hidden');
+                    $('video').trigger('pause');
+                    $('video').attr('src',"");
+                    // $('.video').cancelFullScreen();
+                    // $('.video').exitFullscreen();
+                    // $('video').load(location.href+"video"); 
+                }
+            }
+            ws.onclose = function (event) { 
+                console.log("已经与服务器断开连接\r\n当前连接状态：" + this.readyState);
+            };
+            ws.onerror = function (event) {
+                console.log("WebSocket异常！"); 
+            };       
+        });
+    </script>

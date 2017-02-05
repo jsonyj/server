@@ -1,0 +1,125 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li>
+      <a href="?c=parent&a=index">家长一览</a>
+    </li>
+    <li>
+      <a href="?c=parent&a=input&pc=parent&pa=index&id=<{$parent.id}>&tab=student-tab">编辑家长</a>
+    </li>
+    <li class="active"><{if $smarty.get.id}>编辑<{else}>新增<{/if}>关联学生</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <form name="data_form" method="post">
+          <{if $form.id}><input type="hidden" name="form[id]" value="<{$form.id|escape}>" /><{/if}>
+          <table class="table table-bordered table-form">
+              <tr>
+                <th>家长姓名：</th>
+                <td><p class="form-control-static"><{$parent.name}></p></td>
+              </tr>
+              <tr>
+                <th>家长电话：</th>
+                <td><p class="form-control-static"><{$parent.phone}></p></td>
+              </tr>
+              <tr>
+                <th>所属学校：</th>
+                <td><p class="form-control-static"><{$parent.school_title}></p></td>
+              </tr>
+              <tr>
+                <th class="must">学生班级：</th>
+                <td>
+                  <select  name="form[class_id]" style='width:330px;' id="select-class">
+                    <{brave_html_select maxSize='30' code=$classList value=$form.class_id empty=true}>
+                  </select>
+                  <{brave_error_hint errors=$errors name=class_id}>
+                </td>
+              </tr>
+              <tr>
+                <th class="must">学生姓名：</th>
+                <td>
+                  <select  name="form[student_id]" style='width:330px;' id="select-student">
+                    <{brave_html_select maxSize='30' code=$studentList value=$form.student_id empty=true}>
+                  </select>
+                  <{brave_error_hint errors=$errors name=student_id}>
+                </td>
+              </tr>
+              <tr>
+                <th class="must">家长称谓：</th>
+                <td>
+                  <select  name="form[relation_id]" style='width:330px;' id="select-relation">
+                    <{brave_html_select maxSize='30' code=$code.relation value=$form.relation_id empty=true}>
+                  </select>
+                  <div class="select-divh <{if $form.relation_id != $smarty.const.PARENT_TYPE_OTHER}>hidden<{/if}>" style="margin-top:10px;">
+                      <input type="text" name="form[relation_title]" size="30" placeholder="请输入您的称谓" class="form-control text" value="<{$form.relation_title}>"/>
+                  </div>
+                  <{brave_error_hint errors=$errors name=relation_id}>
+                  <{brave_error_hint errors=$errors name=relation_title}>
+                </td>
+              </tr>
+              <tr class="option">
+                <th></th>
+                <td>
+                  <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                </td>
+              </tr>
+          </table>
+      </form>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+$('#select-school').change(function() {
+  $.get('?c=class&a=getClassOption&id=' + $(this).val(), function(resp) {
+    if(resp.code == 0) {
+      var html = '<option selected="selected" value="">------</option>';
+      $.each(resp.optionList, function(n, o) {
+        html += '<option value="' + o.value + '">' + o.name + '</option>';
+      })
+      $('#select-class').html(html);
+      $('#select-student').html('<option selected="selected" value="">------</option>');
+    } else {
+      alert(resp.message);
+    }
+  }, 'json');
+});
+
+$('#select-class').change(function() {
+  $.get('?c=student&a=getStudentOption&id=' + $(this).val(), function(resp) {
+    if(resp.code == 0) {
+      var html = '<option selected="selected" value="">------</option>';
+      $.each(resp.optionList, function(n, o) {
+        html += '<option value="' + o.value + '">' + o.name + '</option>';
+      })
+      $('#select-student').html(html);
+    } else {
+      alert(resp.message);
+    }
+  }, 'json');
+});
+
+$('#select-relation').change(function(){
+    var val = $(this).val();
+    if(val == "<{$smarty.const.PARENT_TYPE_OTHER}>"){
+        $('.select-divh').removeClass('hidden');
+    }else{
+        $('.select-divh').addClass('hidden');
+    }
+
+
+});
+
+
+</script>

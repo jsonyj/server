@@ -1,0 +1,98 @@
+ 
+    <!--消息列表 -->
+    <{if $userSystemNoticeList}>
+    <section id="cd-timeline" class="cd-container">
+        <{foreach from=$userSystemNoticeList item=val}>
+            <div class="cd-timeline-block">
+                <span class="timeline-span"><{$val.created|date_format:"n月d日"}></span>
+                <div class="cd-timeline-img cd-picture">
+                </div>
+                <div class="cd-timeline-content">
+                    <div class="user_avatar"><img  src="<{$smarty.const.APP_OSS_URL}><{$val.send_user_avatar}>"/></div>
+                    <p><{$val.content}></p>
+                    <a href="<{$val.url}>&studentId=<{$studentId}>&systemNotice_id=<{$val.id}>" class="cd-read-more <{if $val.is_read == $smarty.const.APP_UNIFIED_FALSE}>shifou-yidu <{/if}>">详情</a>
+                    <span class="cd-date"><{$val.created|date_format:"H:i:s"}></span>
+                </div>
+            </div>
+        <{/foreach}>
+    </section>
+    <{else}>
+    <div class="section">
+        <div class="container">
+            <div class="row parent-index-div">
+                <div class="col-xs-12 position-relative">
+                    <div class="unMessageList">暂无消息记录</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <{/if}>
+    
+   
+    <div class="margin-top-50 height-di-w  clear-both"></div>
+    <!--底部导航条-->
+    <footer class="footer footer_teacher">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+            <a href="?c=school&a=classStatistic&teacher_id=<{$loginUser.id}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+            <!--跳转到发布通知-->
+            <a href="?c=staff&a=deliverNotice&teacher_id=<{$loginUser.id}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>发送通知</div></a>
+
+            <!--跳转到留言消息-->
+            <a href="?c=staff&a=notice&teacher_id=<{$loginUser.id}>" class="<{if $smarty.get.a ==notice && $smarty.get.c==staff}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe614;</i><div>消息</div></a>
+        </div>
+    </footer>
+        
+    <!--底部导航条-->
+    <footer class="footer">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+            <a href="?c=parent&a=index&studentId=<{$studentId}>" class="<{if $smarty.get.a ==index && $smarty.get.c == parent}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+
+            <!--跳转到接送报告-->
+            <a href="?c=parent&a=report&studentId=<{$studentId}>&type=<{$smarty.const.REPORT_TYPE_DAY}>" class="<{if $smarty.get.a ==report}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe616;</i><div>报告</div></a>
+
+
+            <!--跳转到查询-->
+            <a href="?c=query&a=index&studentId=<{$studentId}>" class="<{if $smarty.get.a ==index && $smarty.get.c==query}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe617;</i><div>查询</div></a>
+
+
+            <!--跳转到关系绑定-->
+            <a href="?c=group&a=index&id=<{$studentId}>" class="<{if $smarty.get.a ==index && $smarty.get.c==group}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>家庭管理</div></a>
+            
+            <!--跳转到电话绑定-->
+            <a href="?c=public&a=messageIndex&studentId=<{$studentId}>" class="<{if $smarty.get.a ==messageIndex && $smarty.get.c==public}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe614;</i><div>消息</div></a>
+        </div>
+    </footer>
+
+    <!-- 退回 -->
+    
+ <script>   
+    $(function() {
+        //初始化日期控件
+        var opt = {
+            preset: 'date', //日期
+            theme: 'android-ics light', //皮肤样式
+            display: 'modal', //显示方式
+            mode: 'scroller', //日期选择模式
+            lang:'zh',
+            dateFormat: 'yy-mm-dd', // 日期格式
+            setText: '确定', //确认按钮名称
+            cancelText: '取消',//取消按钮名籍我
+            dateOrder: 'yymmdd', //面板中日期排列格式
+            showNow: false,
+            maxDate: new Date(),
+        };
+       
+        $("#sh_date").mobiscroll(opt);
+       
+        $('#sh_date').change(function() {
+            var new_date = $('#sh_date').val();
+            $('#day_time').val(new_date);
+            $('#repost-form').submit();
+        });
+    });
+    
+    </script>

@@ -1,0 +1,90 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li>
+      <a href="?c=version&a=index">版本一览</a>
+    </li>
+    <li class="active"><{if $smarty.get.id}>编辑<{else}>新增<{/if}>版本</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <form name="data_form" method="post" enctype="multipart/form-data">
+          <{if $form.id}><input type="hidden" name="form[id]" value="<{$form.id|escape}>" /><{/if}>
+          <table class="table table-bordered table-form">
+              <tr>
+                <th class="must">选择文件：</th>
+                <td>
+                  <input type="file" name="file" size="30" class="form-control text"/>
+                </td>
+              </tr>
+              <tr>
+                <th class="must">设备类型：</th>
+                <td>
+                  <select  name="form[device_type]" style='width:330px;' id="<{$form.device_type|escape}>">
+                    <option value ="1">robot_android</option>
+                    <option value ="2">robot_linux</option>
+                    <option value ="3">gates_linux</option>
+                  </select>
+                </td>
+              </tr>
+              
+              <tr>
+                <th class="must">群名称：</th>
+                <td>
+                  <select name="form[branch_id]" style='width:330px;' id="status<{$form.branch_id|escape}>">
+                  <{foreach from=$branchList item=branch key=key}> 
+                    <option value ="<{$branch.id}>"><{$branch.branch_name}></option>
+                  <{/foreach}>
+                  </select>
+
+                </td>
+              </tr>
+             
+              <tr>
+                <th class="must">版本号：</th>
+                <td>
+                  <input type="text" name="form[version_no]" size="30" class="form-control text" value="<{if $form.branch_id == 0}><{$form.main_version|escape}><{else}><{$form.branch_version|escape}><{/if}>"/>
+                  <font color="red">*主版本3位编写，eg：1.2.1；群版本2位编写，eg：2.1（2对应群号）</font>
+                </td>
+
+              </tr>
+              <tr>
+                <th class="must">设备型号：</th>
+                <td>
+                  <input type="text" name="form[model_no]" size="30" class="form-control text" value="<{$form.model_no|escape}>"/>
+                </td>
+              </tr>
+              <tr>
+                <th class="must">版本说明：</th>
+                <td>
+                  <input type="text" name="form[version_des]" size="30" class="form-control text" value="<{$form.version_des|escape}>"/>
+                </td>
+              </tr>
+              <tr class="option">
+                <th></th>
+                <td>
+                  <input type="submit" class="btn btn-primary" name="complete" value="上传" />
+                </td>
+              </tr>
+          </table>
+      </form>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+    $(document).ready(function(){
+       $("#status").attr("value",'${requestScope.status}'); 
+    })
+</script>

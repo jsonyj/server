@@ -1,0 +1,75 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li>
+      <a href="?c=class&=index">班级一览</a>
+    </li>
+    <li class="active"><{if $smarty.get.id}>编辑<{else}>新增<{/if}>班级</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <form name="data_form" method="post">
+          <{if $form.id}><input type="hidden" name="form[id]" value="<{$form.id|escape}>" /><{/if}>
+          <table class="table table-bordered table-form">
+              <tr>
+                <th class="must">名称：</th>
+                <td>
+                  <input type="text" name="form[title]" size="30" class="form-control text" value="<{$form.title|escape}>"/>
+                  <{brave_error_hint errors=$errors name=title}>
+                </td>
+              </tr>
+              <tr>
+                <th class="must">开学日期：</th>
+                <td>
+                  <div class='input-group date' id='datetimepicker1'>
+                    <input type="text" name="form[start]" size="30" class="form-control form-control-datepicker text" value="<{$form.start|escape}>"/>
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
+                  <span id="helpBlock" class="help-block">请输入首次开学日期，计算入学年级使用</span>
+                  <{brave_error_hint errors=$errors name=start}>
+                </td>
+              </tr>
+              <tr>
+                <th class="must">学校：</th>
+                <td>
+                  <select  name="form[school_id]" style='width:330px;'>
+                    <{brave_html_select maxSize='30' code=$schoolList value=$form.school_id empty=true}>
+                  </select>
+                  <{brave_error_hint errors=$errors name=school_id}>
+                </td>
+              </tr>
+              <tr>
+                  <th class="must">有效状态：</th>
+                  <td>
+                    <{ace_switch name="form[status]" value=$form.status code="1"}>
+                  </td>
+              </tr>
+              <tr class="option">
+                <th></th>
+                <td>
+                  <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                </td>
+              </tr>
+          </table>
+      </form>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+jQuery(function($) {
+});
+</script>

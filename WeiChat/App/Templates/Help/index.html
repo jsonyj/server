@@ -1,0 +1,18 @@
+
+        <div class="">
+            
+        </div>
+
+        
+<div class="help-table">
+    <{foreach from=$help_list item=help key=key}>
+    <table class="table table-bordered">
+        <col />
+        <col width="55"/>
+        <tr>
+            <th><a href="<{$help.link}>"><{$help.title}></a></th>
+            <td><img src="<{$smarty.const.APP_OSS_URL}><{$help.icon_img}>"  class="img-responsive"></td>
+        </tr>
+    </table>
+    <{/foreach}>
+</div>

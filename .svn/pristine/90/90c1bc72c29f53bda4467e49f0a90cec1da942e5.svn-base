@@ -1,0 +1,68 @@
+<div class="btn-toolbar pull-right pagination-wrapper" role="toolbar" aria-label="">
+
+    <div class="btn-group" role="group" aria-label="">
+      <div class="form-control-static" ><{$paging.count|number_format}> 件</div>
+    </div>
+
+    <div class="btn-group" role="group" aria-label="">
+
+      <ul class="pagination pagination-sm">
+
+          <{if $paging.count}>
+          <{if $paging.pre}>
+          <li><a href="<{brave_uri_replace array=sh page=1}>">&laquo;</a></li>
+          <li><a href="<{brave_uri_replace array=sh page=$paging.pre}>">&lt;</a></li>
+          <{else}>
+          <li class="invalid"><span>&lt;&lt;</span></li>
+          <li class="invalid"><span>&lt;</span></li>
+          <{/if}>
+
+          <{if $paging.start}>
+          <li><a href="<{brave_uri_replace array=sh page=1}>"><{$paging.start}></a></li>
+          <{/if}>
+
+          <{section name=main start=$paging.main.start loop=$paging.main.start + $paging.main.count}>
+          <{if $smarty.section.main.index eq $paging.page}>
+          <li class="active"><span><{$smarty.section.main.index}></span></li>
+          <{else}>
+          <li><a href="<{brave_uri_replace array=sh page=$smarty.section.main.index}>"><{$smarty.section.main.index}></a></li>
+          <{/if}>
+          <{/section}>
+          
+          <{if $paging.end}>
+          <li><a href="<{brave_uri_replace array=sh page=$paging.pages}>"><{$paging.end}></a></li>
+          <{/if}>
+
+          <{if $paging.next}>
+          <li><a href="<{brave_uri_replace array=sh page=$paging.next}>">&gt;</a></li>
+          <li><a href="<{brave_uri_replace array=sh page=$paging.pages}>">&gt;&gt;</a></li>
+          <{else}>
+          <li class="invalid"><span>&gt;</span></li>
+          <li class="invalid"><span>&gt;&gt;</span></li>
+          <{/if}>
+
+          <{/if}>
+      </ul>
+
+    </div>
+
+    <{if $paging.code.one}>
+    <div class="btn-group" role="group" aria-label="">
+      <select class="form-control" name="sh[one]" onchange="pagingChange()">
+          <{brave_html_select code=$paging.code.one value=$sh.one}>
+      </select>
+    </div>
+    <{/if}>
+
+    <{if $paging.count}>
+    <div class="btn-group" role="group" aria-label="">
+      <div class="input-group input-group-sm">
+          <input class="form-control page-input" type="text" name="sh[page]" value="">
+          <span class="input-group-btn">
+              <input class="btn btn-primary btn-xs" type="submit" value="GO">
+          </span>
+      </div>
+    </div>
+    <{/if}>
+
+</div>

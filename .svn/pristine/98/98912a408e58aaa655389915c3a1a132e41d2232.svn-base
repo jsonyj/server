@@ -1,0 +1,127 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+  <ul class="breadcrumb">
+    <li class="active">设备运营统计</li>
+  </ul><!-- /.breadcrumb -->
+</div>
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+</br>
+</br>
+
+      <!-- PAGE CONTENT BEGINS -->
+      <form method="get" name="search_form" class="search-form" id="search-form">
+          <input type="hidden" name="c" value="school" />
+          <input type="hidden" name="a" value="dataStatistics" id="submit_action" />
+          
+          
+          <table class="table table-bordered table-condensed ">
+              <tr>
+                <th>选择日期：</th>
+                  <td>
+                    <input id="start_date" readonly="readonly" type="text" name="sh[date_time]" size="30" class="form-control text" value="<{$sh.date_time|date_format:'Y-m-d'}>" style="width:240px;" /><span style="color:red">*必选时间，否则无法查询<span>
+                  </td>
+                <td class="button" style="width:130px">
+                    <div><button type="submit" class="btn btn-primary btn-xs" id="search_button"><i class="ace-icon fa fa-search"></i> 搜索</button>
+                    <a href="?c=school&a=dataStatistics" class="btn btn-default btn-xs"><i class="ace-icon fa fa-undo"></i> 重置</a></div>
+                </td>
+              </tr>
+          </table> 
+           
+      </form>
+      
+      </br>
+      </br>
+      <div class='clearfix'></div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center">
+
+            <col width="180" />
+            <col width="180" />
+            <col width="180"/>
+            <col width="180" />
+            <col width="180" />
+            <col width="180" />
+            <col width="180" />
+
+            <tr>
+              <th class="text-center">学校名称</th>
+              <th class="text-center">
+              本校未识别人数</th>
+              <th class="text-center">绑定家长数</th>
+              <th class="text-center">
+              放学家长接送人数
+              </th>
+              <th class="text-center">学生总数</th>             
+              <th class="text-center">成功晨检人数</th>
+              <th class="text-center">晨检人数比例</th>
+            </tr>
+
+            <{foreach from=$dataStatisticsList item=dataStatistics key=key}>
+            <tr id="row_<{$admin.id}>">
+              <td class="text-center"><{$dataStatistics.title}></td>
+              <td><{$dataStatistics.unidentificationNum}></td>
+              
+              <td><{$dataStatistics.bindParentNum}></td>
+              <td><{$dataStatistics.packUpNum}></td>
+              <td><{$dataStatistics.studentNum}></td>             
+              <td class="text-center"><{$dataStatistics.successNum}></td>
+              <td><{$dataStatistics.percent}></td>
+            </tr>
+            <{/foreach}>
+
+        </table>
+      </div>
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+<script type="text/javascript">
+
+$(document).ready(function(){
+    showDatePicker();
+});
+
+function showDatePicker(){
+    $("#start_date").datepicker({
+        inline:true, 
+        dateFormat: "yy-mm-dd",
+        currentText:'确定',
+        showButtonPanel:true,
+    });
+
+    $("#end_date").datepicker({
+        inline:true,
+        dateFormat: "yy-mm-dd",
+        closeText:'确定',
+        showButtonPanel:true,
+    });
+
+    $("#al_start_date").datepicker({
+      inline:true,
+      dateFormat:"yy-mm-dd",
+      closeText:'确定',
+      showButtonPanel:true,
+    });
+
+    $("#al_end_date").datepicker({
+      inline:true,
+      dateFormat:"yy-mm-dd",
+      closeText:'确定',
+      showButtonPanel:true,
+    })
+
+}
+
+ $("#search_button").click(function(){
+    var valStr = $("#start_date").val();
+    if(!valStr){
+      alert("请选择查看设备运行时间!");
+    }
+ });
+
+</script>

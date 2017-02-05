@@ -1,0 +1,8 @@
+<div class="row row-content margin-lr-none">
+  <{if $message.url}><a href="<{$message.url}>"><{/if}>
+    <div class="alert alert-<{$message.type}>" role="alert" style="font-size:20px;"><i class="iconfont iconfont-<{$message.type}>">&#xe60c;</i> <{$message.body}></div>
+  <{if $message.url}></a><{/if}>
+</div>
+
+<script>
+</script>

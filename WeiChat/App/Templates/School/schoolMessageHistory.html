@@ -1,0 +1,41 @@
+	<!-- 园长历史消息页 -->
+    <{if $schoolMessageHisList}>
+    <section id="cd-timeline" class="cd-container">
+        <{foreach from=$schoolMessageHisList item=val}>
+            <div class="cd-timeline-block">
+                <span class="al-timeline-span"><{$val.created|date_format:"y年m月d日"}></span>
+                <div class="cd-timeline-img cd-picture">
+                </div>
+                <div class="cd-timeline-content">
+                    <p><span class="tongzhi-color"><{$val.name}>：</span><{$val.content}></p>
+                    <p><span class="al-tongzhi-color">提示：</span>发送至<span class="color-red"><{$val.send_num}></span>人，已有<span class="color-red"><{$val.is_read}>人阅读</span></p>
+                    <span class="cd-date"><{$val.created|date_format:"H:i:s"}></span>
+                </div>
+            </div>
+        <{/foreach}>
+    </section>
+    <{else}>
+    <div class="section">
+        <div class="container">
+            <div class="row parent-index-div">
+                <div class="col-xs-12 position-relative">
+                    <div class="unMessageList">暂无消息记录</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <{/if}>
+
+	<div class="margin-top-50 height-di-w  clear-both"></div>
+    <!--底部导航条-->
+    <footer class="footer footer_school">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+            <a href="?c=school&a=schoolStatistic&statistic_id=<{$loginUser.id}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+            <!--跳转到发布通知-->
+            <a href="?c=school&a=deliverNotice&statistic_id=<{$loginUser.id}>" class="<{if $smarty.get.a ==deliverNotice && $smarty.get.c==school}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>发送通知</div></a>
+
+            <!--跳转到留言消息-->
+        </div>
+    </footer>

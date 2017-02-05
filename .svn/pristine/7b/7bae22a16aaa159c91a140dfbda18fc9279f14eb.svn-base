@@ -1,0 +1,122 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+  <ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'><i class="fa fa-arrow-left"></i></a>&nbsp;&nbsp;
+    <li class="active">接送一览</li>
+  </ul><!-- /.breadcrumb -->
+</div>
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+</br>
+</br>
+
+      <!-- PAGE CONTENT BEGINS -->
+      <form method="get" name="search_form" class="search-form" id="search-form">
+          <input type="hidden" name="c" value="parent" />
+          <input type="hidden" name="a" value="pickUp" id="submit_action" />
+          
+          
+          <table class="table table-bordered table-condensed ">
+              <tr>
+                <th>学生姓名：</th>
+                <td><input type="text" name="sh[name]" value="<{$sh.name}>" size="30" id="student_name"></td>
+                <th>选择日期：</th>
+                  <td>
+                    <input id="start_date" readonly="readonly" type="text" name="sh[date_time]" size="30" class="form-control text" value="<{$sh.date_time|date_format:'Y-m-d'}>" style="width:240px;" /><span style="color:red">*必选时间，否则无法查询<span>
+                  </td>
+                <td class="button" style="width:130px">
+                    <div><button type="submit" class="btn btn-primary btn-xs" id="search_button"><i class="ace-icon fa fa-search"></i> 搜索</button>
+                    <a href="?c=parent&a=pickUp" class="btn btn-default btn-xs"><i class="ace-icon fa fa-undo"></i> 重置</a></div>
+                </td>
+              </tr>
+          </table>
+          <{if !empty($pickUpPic_list)}><{include file="../Common/paginate.html"}><{/if}>  
+           
+      </form>
+      
+      </br>
+      </br>
+      <div class='clearfix'></div>
+      <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+
+                    <col  width="100"/>
+                    <col  width="100"/>
+                    <col  width="100"/>
+                    <col  width="100"/>
+                    <col  width="100"/>
+                    <col  width="100"/>
+                    <h2 class="text-center"><font color="#EE0000"><{if empty($pickUpPic_list)}>请查询家长接送照片！<{/if}></font></h2>
+                    <{foreach from=$pickUpPic_list item=img key=key}>
+                    <{if $key%6 == 0}>
+                        <tr>
+                    <{/if}>
+                        <td  class="text-center worksbox">
+                            <a target="_blank" href="<{$smarty.const.APP_OSS_URL}><{$img.path}>">
+                            <img  id="<{$key}>"src="<{$smarty.const.APP_OSS_URL}><{$img.path}>"  class="img_claim"/></a>
+                            <{if $img.subPath}>
+                              <a target="_blank" href="<{$smarty.const.APP_OSS_URL}><{$img.subPath}>">
+                              <img  id="<{$key}>"src="<{$smarty.const.APP_OSS_URL}><{$img.subPath}>"  class="img_claim"/></a>
+                            <{/if}>
+                            <p><{$img.createTime}></p>
+                        </td>
+
+                        <{if $key%6 == 0 && $i != 0}>
+                            </tr>
+                        <{/if}>
+                    <{/foreach}>
+          </table>
+      </div>
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+<script type="text/javascript">
+
+$(document).ready(function(){
+    showDatePicker();
+});
+
+function showDatePicker(){
+    $("#start_date").datepicker({
+        inline:true, 
+        dateFormat: "yy-mm-dd",
+        currentText:'确定',
+        showButtonPanel:true,
+    });
+
+    $("#end_date").datepicker({
+        inline:true,
+        dateFormat: "yy-mm-dd",
+        closeText:'确定',
+        showButtonPanel:true,
+    });
+
+    $("#al_start_date").datepicker({
+      inline:true,
+      dateFormat:"yy-mm-dd",
+      closeText:'确定',
+      showButtonPanel:true,
+    });
+
+    $("#al_end_date").datepicker({
+      inline:true,
+      dateFormat:"yy-mm-dd",
+      closeText:'确定',
+      showButtonPanel:true,
+    })
+
+}
+
+ $("#search_button").click(function(){
+    var valStr = $("#start_date").val();
+    if(!valStr){
+      alert("请选择家长接送照片日期!");
+    }
+ });
+
+</script>

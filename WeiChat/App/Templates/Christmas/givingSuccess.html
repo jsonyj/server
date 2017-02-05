@@ -1,0 +1,46 @@
+
+	<div class="gift-success-body">
+		<div class="gift-success-img">
+			<img src="img/giving_success.png" class="gift-img">
+		</div>
+		<div class="col-xs-12 padding-20">
+            <{if $getGivingNum>0}>
+    			<div class="col-xs-5 btn btn-green-bk border-radius60" onclick="window.location.href='?c=christmas&a=givingGift&studentId=<{$studentId}>&classId=<{$classId}>&type=2'">	
+    				继续送礼
+    			</div>
+    			<div class="col-xs-5 btn btn-green-bk col-xs-offset-2 border-radius60" onclick="window.location.href='?c=christmas&a=index&studentId=<{$studentId}>&classId=<{$classId}>'">
+    				返回活动首页
+    			</div>
+            <{else}>
+                <div class="col-xs-6 btn btn-green-bk col-xs-offset-3 border-radius60" onclick="window.location.href='?c=christmas&a=index&studentId=<{$studentId}>&classId=<{$classId}>'">
+                    返回活动首页
+                </div>
+            <{/if}>
+            <div class="col-xs-12 text-center success-tips">
+                你还能给<{$getGivingNum}>个最好的朋友送上圣诞祝福
+            </div>
+		</div>
+	</div>
+
+
+	    <footer class="footer">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+            <a href="?c=parent&a=index&studentId=<{$student.id}>" class="<{if $smarty.get.a ==index && $smarty.get.c == parent}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+
+            <!--跳转到接送报告-->
+            <a href="?c=parent&a=report&studentId=<{$student.id}>&type=<{$smarty.const.REPORT_TYPE_DAY}>" class="<{if $smarty.get.a ==report}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe616;</i><div>报告</div></a>
+
+
+            <!--跳转到查询-->
+            <a href="?c=query&a=index&studentId=<{$student.id}>" class="<{if $smarty.get.a ==index && $smarty.get.c==query}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe617;</i><div>查询</div></a>
+
+
+            <!--跳转到关系绑定-->
+            <a href="?c=group&a=index&id=<{$student.id}>" class="<{if $smarty.get.a ==index && $smarty.get.c==group}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>家庭管理</div></a>
+            
+            <!--跳转到电话绑定-->
+            <a href="?c=public&a=messageIndex&studentId=<{$student.id}>"><span class="xiaoxi-tishi hidden"></span><i class="iconfont iconfont-color-hei">&#xe614;</i><div>消息</div></a>
+        </div>
+    </footer>

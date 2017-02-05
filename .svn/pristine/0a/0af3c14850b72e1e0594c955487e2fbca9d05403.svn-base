@@ -1,0 +1,128 @@
+ 
+ 
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+    <form method="post" id="data-from">
+    <div class="section margin-lr-none">
+        <div class="container">
+            <div class="row group-input-div">
+                    <div class="col-xs-12 padding-none">
+                        <input type="hidden" name="complete" value="complete">
+                        <input type="hidden" name="form[parent_id]" value="<{$parent.id}>">
+                        <div class="form-group-s">
+                            <input type="text" class="form-control" placeholder="家长姓名" name="form[name]" value="<{$parent.name}>" >
+                        </div>
+                        <div class="form-group-s">
+                            <input type="text" class="form-control" placeholder="家长电话号码" name="form[phone]"value="<{$parent.phone}>"  >
+                        </div>
+                        <div class="form-group-s">
+                            <select id="relation-select" class="form-control dida-input" style="text-indent:0px;" name="form[relation_id]" value="" >
+                                <option value="">请选择与宝宝关系</option>
+                                <{brave_html_select code=$code.relation value=$parent.value empty=false}>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="relation_title_div" <{if $parent.value != $smarty.const.PARENT_TYPE_OTHER}> style="display:none"<{/if}>>
+                          <input type="text" class="form-control" id="form-relation-title" placeholder="请输入与学生关系例：舅舅" name="form[relation_title]"
+                          <{if $parent.value != 99}>
+                           value=""
+                           <{else}>
+                           value="<{$parent.relation_title}>"
+                           <{/if}>
+                           >
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="section sec-welfare margin-top-30">
+        <div class="container">
+            <div class="row parent-index-biao">
+                <div class="col-xs-12 text-center padding-none">
+                    <button type="button" class="btn btn-success col-xs-12 button-height-45 al-btn-color" onclick="saveGroup(this)">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+      
+    <div class="margin-top-100 height-di-w"></div>
+    <!--底部导航条-->
+    <footer class="footer">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center">
+            <a href="?c=parent&a=index&studentId=<{$student.id}>" class="<{if $smarty.get.a ==index && $smarty.get.c == parent}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+            <!--跳转到接送报告-->
+            <a href="?c=parent&a=report&studentId=<{$student.id}>&type=<{$smarty.const.REPORT_TYPE_DAY}>" class="<{if $smarty.get.a ==report}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe616;</i><div>报告</div></a>
+
+            <!--跳转到查询-->
+            <a href="?c=query&a=index&studentId=<{$student.id}>" class="<{if $smarty.get.a ==index && $smarty.get.c==query}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe617;</i><div>查询</div></a>
+
+            <!--跳转到关系绑定-->
+            <a href="?c=group&a=index&id=<{$student.id}>" class="<{if $smarty.get.a ==input && $smarty.get.c==group}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>家庭管理</div></a>
+
+
+            <!--跳转到电话绑a定-->
+            <a href="?c=public&a=messageIndex&studentId=<{$student.id}>"><span class="xiaoxi-tishi hidden"></span><i class="iconfont iconfont-color-hei">&#xe614;</i><div>消息</div></a>
+        </div>
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+                var hm = document.createElement("script");
+                hm.src = "//hm.baidu.com/hm.js?06abfa8d15984e47d948d94dafbb9483";
+                var s = document.getElementsByTagName("script")[0]; 
+                s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+    </footer>
+    
+<script>
+
+    $(function() {
+        xiaoxiTishi();
+        function  xiaoxiTishi(){
+            $.get('?c=public&a=ajaxMessageTishi', function(rs){
+                if(rs.code == 0){
+                    $('.xiaoxi-tishi').removeClass('hidden');
+                }else{
+                    $('.xiaoxi-tishi').addClass('hidden');
+                }
+            }, 'json');
+        }
+    });
+
+function saveGroup(btn) {
+  var l = Ladda.create(btn);
+  l.start();
+  $.post('?c=group&a=input&id=' + <{$smarty.get.id}>, $('#data-from').serialize(), function(resp) {
+    if(resp.code == 0) {
+      BootstrapDialog.show({
+        title: '',
+        cssClass: 'dialog-no-title',
+        message: '成员添加成功！',
+        buttons: [{
+          label: '确定',
+          action: function(dialog) {
+            location.href = '?c=group&id=' + <{$smarty.get.id}>;
+          }
+        }]
+      });
+    } else {
+      toast(resp.message);
+    }
+  }, 'json').always(function() {
+    l.stop();
+  });
+}
+
+  $('#relation-select').change(function(){
+        if($('#relation-select').val() == <{$smarty.const.PARENT_TYPE_OTHER}>){
+            $('#relation_title_div').show();
+        }
+        else {
+            $('#relation_title_div').hide();
+        }
+    });
+</script>

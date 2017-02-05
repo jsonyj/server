@@ -1,0 +1,133 @@
+<!-- logo -->
+<div class="row top-nav-bar">
+    <div class="text-left">
+    </div>
+    <div class="col-xs-9 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h4 class="text-center">用户绑定</h4>
+    </div>
+</div>
+<!-- /.logo -->
+
+<div class="row user-profile-body">
+
+  <div class="panel panel-default no-margin">
+  
+    <form id="role_form" name="role_form" method="post">
+        <input type="hidden" name="complete" value="complete">
+        
+        <div class="panel-heading">
+            <select id="role-select" name="form[role]" class="form-control" style="padding:5px;">
+                <{brave_html_select maxSize='30' code=$code.role value=$form.role default=<{$role_defalut}>}>
+            </select>
+        </div>
+    
+        <div class="panel-heading no-bottom">
+
+            <div>
+                <div class="form-group">
+                  <label for="form-phone">手机号码：</label>
+                  <input type="tel" class="form-control" id="form-phone" placeholder="请输入手机号码"  name="form[phone]" value="<{$form.phone|escape}>">
+                </div>
+                <div class="form-group">
+                  <label for="form-captcha">验证码：</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="form-captcha" placeholder="请输入手机验证码" name="form[captcha]">
+                    <span class="input-group-btn">
+                      <button class="btn btn-warning" type="button" id="captcha-button" onclick="getCaptcha(this)">获取验证码</button>
+                    </span>
+                  </div>
+                </div>
+            </div>
+            
+            <div class="text-center padding-top-15">
+                <button type="button" class="btn btn-success width-100 ladda-button" data-style="expand-left" data-size="l" onclick="javascript:submitBind();">提交</button>
+            </div>
+        </div>
+    </form>
+    
+  </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+$(function(){
+    
+    $('#role-select').change(function(){
+        if($('#role-select').val() == <{$smarty.const.ACT_PARENT_ROLE}>){
+            <{if $parent_is_bind}>
+                location.href = '?c=bind&a=bindStudent';
+            <{/if}>
+        }
+    });
+    
+});
+
+function getCaptcha(o) {
+    var phone = $('#form-phone').val();
+    var role_type = $('#role-select').val();
+
+    if(phone == null || phone.length == 0) {
+        toast('请输入手机号码');
+        return;
+    }
+
+    var seconds = 120;
+    $(o).attr('disabled', 'disabled');
+
+    $.post('?c=bind&a=bindCaptcha', {phone: phone, type: role_type}, function(resp) {
+        if(resp.code == 0) {
+            toast('验证码已经发送到您手机，请注意查收', 'info');
+            var countdown = setInterval(function() {
+                if(seconds <= 0) {
+                    $(o).html('获取验证码');
+                    $(o).removeAttr('disabled');
+                    clearInterval(countdown);
+                }
+                else {
+                    $(o).html(' ' + seconds + ' 秒');
+                    seconds--;
+                }
+            }, 1000);
+        }
+        else {
+            $('#alert-message').removeClass('hidden');
+            $(o).removeAttr('disabled');
+            toast(resp.message);
+        }
+    }, 'json');
+}
+
+function submitBind() {
+    var valid = true;
+    var phone = $('#form-phone').val();
+    var captcha = $('#form-captcha').val();
+
+    if(phone == '' || phone.length == 0) {
+        toast('请输入手机号码');
+        valid = false;
+    } else if(captcha == '' || captcha.length != 4) {
+        toast('请输入正确的验证码');
+        valid = false;
+    }
+
+    if(valid) {
+        $.post('?c=bind&a=index', $('#role_form').serialize(), function(resp) {
+            if(resp.code == 0) {
+                location.href = '?c=index&a=message';
+            }
+            else if(resp.code == 301) {
+                location.href = '?c=bind&a=bindStudent';
+            }
+            else {
+                toast(resp.message);
+            }
+        }, 'json');
+    }
+}
+
+</script>

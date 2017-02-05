@@ -1,0 +1,12 @@
+<div class="list-group-item" id="list-group-item-message-<{$message.id}>">
+  <p class="list-group-item-text"><{$message.content|escape}></p>
+  <div class="row margin-top-5 no-padding">
+    <div class="col-xs-6 no-padding">
+      <{$message.created|escape}>
+      <{if $student.parent_type || $smarty.session[$smarty.const.SESSION_USER].id == $message.parent_id}>
+      <a class="margin-left-10" href="javascript:void(0);" onclick="deleteMessage(<{$message.id}>, this)" data-style="zoom-out" data-size="l" ><i class="iconfont">&#xe605;</i></a>
+      <{/if}>
+    </div>
+    <div class="col-xs-6 no-padding text-right"><{$message.relation_title|escape}></div>
+  </div>
+</div>

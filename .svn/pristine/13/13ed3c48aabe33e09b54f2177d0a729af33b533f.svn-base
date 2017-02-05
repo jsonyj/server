@@ -1,0 +1,183 @@
+    <div class="classmates-div <{if $type==1}>hidden<{/if}>">
+        <div class="nav-top">
+            <div class="col-xs-12">  
+                <div class="col-xs-6">   
+                  <span>选择要赠送的好朋友</span>
+                </div>
+                <div class="col-xs-6 text-right" id="complete-btn">  
+                    <span class="btn btn-gray-bk border-radius8">去挑选礼物</span>
+                </div>
+            </div>
+        </div>
+        <div class="gift-list">
+            
+            <form class="classmates_gifts_form" name="classmates_form" method="post">
+                <input type="hidden" name="form[student_id]" value="<{$studentId}>" class="classmates-input"/>
+                <{foreach from=$classmatesList item=classmates}>
+                    <div class="col-xs-4 rl-padding-10 text-center" id="<{$classmates.id}>" onclick="chooseStudent(this)">
+                        <img src="<{if $classmates.org_img_url}><{$smarty.const.APP_OSS_URL}><{$classmates.org_img_url}><{else}>img/baby_img.png<{/if}>" class="gift-img">
+                        <p><{$classmates.name}></p>
+                        <input type="radio" class="hidden" name="form[classmates_info][]" value="<{$classmates.id}>,<{$classmates.name}>"/>
+                        <div class="ourter-circle hidden">
+                            <div class="inner-circle">
+                            </div>
+                        </div>
+                    </div>
+                <{/foreach}>
+                <div class="col-xs-12 b-padding-50"></div>
+            <form>
+        </div>
+    </div>
+
+    <div class="gifts-div <{if $type==2}>hidden<{/if}>">
+        <div class="nav-top">
+            <div class="col-xs-12">
+                <{if $type==1}>
+                    <div class="col-xs-6 gift-back-btn">
+                        选择送该朋友的礼物
+                    </div> 
+                <{else}>
+                    <div class="col-xs-6 gift-back-btn">
+                        <span class="gift-back-tips"><img src="img/gift_back.png"></span>
+                        <span class="gift-back-tips gift-back-text">返回</span>
+                    </div> 
+                <{/if}>
+                <div class="col-xs-6 text-right giving-gift-btn" id="complete-gift-btn" onclick="submitGivingGift()">   
+                    <span class="btn  btn-gray-bk border-radius8">赠送礼物</span>
+                </div>
+            </div>
+    	</div>
+    	<div class="gift-list">
+            <form class="classmates_gifts_form" name="gift_form" method="post">
+                <{foreach from=$giftList item=gift}>
+        			<div class="col-xs-4 text-center rl-padding-10" id="<{$gift.id}>" onclick="chooseGift(this)">
+        				<img src="<{$smarty.const.APP_OSS_URL}><{$gift.gift_img}>" class="gift-img">
+        				<p><{$gift.gift_name}></p>
+                        <input type="radio" class="hidden" name="form[gifts_info][]" value="<{$gift.id}>,<{$gift.gift_name}>,<{$gift.gift_img}>"/>
+        				<div class="ourter-circle hidden">
+        					<div class="inner-circle">
+        					</div>
+        				</div>
+        			</div>
+    		  <{/foreach}>
+              <div class="col-xs-12 b-padding-50"></div>
+            <form>
+    	</div>
+    </div>
+
+    <div class="modal fade " id="classmates-tips" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <span class="close_bi hidden" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></span>
+            <div class="modal-body" style="height:50px;text-indent: 1em;">
+            </div>
+            <div class="dialog-footer text-center" style="padding-bottom: 15px;padding-bottom: 20px;">
+                <button type="button" class="btn btn-md btn-default" id="comment-close" onclick="cancel(event);" >取消</button> 
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <{if $returnStudentList}>
+        <div class="hidden">
+            <form class="classmates_gifts_form" name="classmates_form" method="post">
+                <input name="form[student_id]" value="<{$studentId}>" />
+                <input type="radio" checked="checked"  name="form[classmates_info][]" value="<{$returnStudentList.id}>,<{$returnStudentList.name}>"/>
+            <form>
+        </div>
+    <{/if}>
+
+
+
+        <!--底部导航条-->
+    <footer class="footer">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+            <a href="?c=parent&a=index&studentId=<{$student.id}>" class="<{if $smarty.get.a ==index && $smarty.get.c == parent}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+
+            <!--跳转到接送报告-->
+            <a href="?c=parent&a=report&studentId=<{$student.id}>&type=<{$smarty.const.REPORT_TYPE_DAY}>" class="<{if $smarty.get.a ==report}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe616;</i><div>报告</div></a>
+
+
+            <!--跳转到查询-->
+            <a href="?c=query&a=index&studentId=<{$student.id}>" class="<{if $smarty.get.a ==index && $smarty.get.c==query}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe617;</i><div>查询</div></a>
+
+
+            <!--跳转到关系绑定-->
+            <a href="?c=group&a=index&id=<{$student.id}>" class="<{if $smarty.get.a ==index && $smarty.get.c==group}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>家庭管理</div></a>
+            
+            <!--跳转到电话绑定-->
+            <a href="?c=public&a=messageIndex&studentId=<{$student.id}>"><span class="xiaoxi-tishi hidden"></span><i class="iconfont iconfont-color-hei">&#xe614;</i><div>消息</div></a>
+        </div>
+    </footer>
+
+
+
+    <script>
+        var studentArr=[];
+        function chooseStudent(obj){
+            $('#complete-btn').children('span').addClass('btn-green-bk');
+            if(studentArr.length){
+                var idStr = "#"+studentArr.shift();
+                ($(idStr).children('.ourter-circle')).addClass("hidden");
+                ($(idStr).children('input')).attr("checked",false);
+                studentArr.pop();
+            }
+            studentArr.push($(obj).attr("id"));
+            ($(obj).children('.ourter-circle')).removeClass("hidden");
+            ($(obj).children('input')).attr("checked",true);
+
+        }
+        var giftArr=[];
+        function chooseGift(obj){
+            $('#complete-gift-btn').children('span').addClass('btn-green-bk');
+            if(giftArr.length){
+                var idStr = "#"+giftArr.shift();
+                ($(idStr).children('.ourter-circle')).addClass("hidden");
+                ($(idStr).children('input')).attr("checked",false);
+                giftArr.pop();
+            }
+            giftArr.push($(obj).attr("id"));
+            ($(obj).children('.ourter-circle')).removeClass("hidden");
+            ($(obj).children('input')).attr("checked",true);
+
+        }
+        
+        function submitGivingGift(obj){
+            if(!$('#complete-gift-btn').children('span').hasClass('btn-green-bk')){
+                $("#classmates-tips").modal('show');
+                $('#classmates-tips').find('.modal-dialog').css({  
+                'margin-top':'150px'});
+                $('.modal-body').html("亲爱的，你还没有选择要赠送给好朋友的礼物哦。");
+            }else{ 
+                $.post('?c=christmas&a=ajaxGivingGift', $('.classmates_gifts_form').serialize(),function(rs){
+                   if(rs.code == 0){
+                        window.location.href = "?c=christmas&a=givingSuccess&studentId=<{$studentId}>&classId=<{$classId}>";
+                   }
+                },'json');
+            }
+        }
+        $("#complete-btn").click(function(){
+            if($('#complete-btn').children('span').hasClass('btn-green-bk')){
+                $(".classmates-div").addClass("hidden");
+                $(".gifts-div").removeClass("hidden");
+            }else{
+                $("#classmates-tips").modal('show');
+                $('#classmates-tips').find('.modal-dialog').css({  
+                'margin-top':'150px'
+                });
+                $('.modal-body').html("亲爱的，你还没有选择要赠送的小朋友哦。");
+            }
+        });
+
+        function cancel(){
+          $('#classmates-tips').modal('hide');
+        }
+
+        $(".gift-back-btn").click(function(){
+            $(".classmates-div").removeClass("hidden");
+            $(".gifts-div").addClass("hidden");
+
+        });
+    </script>

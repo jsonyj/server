@@ -1,0 +1,111 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'><i class="fa fa-arrow-left"></i></a>&nbsp;&nbsp;
+    <li class="active">职工一览</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form method="get" name="search_form" class="search-form" id="search-form">
+          <input type="hidden" name="c" value="staff" />
+                  
+          <input type="hidden" name="a" value="index" />
+
+          <table class="table table-bordered table-condensed ">
+              <tr>
+                <th>姓名：</th>
+                <td><input type="text" name="sh[name]" value="<{$sh.name}>" size="30"></td>
+                <th>电话号码：</th>
+                <td><input type="text" name="sh[phone]" value="<{$sh.phone}>" size="30"></td>
+                <td rowspan="2" class="button" style="width:130px;">
+                    <div><button type="submit" class="btn btn-primary btn-xs"><i class="ace-icon fa fa-search"></i> 搜索</button>
+                    <a href="?c=staff&a=index" class="btn btn-default btn-xs"><i class="ace-icon fa fa-undo"></i> 重置</a></div>
+                </td>
+              </tr>
+              <tr>
+                  <th>职工类型：</th>
+                  <td colspan="3">
+                      <select name="sh[type]" class="form-control text">
+                          <{brave_html_select maxSize='30' code=$code.staff_type value=$sh.type empty=true}>
+                      </select>
+                  </td>
+              </tr>
+          </table>
+
+        <{include file="../Common/paginate.html"}>
+      </form>
+
+      <div class='clearfix'></div>
+      <div class="text-right toolbar">
+          <a style="width:80px;" class="btn btn-info btn-sm" href="?c=staff&a=input&pc=staff&pa=input">新增</a>
+      </div>
+      <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+
+          <col />
+          <col width="120" />
+          <col width="100" />
+          <col width="100" />
+          <col width="200" />
+          <col width="100" />
+          <col width="200" />
+          <col width="105" />
+
+          <tr>
+            <th>姓名</th>
+            <th>电话</th>
+            <th>班级</th>
+            <th>职工类型</th>
+            <th class="text-center">签到类型</th>
+            <th>有效状态</th>
+            <th <{brave_order code=$code.order.default array=sh key='a' name='field' txt="创建时间"}>></th>
+            <th>操作</th>
+          </tr>
+
+          <{foreach from=$staffList item=staff key=key}>
+          <tr id="row_<{$staff.id}>">
+            <td><{$staff.name}></td>
+            <td><{$staff.phone}></td>
+            <td><{$staff.class_title}></td>
+            <td class="text-center"><{$code.staff_type[$staff.type].name}></td>
+            <td class="text-center">
+                <{$staff.title}><br/>(<{$staff.in_time|date_format:'H:i'}>~<{$staff.out_time|date_format:'H:i'}>)
+            </td>
+            <td class="text-center"><{$code.status[$staff.status].name}></td>
+            <td><{$staff.created}></td>
+            <td>
+              <a class="btn btn-xs btn-danger" href="javascript:void(0);" onclick="linkConfirm('确定删除吗？', '?c=staff&a=delete&id=<{$staff.id}>')">删除</a>
+              <!-- <a class="btn btn-xs btn-primary" href="?c=staff&a=input&pc=staff&pa=input&id=<{$staff.id}>">编辑</a> -->
+              <a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="deleteEdit(this)" name="<{$staff.id}>">编辑</a>
+            </td>
+          </tr>
+          <{/foreach}>
+
+      </table>
+      </div>
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+  function deleteEdit(obj){
+    var id = $(obj).attr("name");
+    var url = window.location.href;
+    var urlArr = url.split("]=");
+    var pageNum = urlArr[1];
+    if(pageNum){  
+      window.location.href="?c=staff&a=input&pc=staff&pa=index&page="+pageNum+"&id="+id;
+    }else{
+      window.location.href="?c=staff&a=input&pc=staff&pa=index&id="+id;
+    }
+  }
+</script>

@@ -1,0 +1,87 @@
+<!-- logo -->
+<div class="row top-nav-bar">
+    <div class="text-left">
+    </div>
+    <div class="col-xs-9 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h4 class="text-center">领取页面</h4>
+    </div>
+</div>
+<!-- /.logo -->
+
+<div class="row user-profile-body">
+
+  <div class="panel panel-default no-margin">
+    <div class="panel-heading no-bottom">
+            <div class="row">
+            <{if $detectionClaimList}>
+                <{foreach from=$detectionClaimList item=claim}>
+                <div class="col-xs-6" style="padding-bottom: 10px;">
+                    <img class="img-responsive img-circle-avatar1" onclick="claim(<{$claim.id}>);" src="<{if $claim.file_path}><{$smarty.const.APP_OSS_URL}><{$claim.file_path}><{else}>http://tse1.mm.bing.net/th?id=OIP.M76446756dcb348b279464f77687a43b9o0&pid=15.1<{/if}>">
+                </div>
+                <{/foreach}>
+            <{else}>
+                <div class="alert alert-danger text-center" role="alert" style="font-size: 15px;">暂无数据</div>
+            <{/if}>
+            </div>
+            <br />
+    </div>
+    
+  </div>
+  <br>
+
+</div>
+
+<!-- 确认选中照片 -->
+<div class="modal fade msg-modal" id="claim_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+          <form id="comment_form">
+              <input id="detection-claim-id" type="hidden" name="form[id]">
+              <input type="hidden" name="form[student_id]" value="<{$student.id}>">
+              <input type="hidden" name="form[day]" value="<{$day}>">
+              
+              <p class="text-center" style="font-size: 14px;">确定是我家宝宝<b>“<{$student.name}>”</b></p>
+          </form>
+      </div>
+      <div class="dialog-footer text-center" style="padding-bottom: 15px;">
+        <button type="button" class="btn btn-md btn-default" id="comment-close" onclick="cancel(event);" >取消</button> 
+        <button type="button" class="btn btn-md btn-danger" id="comment_button" onclick="commentAjax(<{$student.id}>);" >确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+function claim(id){
+    $('#detection-claim-id').val(id);
+    $('#claim_modal').modal('show');
+}
+
+function cancel(){
+    $('#claim_modal').modal('hide');
+}
+
+function commentAjax(student_id){
+    $.ajax({
+        type: "post",
+        url: "?c=claim&a=claimReceiveAjax",
+        data: $("#comment_form").serialize(),
+        dataType: "json",
+        success:function(data){
+            if(data.code == 0){
+                //关闭模态框
+                $("#claim_modal").modal('hide');
+                window.location.href = "?c=parent&a=report&type=<{$smarty.const.REPORT_TYPE_DAY}>&studentId="+student_id;
+            }else{
+                $.notify(data.errors); //回填错误信息
+            }
+        }
+    });
+}
+
+</script>

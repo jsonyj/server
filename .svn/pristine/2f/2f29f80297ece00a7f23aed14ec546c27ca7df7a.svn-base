@@ -1,0 +1,129 @@
+	<div class="container margin-top-15">
+			<!-- <div class="col-xs-6 padding-5-0-10-10" onclick="window.location.href=''">	
+                <div>
+				    <img src="./img/u8.jpg" alt="监控" class="width-100">
+                    <div class="coverDiv"></div>    
+                </div>
+				<p class="padding-top-5">贝恩班教室监控</p>
+			</div>
+            <div class="col-xs-6 padding-5-0-10-10" onclick="window.location.href=''"> 
+                <img src="./img/u8.jpg" alt="监控" class="width-100">
+                <p class="padding-top-5">贝恩班教室监控</p>
+            </div> -->
+	</div>
+
+
+    <div class="modal fade " id="classmates-tips" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <span class="close_bi hidden" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></span>
+                <div class="modal-body" style="height:auto;text-indent: 1em;">
+                </div>
+                <div class="dialog-footer text-center" style="padding-bottom: 15px;padding-bottom: 20px;">
+                <button type="button" class="btn btn-md btn-default" id="comment-close" onclick="cancel(event);" >取消</button> 
+                </div>
+            </div>
+        </div>
+    </div>
+	<!-- 底部 -->
+    <!-- <div class="margin-top-100 height-di-w"></div> -->
+    <!--底部导航条-->
+    <footer class="footer">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+            <a href="?c=parent&a=index&studentId=<{$studentId}>" class="<{if $smarty.get.a ==videoIndex}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+
+            <!--跳转到接送报告-->
+            <a href="?c=parent&a=report&studentId=<{$studentId}>&type=<{$smarty.const.REPORT_TYPE_DAY}>" class="<{if $smarty.get.a ==report}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe616;</i><div>报告</div></a>
+
+
+            <!--跳转到查询-->
+            <a href="?c=query&a=index&studentId=<{$studentId}>" class="<{if $smarty.get.a ==index && $smarty.get.c==query}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe617;</i><div>查询</div></a>
+
+
+            <!--跳转到关系绑定-->
+            <a href="?c=group&a=index&id=<{$studentId}>" class="<{if $smarty.get.a ==index && $smarty.get.c==group}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>家庭管理</div></a>
+            
+            <!--跳转到电话绑定-->
+            <a href="?c=public&a=messageIndex&studentId=<{$studentId}>"><span class="xiaoxi-tishi hidden"></span><i class="iconfont iconfont-color-hei">&#xe614;</i><div>消息</div></a>
+        </div>
+    </footer>
+
+    <script>
+
+        
+        $(document).ready(function(){
+            var item = "";
+            var flag = 0;
+            $.ajax({
+                type: "POST",
+                url:"http://video.didano.com/video/client/post/channel_get_by_student/"+<{$studentId}>,
+                dataType: 'JSON',
+                success: function(rs){
+                    if(!rs.success){
+                        item = '<div class="no-video col-xs-12">网络异常，暂时无法播放</div>';
+                    }else{
+                        
+                        $.each(rs.data, function(index, obj) {
+                            if(obj.length==0){
+                                item = '<div class="no-video col-xs-12">网络异常，暂时无法播放</div>';
+                            }else{
+
+                                for(var i = 0; i < obj.length; i++){ 
+                                    if(obj[i].on){
+                                        var clickUrl = "'"+"?c=parent&a=videoDetails&studentId="+<{$studentId}>+"&channelId="+obj[i].channelId+"'";
+                                        item += '<div class="col-xs-6 padding-5-0-10-10" onclick="window.location.href='+clickUrl+'"><img class="width-100" src="./img/u8.jpg"><p class="padding-top-5">'+obj[i].name+'</p></div>';
+                                    }else{
+                                        item += '<div class="col-xs-6 padding-5-0-10-10" onclick="timeTips(this)" id="'+obj[i].start_ends+'"><div><img class="width-100" src="./img/u8.jpg"><div class="coverDiv">未到开放时间</div></div><p class="padding-top-5">'+obj[i].name+'</p></div>';
+                                        flag = 1;
+                                        
+                                    }
+                                }
+                            }
+                        });
+                    } 
+                    $('.margin-top-15').append(item);//内容添加到页面上。
+                     if(flag == 1){
+                        var imgWidth = $('img').width();
+                        var imgHeight = imgWidth/700 * 466;
+                        console.log(imgWidth);
+                        console.log(imgHeight);
+                        $('.coverDiv').width(imgWidth);
+                        $('.coverDiv').height(imgHeight);
+                        $('.coverDiv').css('line-height',imgHeight+'px'); 
+                     }  
+                    
+
+                },
+                error: function(){
+                    console.log("错误");
+                    item = '<div class="no-video col-xs-12">网络异常，暂时无法播放</div>';
+                    $(".margin-top-15").append(item);//内容添加到页面上。
+                }
+            });
+
+        })
+
+
+        function timeTips(obj){
+            // var timeStr = $(obj).attr('id');
+            var timeArr = $(obj).attr('id').split(',');
+            var time;
+            var timeStr = "";
+            for (time in timeArr)
+            {
+                timeStr += '<p  class="margin-b-0" style="text-indent: 6em;">'+timeArr[time]+'</p>';
+            }
+            var timeTipsStr = "温馨提示：亲，该视频通道仅在每天的："+timeStr+'<p class="margin-b-0" style="text-indent: 6em;">时间段内可以观看！</p>';
+            $("#classmates-tips").modal('show');
+                $('#classmates-tips').find('.modal-dialog').css({  
+                'margin-top':'150px'});
+                $('.modal-body').html(timeTipsStr);
+        }
+
+        function cancel(){
+          $('#classmates-tips').modal('hide');
+        }
+  	</script>
+			

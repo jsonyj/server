@@ -1,0 +1,132 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li class="active">学生一览</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form method="get" name="search_form" class="search-form" id="search-form">
+          <input type="hidden" name="c" value="student" />
+          <input type="hidden" name="a" value="index" />
+
+          <table class="table table-bordered table-condensed ">
+              <tr>
+                <th>学生名称：</th>
+                <td colspan="3"><input type="text" name="sh[name]" value="<{$sh.name}>" size="30"></td>
+                <td class="button" style="width:130px" rowspan="2">
+                    <div><button type="submit" class="btn btn-primary btn-xs"><i class="ace-icon fa fa-search"></i> 搜索</button>
+                    <a href="?c=student&a=index" class="btn btn-default btn-xs"><i class="ace-icon fa fa-undo"></i> 重置</a></div>
+                </td>
+              </tr>
+              <tr>
+                <th>学校：</th>
+                <td>
+                  <select name="sh[school_id]" style="width:230px;" id="select-school">
+                    <{brave_html_select maxSize='30' code=$schoolList value=$sh.school_id empty=true}>
+                  </select>
+                </td>
+                <th>班级：</th>
+                <td>
+                  <select name="sh[class_id]" style="width:230px;" id="select-class">
+                    <{brave_html_select maxSize='30' code=$classList value=$sh.class_id empty=true}>
+                  </select>
+                </td>
+              </tr>
+          </table>
+
+        <{include file="../Common/paginate.html"}>
+      </form>
+      
+      <div class='clearfix'></div>
+      <div class="text-right toolbar">
+        <a style="width:80px;" class="btn btn-info btn-sm" href="?c=student&a=input&pc=student&pa=index">新增</a>
+      </div>
+      <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+
+          <col width="180" />
+          <col width="50" />
+          <col width="80" />
+          <col width="160" />
+          <col width="120" />
+          <col />
+          <col width="70" />
+          <col width="150" />
+          <col width="101" />
+
+          <tr>
+            <th>学生名称</th>
+            <th>性别</th>
+            <th>生日</th>
+            <th>学校名称</th>
+            <th>班级名称</th>
+            <th>家长信息</th>
+            <th>有效状态</th>
+            <th <{brave_order code=$code.order.default array=sh key='a' name='field' txt="创建时间"}>></th>
+            <th>操作</th>
+          </tr>
+
+          <{foreach from=$studentList item=student key=key}>
+          <tr id="row_<{$admin.id}>">
+            <td><{$student.name}></td>
+            <td class="text-center"><{$code.gender[$student.gender].name}></td>
+            <td><{if $student.birthday == '0000-00-00'}><{else}><{$student.birthday|escape}><{/if}></td>
+            <td><{$student.school_title}></td>
+            <td><{$student.class_title}></td>
+            <td>
+              <table class="table table-striped table-condensed">
+              
+              <col width="60">
+              <col />
+              <col width="120">
+              <col width="60">
+
+              <{foreach from=$student.parentList item=parent}>
+                <tr>
+                  <td><{$parent.relation_title}></td>
+                  <td><{$parent.name}></td>
+                  <td><{$parent.phone}></td>
+                  <td><{$code.parentType[$parent.type].name}></td>
+                </tr>
+              <{/foreach}>
+              </table>
+            </td>
+            <td class="text-center"><{$code.status[$student.status].name}></td>
+            <td><{$student.created}></td>
+            <td>
+              <a class="btn btn-xs btn-danger" href="javascript:void(0);" onclick="linkConfirm('确定删除吗？', '?c=student&a=delete&id=<{$student.id}>')">删除</a>
+              <a class="btn btn-xs btn-primary" href="?c=student&a=input&pc=student&pa=index&id=<{$student.id}>">编辑</a>
+            </td>
+          </tr>
+          <{/foreach}>
+
+      </table>
+      </div>
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+$('#select-school').change(function() {
+  $.get('?c=class&a=getClassOption&id=' + $(this).val(), function(resp) {
+    if(resp.code == 0) {
+      var html = '<option selected="selected" value="">------</option>';
+      $.each(resp.optionList, function(n, o) {
+        html += '<option value="' + o.value + '">' + o.name + '</option>';
+      })
+      $('#select-class').html(html);
+    } else {
+      alert(resp.message);
+    }
+  }, 'json');
+});
+</script>

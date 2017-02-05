@@ -1,0 +1,63 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'><i class="fa fa-arrow-left"></i></a>&nbsp;&nbsp;
+    <li class="active">考勤类型列表</li>
+  </ul><!-- /.breadcrumb -->
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form method="get" name="search_form" class="search-form" id="search-form">
+          <input type="hidden" name="c" value="sign" />
+          <input type="hidden" name="a" value="typeIndex" />
+          <input type="hidden" name="pc" value="sign" />
+          <{include file="../Common/paginate.html"}>
+      </form>
+
+      <div class='clearfix'></div>
+      <div class="text-right toolbar">
+          <a style="width:80px;" class="btn btn-info btn-sm" href="?c=sign&a=typeInput&pc=sign&pa=typeIndex">新增</a>
+      </div>
+      <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+
+          <col />
+          <col />
+          <col />
+          <col width="101" />
+
+          <tr>
+            <th>类型名称</th>
+            <th>签到时间</th>
+            <th>签退时间</th>
+            <th>操作</th>
+          </tr>
+
+          <{foreach from=$type_list item=type key=key}>
+          <tr id="row_<{$type.id}>">
+            <td><{$type.title}></td>
+            <td><{date('H:i',strtotime($type.in_time))}></td>
+            <td><{date('H:i',strtotime($type.out_time))}></td>
+            <td>
+              <a class="btn btn-xs btn-danger" href="javascript:void(0);" onclick="linkConfirm('确定删除吗？', '?c=sign&a=delete&id=<{$type.id}>')">删除</a>
+              <a class="btn btn-xs btn-primary" href="?c=sign&a=typeInput&pc=sign&pa=typeInput&id=<{$type.id}>">编辑</a>
+            </td>
+          </tr>
+          <{/foreach}>
+
+      </table>
+      </div>
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+
+</script>

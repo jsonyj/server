@@ -1,0 +1,141 @@
+
+.no-skin #main-container .main-content .page-content .row form table tr td textarea.textareaheight{
+    height: 480px;
+}
+
+.toolbar {
+    margin-bottom: 5px;
+}
+
+.bootstrap-timepicker-widget.dropdown-menu.timepicker-orient-left.timepicker-orient-top.open {
+  z-index: 9999;
+}
+
+.toolbar .btn-group > .btn.btn-sm > .caret {
+  margin-top: 0px;
+}
+
+.statistic-info span {
+  padding-right: 45px;
+  padding-left: 5px;
+}
+
+.search-form > .table > tbody > tr > th {
+  vertical-align: middle;
+}
+.main-container .main-content .main-content-inner .page-content .form-group fieldset.fieldset{
+    border: 1px solid silver;margin: 0 2px;padding: 0.35em 0.625em 0.75em;
+}
+.main-container .main-content .main-content-inner .page-content .form-group fieldset.fieldset legend.legend{
+    border:0px;margin-bottom: 0px;width: inherit;
+}
+
+legend label {
+  padding: 5px 10px;
+}
+
+.form-control-select {
+  width: 330px;
+}
+
+.modal-dialog {
+  width: 800px;
+}
+
+td div img {
+  width:100%;
+}
+#main-container .main-content .page-content table tr td table tr td,#main-container .main-content .page-content table tr td table tr th{
+    padding: 5px;
+}
+.main-container .main-content .page-content .tab-content table tr td .edui-container .edui-editor-body div p img,.main-container .main-content .page-content fieldset table tr td div p img{
+    width: inherit;
+}
+.product-list-title a:hover {
+  text-decoration: none;
+}
+.edui-container, .edui-btn-toolbar, .edui-dialog-container {
+  width:100%;
+}
+.glyphicon-danger {
+  color: red;
+}
+
+.help-block {
+ margin: 0px;
+}
+
+.table .table.table-striped.table-condensed {
+  margin-bottom: 0px;
+}
+.datetimepicker-hours .table-condensed{
+    width: 189px;
+}
+.datetimepicker-hours .table-condensed thead{
+    display:none;
+}
+.datetimepicker .datetimepicker-minutes .table-condensed{
+    width: 189px;
+}
+.datetimepicker .datetimepicker-minutes .table-condensed thead{
+    display:none;
+}
+.img_little {
+  width: 45px;
+  height:45px;
+}
+.img_claim {
+  width: 100px;
+  height: 100px;
+}
+.export_select, .print_select{
+    height: 100px;
+    display: none;
+    background: #f5f5f5;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.al_export_select{
+    height: 130px !important;
+}
+
+.export_select_title, .print_select_title{
+    width: 200px;
+    height: 100%;
+    padding-top: 10px;
+    position: absolute;
+    right: 400px;
+}
+
+.export_select_form, .print_select_form{
+    width: 200px;
+    height: 100%;
+    padding-top: 10px;
+    padding-left: 10px;
+    text-align: left;
+    position: absolute;
+    right: 200px;
+}
+
+.export_select_button, .print_select_button{
+    width: 200px;
+    height: 100%;
+    text-align: center;
+    padding-top: 60px;
+    position: absolute;
+    right: 0;
+}
+.al_export_select_button{
+    padding-top: 100px !important;
+}
+.export_select_button span, .print_select_button span{
+    padding: 5px 10px;
+    border: 1px solid #b0b0b0;
+    border-radius: 2px;
+    background: #f1f1f1;
+}
+
+.al_picImg_size{
+  width: 150px !important;
+  height: 150px !important;
+}

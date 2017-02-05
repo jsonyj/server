@@ -1,0 +1,236 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'><i class="fa fa-arrow-left"></i></a>&nbsp;&nbsp;
+    <li class="active">签到统计列表</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form method="get" name="search_form" class="search-form" id="search-form">
+          <input type="hidden" name="c" value="sign" />
+          <input type="hidden" name="pc" value="sign"/>
+          <!-- <input type="hidden" name="a" value="index"/> -->
+          <input type="hidden" name="a" value="index" id="submit_action" />
+
+          
+          
+          <table class="table table-bordered table-condensed">
+              <tr>
+                  <th>起始日期：</th>
+                  <td>
+                    <input id="start_date" readonly="readonly" type="text" name="sh[start_time]" size="30" class="form-control text" value="<{$sh.start_time|date_format:'Y-m-d'}>"/>
+                  </td>
+                  <th>结束日期：</th>
+                  <td>
+                    <input id="end_date" readonly="readonly" type="text" name="sh[end_time]" size="30" class="form-control text" value="<{$sh.end_time|date_format:'Y-m-d'}>"  />
+                  </td>
+                  <td class="button" style="width:130px" rowspan="2">
+                      <div><button type="submit" class="btn btn-primary btn-xs" id="search_button"><i class="ace-icon fa fa-search"></i> 搜索</button>
+                      <a href="?c=sign&a=index" class="btn btn-default btn-xs"><i class="ace-icon fa fa-undo"></i> 重置</a></div>
+                  </td>
+              </tr>
+              <tr>
+                  <th>职工姓名：</th>
+                    <td>
+                        <select name="sh[staffId]" class="form-control text" style='width:330px;' id="select-staff-name">
+                              <{brave_html_select maxSize='30' code=$staffAllList value=$sh.staffId empty=true}>
+                        </select>
+                    </td>
+
+                  <th>考勤状态：</th>
+                    <td>
+                        <select  name="sh[sign_status]" style='width:330px;' id="select-staff-signdate">
+                                <{brave_html_select maxSize='30' code=$sign_status value=$sh.sign_status empty=true}>
+                        </select>
+                    </td>
+              </tr>
+
+          </table>
+            <{include file="../Common/paginate.html"}>
+      
+
+
+       <div class='clearfix'></div>
+       <div class="text-right toolbar">
+        <a style="width:80px;" class="btn btn-info btn-sm" href="javascript:void(0);" id="export_button">导出</a>
+      </div>
+
+      <div class="export_select al_export_select" id="export_select">
+          <div class="export_select_title">请选择导出日期和输入职工电话：</div>
+          <div class="export_select_form">
+              <table>
+                  <tr>
+                      <td>开始日期：</td>
+                      <td><input id="al_start_date"  type="text" name="export_title[start_time]" style="height:30px; width:120px;" class="form-control text" value="<{$export_title.start_time|date_format:'Y-m-d'}>"  />
+                      <span style="color:red">*必选开始时间</span>
+                      </td>
+                  </tr>
+              </table>
+              <table class="al_date_tab">
+                  <tr>
+                      <td>结束日期：</td>
+                      <td><input id="al_end_date"  type="text" name="export_title[end_time]" style="height:30px;width:120px;" class="form-control text" value="<{$export_title.end_time|date_format:'Y-m-d'}>"  />
+                      </td>
+                  </tr>
+              </table>
+              <table class="al_date_tab">
+                  <tr>
+                      <td>职工姓名：</td>
+                      <td>
+                        <select  name="export_title[staffId]" id="al_staffId" style="height:30px;width:120px;margin-top:5px;">
+                                <{brave_html_select maxSize='30' code=$staffAllList value=$export_title.staffId empty=true}>
+                        </select>
+                    </td>
+                  </tr>
+              </table>
+          </div>
+          <div class="export_select_button al_export_select_button">
+              <a href="javascript:void(0)" style="text-decoration:none;"><span id="export_select_confirm">确定</span></a>
+              <a href="javascript:void(0)" style="text-decoration:none;"><span id="export_select_cancel">取消</span></a>
+          </div>
+      </div>
+      </form>
+      <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+          <table class="table table-bordered table-hover">
+
+                <col width="110" />
+                <col />
+                <col width="110" />
+                <col width="80" />
+                <col width="100" />
+                <col width="80" />
+                <col width="80" />
+                <col width="70" />
+                <col width="70" />
+
+                <tr>
+                  <th <{brave_order code=$code.order.default array=sh key='a' name='field' txt="签到日期"}>></th>
+                  <th>用户姓名</th>
+                  <th>电话号码</th>
+                  <th>用户类型</th>
+                  <th class="text-center">考勤状态</th>
+                  <th>签到时间</th>
+                  <th>签退时间</th>
+                  <th>签到图片</th>
+                  <th>签退图片</th>
+                </tr>
+
+                <{foreach from=$sign_list item=sign key=key}>
+                <tr>
+                  <td><{$sign.sign_date}></td>
+                  <td><{$sign.name}></td>
+                  <td ><{$sign.phone}></td>
+                  <td class="text-center"><{$code.sign_staff[$sign.type].name}></td>
+                  <td class="text-center"><{$code.sign_status[$sign.sign_status].name}></td>
+                  <{if $sign.in_time eq '00:00:00'}>
+                  <td></td>
+                  <{else}>
+                  <td class="text-center"><{date('H:i',strtotime($sign.in_time))}></td>
+                  <{/if}>
+                  <{if $sign.out_time eq '00:00:00'||$sign.sign_status eq '2'||$sign.sign_status eq '3'}>
+                  <td></td>
+                  <{else}>
+                  <td class="text-center"><{date('H:i',strtotime($sign.out_time))}></td>
+                  <{/if}>
+                  <{if $sign.in_img neq ''}>
+                  <td class="text-center">
+                      <a target="_blank" href="<{$smarty.const.APP_OSS_URL}><{$sign.in_img}>"><img src="<{$smarty.const.APP_OSS_URL}><{$sign.in_img}>"  class="img_little"></a>
+                  </td>
+                  <{else}>
+                  <td></td>
+                  <{/if}>
+                  <{if $sign.out_img neq ''}>
+                  <td class="text-center">
+                      <a target="_blank" href="<{$smarty.const.APP_OSS_URL}><{$sign.out_img}>"><img src="<{$smarty.const.APP_OSS_URL}><{$sign.out_img}>"  class="img_little"></a>
+                  </td>
+                  <{else}>
+                  <td></td>
+                  <{/if}>
+                </tr>
+                <{/foreach}>
+      </table>
+      </div>
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+<script type="text/javascript">
+
+$(document).ready(function(){
+    showDatePicker();
+});
+
+function showDatePicker(){
+    $("#start_date").datepicker({
+        inline:true, 
+        dateFormat: "yy-mm-dd",
+        currentText:'确定',
+        showButtonPanel:true,
+    });
+
+    $("#end_date").datepicker({
+        inline:true,
+        dateFormat: "yy-mm-dd",
+        closeText:'确定',
+        showButtonPanel:true,
+    });
+
+    $("#al_start_date").datepicker({
+      inline:true,
+      dateFormat:"yy-mm-dd",
+      closeText:'确定',
+      showButtonPanel:true,
+    });
+
+    $("#al_end_date").datepicker({
+      inline:true,
+      dateFormat:"yy-mm-dd",
+      closeText:'确定',
+      showButtonPanel:true,
+    })
+
+
+}
+
+$("#export_button").click(function(){
+    $("#export_select").css("display", "block");
+
+});
+
+$("#export_select_confirm").click(function(){
+    var valStr = $("#al_start_date").val();
+    if(!valStr){
+      alert("请选择开始时间");
+    }else{
+      $("#submit_action").attr("value", "export");
+      $("#search-form").submit();
+      $("#export_select").css("display", "none");
+      $("#al_start_date").val("");
+      $("#al_end_date").val("");
+      $("#al_staff_phoneNum").val("");  
+    }
+});
+
+$("#search_button").click(function(){
+    $("#submit_action").attr("value", "index");
+    $("#search-form").submit();
+});
+
+$("#export_select_cancel").click(function(){
+    $("#al_start_date").val("");
+    $("#al_end_date").val("");
+    $("#al_staff_phoneNum").val("");
+    $("#export_select").css("display", "none");  
+});
+
+
+</script>

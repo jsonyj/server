@@ -1,0 +1,161 @@
+	
+	<div class="container-body padding-rl-0">
+		<!-- <div class="col-xs-12 padding-rl-0 camera-list margin-bottom-15 ">
+			<div class="col-xs-6 padding-l-20">
+				所有摄像头
+			</div>
+			<div class="col-xs-6">
+		            <input id="checked_1" type="checkbox" class="switch" checked="checked"/>  
+		            <label for="checked_1" class="lable-switch all-switch-control">
+		            </label>  
+			</div>
+  		</div> -->
+	</div>
+
+
+	<!-- <div class="container padding-rl-0">
+		<div class="col-xs-12 padding-rl-0 camera-list margin-bottom-15 ">
+			<div class="col-xs-6 padding-l-20">
+				所有摄像头
+			</div>
+			<div class="col-xs-3 switch-div-outer">
+				 <input id="checked_1" type="checkbox" class="switch switch1" checked="checked"/>
+				<div class="col-xs-5 switch-div-inner"></div>  
+			</div>
+  		</div>
+	</div> -->
+
+
+	<div class="margin-top-50 height-di-w  clear-both"></div>
+    <!--底部导航条-->
+    <footer class="footer footer_school">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+ 
+            <a href="?c=school&a=schoolStatistic&statistic_id=<{$loginUser.id}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+            
+            <a href="?c=school&a=schoolVideoSetting&statistic_id=<{$loginUser.id}>" class="<{if $smarty.get.a ==schoolVideoSetting && $smarty.get.c==school}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe610;</i><div>看宝宝</div></a>
+
+            <!-- 跳转到发布通知 -->
+            <a href="?c=school&a=deliverNotice&statistic_id=<{$loginUser.id}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>发送通知</div></a>
+        </div>
+    </footer>
+
+
+
+    <script>
+	    $(document).ready(function(){
+	        $.ajax({
+	            type: "POST",
+	            url:"http://video.didano.com/video/client/post/channel_get_by_staff/"+<{$loginUser.id}>,
+	            dataType: 'JSON',
+	            success: function(rs){
+	            	console.log(rs.data);
+	                $.each(rs.data, function(idx, obj) {
+	                    for(var i = 0; i < obj.length; i++){
+	                    	var channelStatus = obj[i].status;
+	                    	var inputStr = "";
+	            			var btnSrt = "";
+	                    	if(channelStatus == 1){
+	                    		inputStr = '<input id="'+obj[i].channelId+'" type="checkbox" class="switch switch1 switch2" checked="checked"/>';
+
+	                    		btnSrt = '<div class="col-xs-3">'+inputStr+'<label for="'+obj[i].channelId+'" class="lable-switch" onclick="settingStatus(this)"></label></div><div class="col-xs-3 padding-r-20"><div class="btn btn-green-bk video-btn" onclick="watchVideo(this)" id="btn-'+obj[i].channelId+'">进入</div></div>';
+
+	                    	}else{
+	                    		inputStr = '<input id="'+obj[i].channelId+'" type="checkbox" class="switch switch1"/>';
+	                    		btnSrt = '<div class="col-xs-3">'+inputStr+'<label for="'+obj[i].channelId+'" class="lable-switch" onclick="settingStatus(this)"></label></div><div class="col-xs-3 padding-r-20"><div class="btn btn-gray-bk video-btn" onclick="watchVideo(this)" id="btn-'+obj[i].channelId+'">进入</div></div>';
+
+	                    	}
+	                    	
+	                        var item = '<div class="col-xs-12 padding-rl-0 camera-list border-bottom"><div class="col-xs-6 padding-l-20">'+obj[i].name+'</div>'+btnSrt+'</div>';
+		                	$(".container-body").append(item);//内容添加到页面上。
+	                        
+
+	                    }
+	                });
+					
+					var lableAfterWidth = ($(".lable-switch").width()*0.6).toFixed(0);
+	                $('.lable-switch').append('<style>.lable-switch:after{width:'+lableAfterWidth +'px}</style>');
+	            },
+	            error: function(){
+	                console.log("错误");
+	            }
+	        });
+	    });
+
+		/*所有开关设置*/
+		// $(".all-switch-control").click(function(){
+		// 	if(($(".all-switch-control").siblings('input')).is(':checked')){
+		// 		($(".all-switch-control").siblings('input')).attr("checked",false);
+		// 		$("input[type='checkbox']").each(function(){
+		// 			var id = $(this).attr('id');
+		// 			$(this).attr("checked",false);
+		// 		});
+		// 	}else{
+		// 		($(".all-switch-control").siblings('input')).attr("checked",true);
+		// 		$("input[type='checkbox']").each(function(){
+		// 			var id = $(this).attr('id');
+		// 			$(this).attr("checked",true);
+		// 		});
+		// 	}
+		// 	$.ajax({
+	 //            type: "POST",
+	 //            url:"http://192.168.3.200:8080/client/post/channel_set_status_all",
+	 //            dataType: 'JSON',
+	 //            success: function(data){
+
+	 //            },
+	 //            error: function(){
+	 //                console.log("错误");
+	 //            }
+	 //        });
+		// });
+
+
+		/*设置开关*/
+		function settingStatus(obj){
+			var sendchannelID = ($(obj).siblings('input').attr("id"));
+			var channelStatus;
+			if($(obj).siblings('input').is(':checked')){
+				channelStatus = 0;
+			}else{
+				channelStatus = 1;
+			}
+			$.ajax({
+	            type: "POST",
+	            url:"http://video.didano.com/video/client/post/channel_set_status",
+	            dataType: 'JSON',
+	            contentType: "application/json; charset=utf-8",
+	            data:JSON.stringify({"channelId":sendchannelID,"staffId": <{$loginUser.id}>, "status": channelStatus}),
+	            success: function(data){
+	                if(data.success){
+	                	if(channelStatus == 0){
+	                		$(obj).siblings('input').attr("checked",false);
+	                		$(obj).parent().siblings().children('div').removeClass("btn-green-bk");
+	                		$(obj).parent().siblings().children('div').addClass("btn-gray-bk");
+	                	}else{
+	                		$(obj).siblings('input').attr("checked",true);
+	                		$(obj).parent().siblings().children('div').addClass("btn-green-bk");
+	                		$(obj).parent().siblings().children('div').removeClass("btn-gray-bk");
+	                	}
+	                }
+	            },
+	            error: function(){
+	                console.log("错误");
+	            }
+	        });
+		}
+
+
+		function watchVideo(obj){
+			if($(obj).hasClass("btn-green-bk")){
+				var channelStr = $(obj).attr("id");
+				var channelId = channelStr.split('-')[1];
+				window.location.href = "?c=school&a=schoolVideoDetails&channelId="+channelId;
+			}else if($(obj).hasClass("btn-gray-bk")){
+				alert("该视频已经禁止播放")
+			}
+		}
+
+  	</script>
+  	

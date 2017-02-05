@@ -1,0 +1,75 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'>返回</a>
+    <li>
+      <a href="?c=school">学校一览</a>
+    </li>
+    <li class="active"><{if $smarty.get.id}>编辑<{else}>新增<{/if}>学校</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <form name="data_form" method="post">
+          <{if $school.id}><input type="hidden" name="form[id]" value="<{$school.id|escape}>" /><{/if}>
+          <table class="table table-bordered">
+              <tr>
+                <th class="must">登录名：</th>
+                <td>
+                  <input type="text" name="form[account]" size="30" class="form-control text" value="<{$school.account|escape}>"/>
+                  <{brave_error_hint errors=$errors name=account}>
+                </td>
+              </tr>
+              <tr>
+                <th class="must">姓名：</th>
+                <td>
+                  <input type="text" name="form[name]" size="30" class="form-control text" value="<{$school.name|escape}>"/>
+                  <{brave_error_hint errors=$errors name=name}>
+                </td>
+              </tr>
+                <th class="must">角色：</th>
+                <td>
+                  <select  name="form[role_id]" style='width:330px;'>
+                    <{brave_html_select maxSize='30' code=$code.role_list value=$school.role_id empty=true}>
+                  </select>
+                  <{brave_error_hint errors=$errors name=role_id}>
+                </td>
+              </tr>
+              <tr>
+                <th <{if !$school.id}>class="must"<{/if}>>登录密码：</th>
+                <td>
+                  <input type="password" name="form[password]" size="30" class="form-control text" value="<{$school.password}>" />
+                  <label style="margin-top:5px;">
+                  <{brave_error_hint errors=$errors name=password}>
+                  <strong>确认：</strong></label>
+                  <input type="password" name="form[password_confirm]" size="30" class="form-control text" value="<{$school.password_confirm}>" />
+                  <{brave_error_hint errors=$errors name=password_confirm}>
+                </td>
+              </tr>
+              <tr>
+                  <th class="must">有效状态：</th>
+                  <td>
+                    <{ace_switch name="form[status]" value=$school.status code="1"}>
+                  </td>
+              </tr>
+              <tr class="option">
+                <th></th>
+                <td>
+                  <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                </td>
+              </tr>
+          </table>
+      </form>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->

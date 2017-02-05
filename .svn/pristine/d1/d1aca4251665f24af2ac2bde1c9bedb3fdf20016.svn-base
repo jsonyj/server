@@ -1,0 +1,204 @@
+ 
+    <!--首页 index -->
+    <div class="ui-header-w">
+        <div class="container-fluid">
+            <div class="row">
+                  <div class="inner">
+                     <{if $student_list}>
+                        <{foreach from=$student_list item=val}>
+                            <a class="btn btn-lg btn-default col-xs-12 <{if $student_list|count == 1}>hidden<{/if}> <{if $val.id ==$studentId}>btn-green-bk<{else}><{/if}>" href="?c=group&a=index&id=<{$val.id}>"><{$val.name}></a>
+                        <{/foreach}>
+                    <{/if}>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+    <div class="section sec-welfare">
+        <div class="container">
+            <div class="row parent-index-div">
+            <{if $parentList}>
+                <div class="col-xs-12 padding-none">
+                    <{foreach from=$parentList item=parent key=key}>
+                        <{if $key%2 eq 0}>
+                        <div class="col-xs-4-7 group-jiao-div group-left padding-none margin-top-15">
+                            <div class="name-phone">
+                                <span class="parent-name"><{$parent.relation_title}></span>
+                                <a class="parent-phone" href="tel:<{$parent.phone}>"><i class="iconfont iconfont-color-blue">&#xe619;</i><{$parent.phone}></a>
+                            </div>
+                            <div class="al-parent-img al-img-border">
+                                <img src="<{$smarty.const.APP_OSS_URL}>/system/<{$parent.relation_id}>.png"/>
+                            </div>
+                            <div class="parent-weibu text-center clear-both">
+                                <a class="parent-bianji col-xs-6" href="?c=group&a=input&id=<{$smarty.get.id}>&parent_id=<{$parent.parent_id}>"><i class="iconfont iconfont-color-blue">&#xe61b;</i>编辑</a>
+                                 <{if $login_parent_info.type}>
+                                    <{if ($parent.parent_id != $login_parent_info.id) && (!$parent.type)}>
+                                    <a class="parent-shanc col-xs-6" href="javascript:void(0);" onclick="deleteGroup(<{$parent.parent_id}>, <{$parent.student_id}>, this)" data-style="zoom-out" data-size="l"><i class="iconfont iconfont-color-blue">&#xe61a;</i>删除</a>
+                                    <{/if}>
+                                <{else}>
+                                    <{if ($parent.parent_created > $login_parent_info.created) && (!$parent.type)}>
+                                    <a  class="parent-shanc col-xs-6" href="javascript:void(0);" onclick="deleteGroup(<{$parent.parent_id}>, <{$parent.student_id}>, this)" data-style="zoom-out" data-size="l" ><i class="iconfont iconfont-color-blue">&#xe61a;</i> 删除</a>
+                                    <{/if}>
+                                <{/if}>
+                                
+                            </div>
+                        </div>
+                        <{else}>
+                        <div class="col-xs-4-7 group-jiao-div group-right padding-none margin-top-15">
+                            <div class="name-phone">
+                                <span class="parent-name"><{$parent.relation_title}></span>
+                                <a class="parent-phone" href="tel:<{$parent.phone}>"><i class="iconfont iconfont-color-blue">&#xe619;</i><{$parent.phone}></a>
+                            </div>
+                            <div class="al-parent-img al-img-border">
+                                <img src="<{$smarty.const.APP_OSS_URL}>/system/<{$parent.relation_id}>.png"/>
+                            </div>
+                            <div class="parent-weibu text-center">
+                                <a class="parent-bianji col-xs-6" href="?c=group&a=input&id=<{$smarty.get.id}>&parent_id=<{$parent.parent_id}>"><i class="iconfont iconfont-color-blue">&#xe61b;</i>编辑</a>
+                                 <{if $login_parent_info.type}>
+                                    <{if ($parent.parent_id != $login_parent_info.id) && (!$parent.type)}>
+                                    <a class="parent-shanc col-xs-6" href="javascript:void(0);" onclick="deleteGroup(<{$parent.parent_id}>, <{$parent.student_id}>, this)" data-style="zoom-out" data-size="l"><i class="iconfont iconfont-color-blue">&#xe61a;</i>删除</a>
+                                    <{/if}>
+                                <{else}>
+                                    <{if ($parent.parent_created > $login_parent_info.created) && (!$parent.type)}>
+                                    <a  class="parent-shanc col-xs-6" href="javascript:void(0);" onclick="deleteGroup(<{$parent.parent_id}>, <{$parent.student_id}>, this)" data-style="zoom-out" data-size="l" ><i class="iconfont iconfont-color-blue">&#xe61a;</i> 删除</a>
+                                    <{/if}>
+                                <{/if}>
+                                
+                            </div>
+                        </div>
+                        <{/if}>
+                    
+                    <{/foreach}>
+                </div>
+            <{else}>
+            
+            <{/if}>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section sec-welfare margin-top-30 margin-bottom-100">
+        <div class="container">
+            <div class="row parent-index-biao">
+                <div class="col-xs-12 text-center padding-none">
+                    <a type="button" class="btn btn-info col-xs-12 al-btn-color" href="?c=group&a=input&id=<{$smarty.get.id}>">新增成员</a>
+                </div>
+            </div>
+        </div>
+    </div>
+      
+    <div class="margin-top-100 height-di-w"></div>
+    <!--底部导航条-->
+   <footer class="footer">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+            <a href="?c=parent&a=index&studentId=<{$studentId}>" class="<{if $smarty.get.a ==index && $smarty.get.c == parent}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+            <!--跳转到接送报告-->
+            <a href="?c=parent&a=report&studentId=<{$studentId}>&type=<{$smarty.const.REPORT_TYPE_DAY}>" class="<{if $smarty.get.a ==report}>color-green <{/if}>" ><i class="iconfont iconfont-color-hei">&#xe616;</i><div>报告</div></a>
+
+            <!--跳转到查询-->
+            <a href="?c=query&a=index&studentId=<{$studentId}>" class="<{if $smarty.get.a ==index && $smarty.get.c==query}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe617;</i><div>查询</div></a>
+
+            <!--跳转到关系绑定-->
+            <a href="?c=group&a=index&id=<{$studentId}>" class="<{if $smarty.get.a ==index && $smarty.get.c==group}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>家庭管理</div></a>
+
+
+            <!--跳转到电话绑a定-->
+            <a href="?c=public&a=messageIndex&studentId=<{$studentId}>"><span class="xiaoxi-tishi hidden"></span><i class="iconfont iconfont-color-hei">&#xe614;</i><div>消息</div></a>
+        </div>
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+                var hm = document.createElement("script");
+                hm.src = "//hm.baidu.com/hm.js?06abfa8d15984e47d948d94dafbb9483";
+                var s = document.getElementsByTagName("script")[0]; 
+                s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+    </footer>
+    
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script>
+
+    $(function() {
+        xiaoxiTishi();
+        function  xiaoxiTishi(){
+            $.get('?c=public&a=ajaxMessageTishi', function(rs){
+                if(rs.code == 0){
+                    $('.xiaoxi-tishi').removeClass('hidden');
+                }else{
+                    $('.xiaoxi-tishi').addClass('hidden');
+                }
+            }, 'json');
+        }
+    });
+
+
+function deleteGroup(parentId, studentId, btn) {
+  showConfirmDialog('确定删除成员', function() {
+    var l = Ladda.create(btn);
+    l.start();
+    $.get('?c=group&a=delete&id=' + parentId + '&studentId=' + studentId, function(resp) {
+      if(resp.code == 0) {
+        location.href = location.href;
+      } else {
+        toast(resp.message);
+      }
+    }, 'json').always(function() {
+      l.stop();
+    });
+  }, function() {
+    
+  });
+}
+
+function weixinshare() {
+    $('#shard-bar').fadeIn('slow');
+}
+
+function hideShareBar() {
+    $('#shard-bar').fadeOut('slow');
+}
+
+wx.config({
+    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+    appId: '<{$smarty.const.WX_APP_ID}>', // 必填，公众号的唯一标识
+    timestamp: <{$signPackage.timestamp}>, // 必填，生成签名的时间戳
+    nonceStr: '<{$signPackage.nonceStr}>', // 必填，生成签名的随机串
+    signature: '<{$signPackage.signature}>',// 必填，签名，见附录1
+    jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+});
+
+wx.ready(function(){
+
+    wx.onMenuShareTimeline({
+        title: '小诺健康机器人', // 分享标题
+        link: '<{$smarty.const.APP_WEICHAT_URL}>?c=index&a=index', // 分享链接
+        imgUrl: '<{$smarty.const.APP_OSS_URL}>system/qrcode_logo.jpg', // 分享图标
+        success: function () { 
+            // 用户确认分享后执行的回调函数
+        },
+        cancel: function () {
+            // 用户取消分享后执行的回调函数
+        }
+    });
+
+    wx.onMenuShareAppMessage({
+        title: '小诺健康机器人', // 分享标题
+        desc: '小诺健康机器人，让关爱不一样！',// 分享描述
+        link: '<{$smarty.const.APP_WEICHAT_URL}>?c=index&a=index', // 分享链接
+        imgUrl: '<{$smarty.const.APP_OSS_URL}>system/qrcode_logo.jpg', // 分享图标
+        type: 'link', // 分享类型,music、video或link，不填默认为link
+        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+        success: function () {
+        },
+        cancel: function () {
+            // 用户取消分享后执行的回调函数
+        }
+    });
+});
+
+</script>

@@ -1,0 +1,16 @@
+
+  <!-- <div id='J_prismPlayer' class='prism-player'></div>
+  <script type="text/javascript">
+    function InitPlayer(){
+      var player = new prismplayer({
+          id: "J_prismPlayer",    // 容器id
+          source: "http://cloud.video.taobao.com/play/u/2554695624/p/1/e/6/t/1/fv/102/28552077.mp4",  // 视频url 支持互联网可直接访问的视频地址
+          autoplay: true,       // 自动播放
+          width: "100%",        // 播放器宽度
+          height: "400px"      // 播放器高度
+      });
+    }
+  </script> -->
+  <video controls="controls" autoplay="autoplay" width="100%" height="100%"> 
+    <source src="http://jiankong.didano.cn/test-channel/playlist.m3u8">    
+  </video>

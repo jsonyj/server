@@ -1,0 +1,224 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li>
+      <a href="?c=article&a=index">文章一览</a>
+    </li>
+    <li class="active"><{if $smarty.get.id}>编辑<{else}>新增<{/if}>文章</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <div class="tabbable">
+          <ul id="myTab" class="nav nav-tabs">
+            <li class="disable">
+              <a href="?c=article&a=input&pc=article&pa=index&id=<{$smarty.get.id}>">
+                <i class="green ace-icon fa fa-table bigger-120"></i>
+                基本信息
+              </a>
+            </li>
+  
+            <li class="active">
+              <a href="javascript:void(0);">
+                <i class="green ace-icon fa fa-user-secret bigger-120"></i>
+                可见信息
+              </a>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+
+            <div class="tab-pane fade in active" id="auth-tab">
+              <{if $smarty.get.id}>
+
+              <form name="data_form" method="post">
+                <table class="table table-bordered table-form">
+
+                  <tr>
+                    <th class="must">报告：</th>
+                    <td>
+
+                      <div class="form-group">
+                        <label class="checkbox-inline">
+                          <input type="checkbox" name="form[report_type_day]" id="inlineRadio1" value="<{$smarty.const.ARTICLE_AUTH_REPORT_DAY}>" <{if (!$complete && isset($form.report_type_day)) || $form.report_type_day == $smarty.const.ARTICLE_AUTH_REPORT_DAY}>checked<{/if}>> 日报可见
+                        </label>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" name="form[report_type_week]" id="inlineRadio2" value="<{$smarty.const.ARTICLE_AUTH_REPORT_WEEK}>" <{if (!$complete && isset($form.report_type_week)) || $form.report_type_week == $smarty.const.ARTICLE_AUTH_REPORT_WEEK}>checked<{/if}>> 周报可见
+                        </label>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" name="form[report_type_month]" id="inlineRadio2" value="<{$smarty.const.ARTICLE_AUTH_REPORT_MONTH}>" <{if (!$complete && isset($form.report_type_month)) || $form.report_type_month == $smarty.const.ARTICLE_AUTH_REPORT_MONTH}>checked<{/if}>> 月报可见
+                        </label>
+                      </div>
+
+                      <{brave_error_hint errors=$errors name=report_type}>
+
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th class="must">学校：</th>
+                    <td>
+
+                      <div class="form-group">
+                        <label class="radio-inline">
+                          <input type="radio" name="form[school_type]" id="radio-all-school" value="<{$smarty.const.ARTICLE_AUTH_ALL_SCHOOL}>" <{if $form.school_type == '' || $form.school_type == $smarty.const.ARTICLE_AUTH_ALL_SCHOOL}>checked<{/if}> onclick="checkAllSchool()"> 全部学校可见
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="form[school_type]" id="radio-select-school" value="<{$smarty.const.ARTICLE_AUTH_SELECT_SCHOOL}>" <{if $form.school_type == $smarty.const.ARTICLE_AUTH_SELECT_SCHOOL}>checked<{/if}> onclick="checkSchool()"> 选择学校可见
+                        </label>
+                      </div>
+
+                      <div class="form-group <{if $form.school_type != $smarty.const.ARTICLE_AUTH_SELECT_SCHOOL}>hidden<{/if}>" id="form-group-select-school">
+                        <select name="form[school_id][]" style='width:330px;' id="select-school" multiple class="form-control" onchange="selectSchool(this)">
+                          <{foreach from=$schoolList item=school}>
+                            <option value="<{$school.value}>" <{if in_array($school.value, $form.school_id)}>selected<{/if}>><{$school.name}></option>
+                          <{/foreach}>
+                        </select>
+                      </div>
+
+                      <{brave_error_hint errors=$errors name=school_id}>
+
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th class="must">班级：</th>
+                    <td>
+
+                      <div class="form-group">
+                        <label class="radio-inline">
+                          <input type="radio" name="form[class_type]" id="inlineRadio1" value="<{$smarty.const.ARTICLE_AUTH_ALL_CLASS}>" <{if $form.class_type == '' || $form.class_type == $smarty.const.ARTICLE_AUTH_ALL_CLASS}>checked<{/if}> onclick="checkAllClass()"> 全部班级可见
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="form[class_type]" id="inlineRadio2" value="<{$smarty.const.ARTICLE_AUTH_SELECT_CLASS}>" <{if $form.class_type == $smarty.const.ARTICLE_AUTH_SELECT_CLASS}>checked<{/if}> onclick="checkClass()"> 选择班级可见
+                        </label>
+                      </div>
+
+                      <div class="form-group <{if $form.class_type != $smarty.const.ARTICLE_AUTH_SELECT_CLASS}>hidden<{/if}>" id="form-group-select-class">
+                        <select name="form[class_id][]" style='width:330px;' id="select-class" multiple class="form-control">
+                          <{foreach from=$classList item=class}>
+                            <option value="<{$class.value}>" <{if in_array($class.value, $form.class_id)}>selected<{/if}>><{$class.name}></option>
+                          <{/foreach}>
+                        </select>
+                      </div>
+
+                      <{brave_error_hint errors=$errors name=class_id}>
+
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th class="must">年级：</th>
+                    <td>
+
+                      <div class="form-group">
+                        <label class="radio-inline">
+                          <input type="radio" name="form[class_type]" id="inlineRadio1" value="<{$smarty.const.ARTICLE_AUTH_ALL_GRADE}>" <{if $form.class_type == $smarty.const.ARTICLE_AUTH_ALL_GRADE}>checked<{/if}> onclick="checkAllGrade()"> 全部年级可见
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="form[class_type]" id="inlineRadio2" value="<{$smarty.const.ARTICLE_AUTH_SELECT_GRADE}>" <{if $form.class_type == $smarty.const.ARTICLE_AUTH_SELECT_GRADE}>checked<{/if}> onclick="checkGrade()"> 选择年级可见
+                        </label>
+                      </div>
+
+                      <div class="form-group <{if $form.class_type != $smarty.const.ARTICLE_AUTH_SELECT_GRADE}>hidden<{/if}>" id="form-group-select-grade">
+                        <select multiple class="form-control" name="form[grade_id][]">
+                          <{foreach from=$code.gradeList item=grade}>
+                            <option value="<{$grade.value}>" <{if in_array($grade.value, $form.grade_id)}>selected<{/if}>><{$grade.name}></option>
+                          <{/foreach}>
+                        </select>
+                      </div>
+
+                      <{brave_error_hint errors=$errors name=grade_id}>
+
+                    </td>
+                  </tr>
+
+                  <tr class="option">
+                    <th></th>
+                    <td>
+                      <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                    </td>
+                  </tr>
+                </table>
+            </form>
+
+            <{else}>
+              <div class="alert alert-danger">
+                <i class="ace-icon fa fa-warning"></i>
+                请先填写并保存基本信息。
+              </div>
+            <{/if}>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+
+jQuery(function($) {
+  setTimeout(reset, 1000);
+});
+
+function reset() {
+  $('.edui-container, .edui-btn-toolbar, .edui-dialog-container, .edui-body-container').css('width', '100%');
+}
+
+function checkAllSchool() {
+  selectSchool(null);
+  $('#form-group-select-school').fadeOut('fast');
+}
+
+function checkSchool() {
+  $('#form-group-select-school').removeClass('hidden');
+  $('#form-group-select-school').fadeIn('fast');
+}
+
+function checkAllClass() {
+  $('#form-group-select-class').fadeOut('fast');
+  $('#form-group-select-grade').fadeOut('fast');
+}
+
+function checkClass() {
+  $('#form-group-select-grade').fadeOut('fast');
+  $('#form-group-select-class').removeClass('hidden');
+  $('#form-group-select-class').fadeIn('fast');
+}
+
+function checkAllGrade() {
+  $('#form-group-select-class').fadeOut('fast');
+  $('#form-group-select-grade').fadeOut('fast');
+}
+
+function checkGrade() {
+  $('#form-group-select-class').fadeOut('fast');
+  $('#form-group-select-grade').removeClass('hidden');
+  $('#form-group-select-grade').fadeIn('fast');
+}
+
+function selectSchool(select) {
+  $.get('?c=class&a=getClassMutilOption', {schoolId: select == null ? null : $(select).val()}, function(resp) {
+    if(resp.code == 0) {
+      var html = '';
+      $.each(resp.optionList, function(n, o) {
+        html += '<option value="' + o.value + '">' + o.school_title + ' - ' + o.name + '</option>'
+      });
+      $('#select-class').html(html);
+    }
+  }, 'json')
+}
+
+</script>

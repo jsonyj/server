@@ -1,0 +1,50 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li class="active">修改密码</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <form name="admin_form" method="post">
+          <table class="table table-bordered">
+              <tr>
+                <th>名称：</th>
+                <td><{$user.name|escape}></td>
+              </tr>
+              <tr>
+                <th>登录账号：</th>
+                <td><{$user.login|escape}></td>
+              </tr>
+              <tr>
+                <th>登录密码：</th>
+                <td>
+                  <input type="password" name="form[password]" size="30" class="form-control text" value="" />
+                  <label style="margin-top:5px;">
+                  <{brave_error_hint errors=$errors name=password}>
+                  <strong>确认密码：</strong></label>
+                  <input type="password" name="form[password_confirm]" size="30" class="form-control text" value="" />
+                  <{brave_error_hint errors=$errors name=password_confirm}>
+                </td>
+              </tr>
+              <tr class="option">
+                <th></th>
+                <td>
+                  <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                </td>
+              </tr>
+          </table>
+      </form>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->

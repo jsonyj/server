@@ -1,0 +1,27 @@
+<{foreach from=$menu key=c item=m}>
+<li class="<{if $c==$smarty.get.c || $c == $smarty.get.pc}>active open<{/if}>">
+    <a href="javascript:void(0);" class="dropdown-toggle">
+      <i class="menu-icon fa <{$m.icon}>"></i>
+      <span class="menu-text"> <{$m.name|escape}> </span>
+      <b class="arrow fa fa-angle-down"></b>
+    </a>
+
+    <b class="arrow"></b>
+
+    <ul class="submenu">
+
+      <{foreach from=$m.sub key=a item=s}>
+      <li class="<{if $c==$smarty.get.c && $a==$smarty.get.a || $c == $smarty.get.pc && $a == $smarty.get.pa}>active<{/if}>">
+        <a href="<{$s.uri}>">
+          <i class="menu-icon fa fa-caret-right"></i>
+          <{$s.name|escape}>
+        </a>
+
+        <b class="arrow"></b>
+      </li>
+      <{/foreach}>
+
+    </ul>
+
+</li>
+<{/foreach}>

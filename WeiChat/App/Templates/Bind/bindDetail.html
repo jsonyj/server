@@ -1,0 +1,100 @@
+<style type="text/css">
+.panel.panel-default.panel-margin .panel-heading.padding-left-0.padding-right-0 .row .col-xs-5.padding-2 p {
+    font-size: 15px;
+}
+</style>
+<div class="row top-nav-bar">
+    <div class="col-xs-8 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-4 text-right logo-title">
+        <h5 class="text-center margin-bottom-0">申请绑定详情</h5>
+    </div>
+</div>
+
+<div class="row user-profile-body">
+
+  <div class="panel panel-default no-margin">
+    
+    <div class="panel-heading no-bottom">
+        <form id="role_form" name="role_form" method="post">
+            
+            <div id="parent-role">
+                <div class="form-group row">
+                    <h4><span class="col-xs-5 text-right">手机号：</span><{$phone}></h4>
+                </div>
+                <div class="form-group row">
+                  <h4><span class="col-xs-5 text-right">学生姓名：</span><{$student_info.name}></h4>
+                </div>
+                <div class="form-group row">
+                  <h4><span class="col-xs-5 text-right">绑定关系：</span><{$relation_title}></h4>
+                </div>
+            </div>
+            
+            <div class="text-center padding-top-15">
+                <{if $apply_info.status == $smarty.const.BIND_PARENT_APPLY_UNDO}>
+                <button type="button" class="btn width-100 btn-info" style="margin-bottom: 10px;" onclick="javascript:agreeBind('<{$apply_info.id}>', '<{$apply_info.bind_key}>', this);">同意</button>
+                <button type="button" class="btn width-100 btn-danger" 
+                onclick="refuseBind('<{$apply_info.id}>', '<{$apply_info.bind_key}>', this);">拒绝</button>
+                <{else if $apply_info.status == $smarty.const.BIND_PARENT_APPLY_AGREE}>
+                    <button type="button" class="btn width-100 btn-info">已同意</button>
+                <{else if $apply_info.status == $smarty.const.BIND_PARENT_APPLY_REFUSE}>
+                    <button type="button" class="btn width-100 btn-danger">已拒绝</button>
+                <{/if}>
+            </div>
+        </form>
+    </div>
+    
+  </div>
+
+</div>
+
+<script type="text/javascript">
+
+function agreeBind(id, key, btn) {
+    showConfirmDialog('确定同意该申请吗？', function() {
+        var l = Ladda.create(btn);
+        l.start();
+        $.post('?c=bind&a=agreeBind', {'id': id, 'key': key}, function(resp) {
+            if(resp.code == 0) {
+                location.href = '?c=group&a=index&id=' + resp.sid;
+            }
+            if(resp.code == 201) {
+                location.reload();
+            }
+            else {
+                toast(resp.message);
+            }
+            
+        }, 'json').always(function() {
+            l.stop();
+        });
+    }, function() {
+
+    });
+}
+
+function refuseBind(id, key, btn) {
+    showConfirmDialog('确定拒接该申请吗？', function() {
+        var l = Ladda.create(btn);
+        l.start();
+        $.post('?c=bind&a=refuseBind', {'id': id, 'key': key}, function(resp) {
+            if(resp.code == 0) {
+                location.reload();
+            }
+            if(resp.code == 201) {
+                location.reload();
+            }
+            else {
+                toast(resp.message);
+            }
+            
+        }, 'json').always(function() {
+            l.stop();
+        });
+    }, function() {
+
+    });
+}
+
+</script>

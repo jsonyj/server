@@ -1,0 +1,123 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li>
+      <a href="?c=article&a=index">文章一览</a>
+    </li>
+    <li class="active"><{if $smarty.get.id}>编辑<{else}>新增<{/if}>文章</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <div class="tabbable">
+          <ul id="myTab" class="nav nav-tabs">
+            <li class="active">
+              <a href="javascript:void(0);">
+                <i class="green ace-icon fa fa-table bigger-120"></i>
+                基本信息
+              </a>
+            </li>
+  
+            <li class="disable">
+              <a href="?c=article&a=auth&id=<{$smarty.get.id}>">
+                <i class="green ace-icon fa fa-user-secret bigger-120"></i>
+                可见信息
+              </a>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <div class="tab-pane fade in active" id="base-tab">
+
+              <form name="data_form" method="post">
+                <table class="table table-bordered table-form">
+                    <tr>
+                      <th class="must">标题：</th>
+                      <td>
+                        <input type="text" name="form[title]" size="30" class="form-control text" value="<{$form.title|escape}>"/>
+                        <{brave_error_hint errors=$errors name=title}>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>链接：</th>
+                      <td>
+                        <input type="text" name="form[link]" size="30" class="form-control text" value="<{$form.link|escape}>" placeholder="http://"/>
+                        <span id="helpBlock" class="help-block">请输入以 http:// 开头的完整链接</span>
+                        <{brave_error_hint errors=$errors name=link}>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="must">开始时间：</th>
+                      <td>
+                        <div class='input-group date' id='datetimepicker1'>
+                          <input type="text" name="form[start]" size="30" class="form-control text form-control-datetimepicker" value="<{if $form.start}><{date('Y-m-d H:i', strtotime($form.start))|escape}><{/if}>"/>
+                          <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                          </span>
+                        </div>
+                        <{brave_error_hint errors=$errors name=start}>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="must">结束时间：</th>
+                      <td>
+                        <div class='input-group date' id='datetimepicker1'>
+                          <input type="text" name="form[end]" size="30" class="form-control text form-control-datetimepicker" value="<{if $form.end}><{date('Y-m-d H:i', strtotime($form.end))|escape}><{/if}>"/>
+                          <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                          </span>
+                        </div>
+                        <{brave_error_hint errors=$errors name=end}>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="must">内容：</th>
+                      <td>
+                        <{umeditor name="form[body]" value=$form.body width="100%" height="180px"}>
+                        <{brave_error_hint errors=$errors name=body}>
+                      </td>
+                    </tr>
+                    <tr>
+                        <th class="must">有效状态：</th>
+                        <td>
+                          <{ace_switch name="form[status]" value=$form.status code="1"}>
+                        </td>
+                    </tr>
+                    <tr class="option">
+                      <th></th>
+                      <td>
+                        <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                      </td>
+                    </tr>
+                </table>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+
+jQuery(function($) {
+  setTimeout(reset, 1000);
+});
+
+function reset() {
+  $('.edui-container, .edui-btn-toolbar, .edui-dialog-container, .edui-body-container').css('width', '100%');
+}
+
+</script>

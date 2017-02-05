@@ -1,0 +1,116 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){} 
+  </script>
+
+  <ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'><i class="fa fa-arrow-left"></i></a>&nbsp;&nbsp;
+    <li>
+      <a href="?c=video&a=index">视频</a>
+    </li>
+    <li class="video">编辑时间</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <form name="data_form" method="post">
+          <input type="hidden" name="form[id]" value="<{$form.id|escape}>" />
+          <table class="table table-bordered table-form">
+              <tr>
+                <th class="must">视频时间：</th>
+                <td>
+                  <div class='input-group date' id='datetimepicker1'>
+                    <!-- 开始时间：<input type="time" id="controls_time_start" value="" />
+                    结束时间：<input type="time" id="controls_time_end"/> -->
+                  </div> 
+                </td>
+              </tr>
+              <!-- <tr class="option">
+                <th></th>
+                <td style="width:330px;">
+                  <input  class="btn btn-primary" id="addParentBtn" value="添加更多时间" />
+                </td>
+              </tr> -->
+              <tr class="option saveBtn">
+                <th></th>
+                <td style="width:330px;">
+                  <input class="btn btn-primary" name="complete" value="保存" onclick="updata()"/>
+                </td>
+              </tr>
+          </table>
+      </form>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+    var url = window.location;
+    function getUrlParam(url,name){
+      var pattern = new RegExp("[?&]" + name +"\=([^&]+)","g");
+      var matcher = pattern.exec(url);
+      var items = null;
+      if(matcher != null){
+        try{
+          items = decodeURIComponent(decodeURIComponent(matcher[1])); 
+        }catch(e){
+          try{
+            items = decodeURIComponent(matcher[1]);
+          }catch(e){
+            items = matcher[1];
+          }
+        }
+      }
+      return items;
+    }
+   var CHANNEL_ID = getUrlParam(url,'channelId');
+   var TIME_ID = getUrlParam(url,'timeId');
+   var START_TIME = getUrlParam(url,'start');
+   var END_TIME = getUrlParam(url,'end');
+ $(document).ready(function(){
+ 	spanStr = '开始时间：<input type="text" readonly="readonly" class="form-control text" id="controls_time_start" value="'+START_TIME+'" />结束时间：<input type="text" readonly="readonly" class="form-control text" id="controls_time_end" value="'+END_TIME+'" />'
+ 	$("#datetimepicker1").append(spanStr);
+ });
+
+	function updata(){
+		var controls_time_start = document.getElementById('controls_time_start').value;
+  		var controls_time_end = document.getElementById('controls_time_end').value;
+  		if(controls_time_start > controls_time_end){
+  			alert("开始时间不能大于结束时间");
+  		}else{
+  			$.ajax({
+  				url:"http://video.didano.com/video/rest/post/time_control_edit",
+		        type:'post',
+		        dataType:'json',
+		        contentType: "application/json; charset=utf-8",
+		        data:JSON.stringify({
+		            "channelId": CHANNEL_ID,
+		            "end": controls_time_end,
+		            "start": controls_time_start,
+		            "id": TIME_ID,
+		        }),
+		        success:function(data){
+		        	alert(data.message);
+		        	window.location.href='?c=video&a=index';
+		        },
+  			});
+  		}
+	}
+$(function(){
+    $('#controls_time_start, #controls_time_end').datetimepicker({
+        autoclose:true,
+        format:"hh:ii",
+        language:"zh-CN",
+        todayBtn:true,
+        minuteStep:1,
+        startView:1,
+        maxView:0,
+    });
+});
+</script>

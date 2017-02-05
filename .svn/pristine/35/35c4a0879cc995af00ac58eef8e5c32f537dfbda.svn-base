@@ -1,0 +1,101 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'><i class="fa fa-arrow-left"></i></a>&nbsp;&nbsp;
+    <li class="active">学生信息打印</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+    <form method="get" name="search_form" class="search-form" id="search-form">
+          <input type="hidden" name="c" value="student" />
+          <input type="hidden" name="a" value="index" id="submit_action" />
+
+          <table class="table table-bordered table-condensed ">
+              <tr>
+                <th>学生名称：</th>
+                <td><input type="text" name="sh[name]" value="<{$sh.name}>" size="30" id="student_name"></td>
+                <th>班级：</th>
+                <td>
+                  <select name="sh[class_id]" style="width:230px;" id="select-class">
+                    <{brave_html_select maxSize='30' code=$classList value=$sh.class_id empty=true}>
+                  </select>
+                </td>
+                <td class="button" style="width:130px">
+                    <div><button type="submit" class="btn btn-primary btn-xs" id="search_button"><i class="ace-icon fa fa-search"></i> 搜索</button>
+                    <a href="?c=student&a=index" class="btn btn-default btn-xs"><i class="ace-icon fa fa-undo"></i> 重置</a></div>
+                </td>
+              </tr>
+          </table>
+      <div class='clearfix'></div>
+      <div class="text-center toolbar">
+        <a class="btn btn-info btn-lg" href="javascript:void(0);" id="print_button">学生信息打印</a>
+      </div>
+      
+      <div class="print_select" id="print_select">
+          <div class="print_select_title">请选择要打印的学生信息：</div>
+          <div class="print_select_form">
+              <div>
+                  <tr>
+                      <td><input type="checkbox" name="print_title_height" value="身高/cm" checked="checked" id="print_title_height" /></td>
+                      <td>身高/cm</td>
+                  </tr>
+              </div>
+              <div>
+                  <tr>
+                      <td><input type="checkbox" name="print_title_weight" value="体重/kg" checked="checked" id="print_title_weight" /></td>
+                      <td>体重/kg</td>
+                  </tr>
+              </div>
+              <div>
+                  <tr>
+                      <td><input type="checkbox" name="print_title_temperature" value="体温/℃" checked="checked" id="print_title_temperature" /></td>
+                      <td>体温/℃</td>
+                  </tr>
+              </div>
+          </div>
+          <div class="print_select_button">
+              <a href="javascript:void(0)" style="text-decoration:none;"><span id="print_select_confirm">确定</span></a>
+              <a href="javascript:void(0)" style="text-decoration:none;"><span id="print_select_cancel">取消</span></a>
+          </div>
+        </form>
+      </div>
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<script type="text/javascript">
+
+$("#print_button").click(function(){
+    $("#print_select").css("display", "block");
+});
+$("#print_select_confirm").click(function(){
+    var print_title_height = null;
+    var print_title_weight = null;
+    var print_title_temperature = null;
+    var sh_name = $("#student_name").val();
+    var sh_class_id = $("#select-class").val();
+    
+    if ($("#print_title_height").is(":checked")) {
+        print_title_height = $("#print_title_height").attr('value');
+    }
+    if ($("#print_title_weight").is(":checked")) {
+        print_title_weight = $("#print_title_weight").attr('value');
+    }
+    if ($("#print_title_temperature").is(":checked")) {
+        print_title_temperature = $("#print_title_temperature").attr('value');
+    }
+    
+    var newWindow=window.open('?c=student&a=print&print_title_height='+print_title_height+'&print_title_weight='+print_title_weight+'&print_title_temperature='+print_title_temperature+'&sh[name]='+sh_name+'&sh[class_id]='+sh_class_id, function(){}, "_blank");
+      $("#print_select").css("display", "none");
+});
+$("#print_select_cancel").click(function(){
+      $("#print_select").css("display", "none");
+});
+
+</script>

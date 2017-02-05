@@ -1,0 +1,268 @@
+<?php
+
+class StudentController extends AppController {
+
+    var $schoolModel = null;
+    var $classModel = null;
+    var $studentModel = null;
+    var $schoolParentModel = null;
+    var $relationModel = null;
+    var $dreamModel = null;
+    var $hobbyModel = null;
+    var $ossClient = null;
+    var $bucket = null;
+
+    function StudentController() {
+        $this->AppController();
+        $this->schoolModel = $this->getModel('School');
+        $this->classModel = $this->getModel('Class');
+        $this->studentModel = $this->getModel('Student');
+        $this->schoolParentModel = $this->getModel('SchoolParent');
+        $this->relationModel = $this->getModel('Relation');
+        $this->dreamModel = $this->getModel('Dream');
+        $this->hobbyModel = $this->getModel('Hobby');
+        $this->ossClient = $this->getOssClient();
+        $this->bucket = $this->code('oss.default.bucket');
+    }
+
+    function indexAction() {
+        $sh = $this->get('sh');
+        $this->view->assign('sh', $sh);
+        $studentList = $this->studentModel->getStudentList($sh);
+        $this->view->assign('paging', $this->studentModel->paging);
+
+        foreach($studentList as $k => $v) {
+            $v['parentList'] = $this->schoolParentModel->getParentListByStudentId($v['id']);
+            $studentList[$k] = $v;
+        }
+        $this->view->assign('studentList', $studentList);
+
+        $schoolList = $this->schoolModel->getSchoolOptionList();
+        $this->view->assign('schoolList', $schoolList);
+
+        $classList = array();
+        if($sh['school_id']) {
+            $classList = $this->classModel->getClassOptionList($sh['school_id']);
+        }
+        $this->view->assign('classList', $classList);
+
+        $this->view->layout();
+    }
+
+    function inputAction() {
+
+        $id = $this->get('id');
+        $form = $this->post('form');
+
+        if ($this->isComplete()) {
+            $form['id'] = $id;
+            if ($this->studentModel->validSaveStudent($form, $errors)) {
+                if ($rs = $this->studentModel->saveStudent($form)) {
+                    $this->redirect("?c=student&a=input&pc=student&pa=index&id={$rs}", true, '保存成功');
+                    exit;
+                }
+
+                $this->redirect("?c=student&a=input&pc=student&pa=index&id={$id}", true, '保存失败');
+                exit;
+            }
+            else {
+                $this->view->assign('errors', $errors);
+                $this->view->assign('form', $form);
+            }
+        } else {
+            $form = $this->studentModel->getStudent($id);
+            if($id && empty($form)) {
+                 $this->redirect("?c=student&a=index", true, $this->lang('ID不存在'));
+                 exit();
+            }
+            $this->view->assign('form', $form);
+        }
+
+        $schoolList = $this->schoolModel->getSchoolOptionList();
+        $this->view->assign('schoolList', $schoolList);
+
+        $classList = array();
+        if($form['school_id']) {
+            $classList = $this->classModel->getClassOptionList($form['school_id']);
+        }
+        $this->view->assign('classList', $classList);
+
+        $this->view->layout();
+    }
+
+    function deleteAction() {
+        $id = $this->get('id');
+        $this->studentModel->deleteStudent($id);
+        $this->studentModel->deleteStudentParent($id);
+        $this->redirect("?c=student&a=index", true, '删除成功');
+    }
+
+    function getStudentOptionAction() {
+        $id = $this->get('id');
+        $studentOptionList = $this->studentModel->getStudentOptionList($id);
+        print json_encode(array(
+            'code' => 0,
+            'optionList' => $studentOptionList,
+        ));
+    }
+
+    function dreamIndexAction() {
+       $sh = $this->get('sh');
+       $this->view->assign('sh', $sh);
+       $dream_list = $this->dreamModel->getDreamList($sh);
+       $this->view->assign('paging',$this->dreamModel->paging);
+       $this->view->assign('dream_list',$dream_list);
+       $this->view->layout();
+    }
+
+    function dreamInputAction() {
+        $id = $this->get('id');
+        $form = $this->post('form');
+        if ($this->isComplete()) {
+            $form['id'] = $id;
+            if ($this->dreamModel->validDream($form, $errors)) {
+                if ($id = $this->dreamModel->saveDream($form)) {
+                    $this->redirect('?c=student&a=dreamInput&id='.$id, true, '保存成功');
+                    exit;
+                }
+                $this->redirect('?c=student&a=dreamIndex', true, '保存失败');
+                exit;
+            } else {
+                $this->view->assign('form', $form);
+                $this->view->assign('errors', $errors);
+            }
+        } else {
+            $dream_info = $this->dreamModel->getDreamById($id);
+            $this->view->assign('form', $dream_info);
+        }
+        $this->view->layout();
+
+    }
+
+    function imgListOneAction() {
+        $id = $this->get('id');
+        $form = $this->post('form');
+
+        $img_one = $this->dreamModel->getDreamById($id);
+        $this->view->assign('form', $img_one);
+        $this->view->layout();
+    }
+
+    function uploadAction() {
+        $id = $this->get('id');
+        $uploadConfig = $this->code('upload.dream');
+        $configKey = 'dream[file]';
+        $postKey = 'dream';
+        $uploadConfig[$configKey]['dir'] = "{$id}";
+
+        // new
+        $fileNameArray = explode('.',$_FILES['dream']['name']['file']);
+        $object = $postKey . '/' . $uploadConfig[$configKey]['dir'] . '/' . md5($fileNameArray['0'] . time()) . '.' . $fileNameArray['1'];
+        $uploadFile = $this->ossClient->uploadFile($this->bucket, $object, $_FILES['dream']['tmp_name']['file']);
+
+        // org
+        // $upload = $this->load(EXTEND, 'BraveUpload');
+        // $upload->upload($uploadConfig);
+        // $uploadFile = $this->post($postKey);
+        // org
+        if (!empty($uploadFile)) {
+            // if ($this->dreamModel->validFileUpload($uploadFile, $errors)) {  // 不去验证
+                $file = array(
+                    // 'img_url' => $uploadConfig[$configKey]['uri'] . '/' .$uploadFile['file_info']['save'], //保存的路径   org
+                    'img_url' => $object, //保存的路径   new
+                );
+                $this->dreamModel->saveDreamImg($file, $id);
+            // } else {                     、、不去验证
+            //     header('HTTP/1.1 500 Internal Server Error');
+            //     header('Content-type: application/json');
+            //     print json_encode(array('error' => implode(' ', $errors)));
+            // }
+        } else {
+            header('HTTP/1.1 500 Internal Server Error');
+            header('Content-type: application/json');
+            print json_encode(array('error' => implode(' ', $errors)));
+        }
+    }
+
+    function getDreamImgAction() {
+        $id = $this->get('id');
+        $file = $this->dreamModel->getDreamById($id);
+        if(!empty($file['img_url'])) {
+            $files[] = array('id' => $file['id'], 'name' => $file['name'], 'size' => $file['dream_size'], 'url' => APP_RESOURCE_URL . $file['img_url']);
+            print json_encode($files);
+            exit();
+        }
+        exit();
+    }
+
+    function deleteDreamAction() {
+        $id = $this->get('id');
+        if ($this->dreamModel->deleteDream($id)) {
+            $this->redirect('?c=student&a=dreamIndex', true, '删除成功');
+             exit;
+        }
+        $this->redirect('?c=student&a=dreamIndex', true, '删除失败');
+        exit;
+    }
+
+    function deleteDreamImgAction() {
+        $id = $this->get('id');
+        $dream = $this->dreamModel->getDreamById($id);
+        $file_path = APP_RESOURCE_ROOT . $dream['img_url'];
+        @unlink($file_path);
+        $this->dreamModel->deleteDreamImg($id);
+    }
+
+    function hobbyIndexAction() {
+        $sh = $this->get('sh');
+        $this->view->assign('sh', $sh);
+        $hobby_list = $this->hobbyModel->getHobbyList($sh);
+        $this->view->assign('paging',$this->hobbyModel->paging);
+        $this->view->assign('hobby_list',$hobby_list);
+        $this->view->layout();
+    }
+
+    function hobbyInputAction() {
+        $id = $this->get('id');
+        $form = $this->post('form');
+
+        if ($this->isComplete()) {
+            $form['id'] = $id;
+            if ($this->hobbyModel->validHobby($form, $errors)) {
+                if ($rs = $this->hobbyModel->saveHobby($form)) {
+                    $this->redirect("?c=student&a=hobbyInput&pc=student&pa=hobbyIndex&id={$rs}", true, '保存成功');
+                    exit;
+                }
+
+                $this->redirect("?c=student&a=hobbyInput&pc=student&pa=hobbyIndex&id={$id}", true, '保存失败');
+                exit;
+            }
+            else {
+                $this->view->assign('errors', $errors);
+                $this->view->assign('form', $form);
+            }
+        } else {
+            $form = $this->hobbyModel->getHobbyById($id);
+            if($id && empty($form)) {
+                 $this->redirect("?c=student&a=hobbyIndex", true, $this->lang('ID不存在'));
+                 exit();
+            }
+            $this->view->assign('form', $form);
+        }
+
+        $this->view->layout();
+    }
+
+    function deleteHobbyAction() {
+        $id = $this->get('id');
+        if ($this->hobbyModel->deleteHobby($id)) {
+            $this->redirect('?c=student&a=hobbyIndex', true, '删除成功');
+             exit;
+        }
+        $this->redirect('?c=student&a=hobbyIndex', true, '删除失败');
+        exit;
+    }
+
+}
+
+?>

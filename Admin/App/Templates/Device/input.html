@@ -1,0 +1,56 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li>
+      <a href="?c=device&=index">设备一览</a>
+    </li>
+    <li class="active"><{if $smarty.get.id}>编辑<{else}>新增<{/if}>设备</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <form name="data_form" method="post">
+          <table class="table table-bordered table-form">
+              <tr>
+                <th class="must">编号：</th>
+                <td>
+                  <input type="text" name="form[no]" size="30" class="form-control text" value="<{$form.no|escape}>"/>
+                  <{brave_error_hint errors=$errors name=no}>
+                </td>
+              </tr>
+              <tr>
+                <th class="must">学校：</th>
+                <td>
+                  <select  name="form[school_id]" style='width:330px;' value="<{$form.school_title|escape}>">
+                    <{brave_html_select maxSize='30' code=$schoolList value=$form.school_id empty=true}>
+                  </select>
+                  <{brave_error_hint errors=$errors name=school_id}>
+                </td>
+              </tr>
+              <tr>
+                  <th class="must">有效状态：</th>
+                  <td>
+                    <{ace_switch name="form[status]" value=$form.status code="1"}>
+                  </td>
+              </tr>
+              <tr class="option">
+                <th></th>
+                <td>
+                  <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                </td>
+              </tr>
+          </table>
+      </form>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->

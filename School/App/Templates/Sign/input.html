@@ -1,0 +1,103 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+    </script>
+
+<ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'><i class="fa fa-arrow-left"></i></a>&nbsp;&nbsp;
+    <li>
+      <a href="?c=sign&a=index&pc=sign&pa=index">签到统计列表</a>
+    </li>
+        <li class="active">编辑签到</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+
+<form name="account_form" method="post">
+    <table class="table table-bordered">
+        <tr>
+            <th class="must">用户姓名：</th>
+                <td><{$form.name}></td>
+                <input type="hidden"  readonly="true" name="form[name]" size="30" class="form-control text" value="<{$form.name|escape}>" />
+        </tr>
+
+        <tr>
+            <th class="must">电话号码：</th>
+                <td><{$form.phone}></td>
+                <input type="hidden" readonly="true" name="form[s_phone]" size="30" class="form-control text" value="<{$form.phone|escape}>" />
+        </tr>
+
+        <tr>
+            <th class="must">用户类型：</th>
+                <td><{$code.sign_staff[$form.type].name}></td>
+                <input type="hidden" name="form[type]" size="30" class="form-control text" value="<{$form.type|escape}>" />
+        </tr>
+
+        <tr>
+            <th class="must">当前日期：</th>
+                <td><{$form.sign_date}></td>
+                <input type="hidden" name="form[sign_date]" size="30" class="form-control text" value="<{$form.sign_date|escape}>" />
+        </tr>
+
+        <tr>
+            <th class="must">签到时间</th>
+            <td>
+                <input type="text" readonly="readonly" class="form-control text" name="form[in_time]" value="<{$form.in_time|date_format:'H:i'}>" id="input-daterange-in"/>
+                <{brave_error_hint errors=$errors name=in_time}>
+            </td>
+        </tr>
+
+        <tr class = "old">
+           <th class="must" >签到图片：</th>
+           <td >
+               <img src="<{$smarty.const.APP_OSS_URL}><{$form.img_url}>" class="img icon" >
+               <input type="hidden" name="form[img_url]" value="<{$form.img_url}>">
+           </td>
+        </tr>
+
+        <tr>
+            <th class="must">签退时间</th>
+            <td>
+                <input type="text" readonly="readonly" class="form-control text" name="form[out_time]" value="<{$form.out_time|date_format:'H:i'}>"  id="input-daterange-out"/>
+                <{brave_error_hint errors=$errors name=out_time}>
+            </td>
+        </tr>
+
+        <tr class = "old">
+           <th class="must" >签退图片：</th>
+           <td >
+               <img src="<{$smarty.const.APP_OSS_URL}><{$form.img_url}>" class="img icon" >
+               <input type="hidden" name="form[img_url]" value="<{$form.img_url}>">
+           </td>
+        </tr>
+
+        <tr class="option">
+            <th></th>
+            <td>
+                <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+            </td>
+        </tr>
+   </table>
+</form>
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+<script type="text/javascript">
+$(function(){
+    $('#input-daterange-in, #input-daterange-out').datetimepicker({
+        autoclose:true,
+        format:"hh:ii",
+        language:"zh-CN",
+        todayBtn:true,
+        minuteStep:1,
+        startView:1,
+        maxView:0,
+    });
+});
+</script>

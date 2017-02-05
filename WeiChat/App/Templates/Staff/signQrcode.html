@@ -1,0 +1,44 @@
+<div class="row top-nav-bar">
+    <div class="col-xs-1 text-left">
+        <a class="btn btn-sm on-active padding-left-0" href="?c=index&a=bind"><i class="iconfont">&#xe600;</i></a>
+    </div>
+    <div class="col-xs-8 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h4 class="text-center margin-top-15 margin-bottom-0"></h4>
+    </div>
+</div>
+
+<div class="padding-5">
+    <div id="qrcode" class="qrcode_list panel-margin panel-align">
+        <div class="panel-heading no-bottom">
+            <div class="row">
+                <div class="col-xs-6 text-center">
+                    <div style="padding-top: 70%">签到二维码</div>
+                </div>
+                <div class="col-xs-6 text-center">
+                    <img style="width: 100%" src="<{$smarty.const.APP_RESOURCE_URL}><{$staff.qrcode_url}>?rand=<{$random_num}>" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-3 text-center"></div>
+                <div class="col-xs-6 text-center">
+                    <img style="width: 100%" src="<{$smarty.const.APP_RESOURCE_URL}><{$staff.qrcode_url}>?rand=<{$random_num}>" />
+                </div>
+                <div class="col-xs-3 text-center"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6 text-center">
+                    <img style="width: 100%" src="<{$smarty.const.APP_RESOURCE_URL}><{$staff.qrcode_url}>?rand=<{$random_num}>" />
+                </div>
+                <div class="col-xs-6 text-center">
+                    <div style="padding-top: 20%">签到二维码</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

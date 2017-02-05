@@ -1,0 +1,29 @@
+<{if $articleList}>
+
+  <div class="more-block-hb">
+
+    <div class="report-body padding-bottom-0 more-title-hb">
+      <h4>更多精彩</h4>
+    </div>
+
+    <div class="report-body list-group  more-item ">
+      <{foreach from=$articleList item=article}>
+        <{if $article.link}>
+          <a href="<{$article.link}>" class="more-item-title-hb">
+            <{else}>
+              <div class="list-group-item">
+                <{/if}>
+                  <p class="list-group-item-text list-group-item-text-article">
+                    <{$article.body}>
+                  </p>
+                  <{if $article.link}>
+          </a>
+          <{else}>
+            </div>
+            <{/if}>
+              <{/foreach}>
+    </div>
+
+
+    <{/if}>
+  </div>

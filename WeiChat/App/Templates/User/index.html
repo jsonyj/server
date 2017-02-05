@@ -1,0 +1,66 @@
+<!-- logo -->
+<div class="row top-nav-bar">
+    <div class="text-left">
+    </div>
+    <div class="col-xs-9 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h4 class="text-center">宝贝中心</h4>
+    </div>
+</div>
+<!-- /.logo -->
+
+<div class="row user-profile-body">
+
+  <{foreach from=$parent.studentList item=student}>
+  <div class="panel panel-default no-margin">
+    <div class="panel-heading padding-left-0 padding-right-0">
+      <div class="row">
+        <div class="col-xs-6 padding-5">
+            <img  class=" img-circle-avatar" src="<{if $student.studentDetectionImg.file_path}><{$smarty.const.APP_OSS_URL}><{$student.studentDetectionImg.file_path}><{else}>http://tse1.mm.bing.net/th?id=OIP.M76446756dcb348b279464f77687a43b9o0&pid=15.1<{/if}>">
+        </div>
+        <div class="col-xs-6 padding-5">
+          <p><{$student.name}> <{$student.school_title}> <{$student.class_title}></p>
+          <hr>
+          <p>身高：<{if $student.studentDetection.height}><{$student.studentDetection.height/10}>厘米<{else}>暂无数据<{/if}></p>
+          <hr>
+          <p>体重：<{if $student.studentDetection.weight/1000}><{$student.studentDetection.weight/1000}>公斤<{else}>暂无数据<{/if}></p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="panel-heading no-bottom">
+        <a href="?c=report&id=<{$student.id}>">
+            <div class="row">
+                <div class="col-xs-4 no-padding"><img src="img/report.jpg" class="img-responsive"></div>
+                <div class="col-xs-8">
+                    <h4>健康日历</h4>
+                    <p>点击查看宝贝历史健康数据</p>
+                </div>
+            </div>
+        </a>
+        
+        <hr>
+        <a href="?c=group&id=<{$student.id}>">
+            <div class="row">
+                <div class="col-xs-4 no-padding"><img src="img/group.jpg" class="img-responsive"></div>
+                <div class="col-xs-8">
+                    <h4>家庭成员管理</h4>
+                    <p>让家人一起关心宝贝</p>
+                </div>
+            </div>
+        </a>
+        
+        <hr>
+        <input type="button" class="btn width-100 btn-primary" value="二维码查看" onclick="window.location.href='?c=student&a=qrcode&student_id=<{$student.id}>'"/>
+    </div>
+    
+  </div>
+  <br>
+  <{/foreach}>
+
+</div>
+
+<script>
+</script>

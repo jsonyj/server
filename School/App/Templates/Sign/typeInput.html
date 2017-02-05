@@ -1,0 +1,70 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'><i class="fa fa-arrow-left"></i></a>&nbsp;&nbsp;
+    <li>
+      <a href="?c=sign&a=typeIndex">考勤类型</a>
+    </li>
+    <li class="active"><{if $smarty.get.id}>编辑<{else}>新增<{/if}>类型</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+        <form name="data_form" method="post">
+          <{if $form.id}><input type="hidden" name="form[id]" value="<{$form.id|escape}>" /><{/if}>
+          <table class="table table-bordered table-form">
+              <tr>
+                <th class="must">类型名称：</th>
+                <td>
+                  <input type="text" name="form[title]" size="30" class="form-control text" value="<{$form.title|escape}>"/>
+                  <{brave_error_hint errors=$errors name=title}>
+                </td>
+              </tr>
+              <tr>
+                  <th class="must">签到时间：</th>
+                  <td>
+                      <input type="text" readonly="readonly" class="form-control text" name="form[in_time]" value="<{$form.in_time|date_format:'H:i'}>" id="input-daterange-in"/>
+                      <{brave_error_hint errors=$errors name=in_time}>
+                  </td>
+              </tr>
+              <tr>
+                  <th class="must">签退时间：</th>
+                  <td>
+                      <input type="text" readonly="readonly" class="form-control text" name="form[out_time]" value="<{$form.out_time|date_format:'H:i'}>"  id="input-daterange-out"/>
+                      <{brave_error_hint errors=$errors name=out_time}>
+                  </td>
+              </tr>
+              <tr class="option">
+                <th></th>
+                <td>
+                  <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                </td>
+              </tr>
+          </table>
+      </form>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+<script type="text/javascript">
+$(function(){
+    $('#input-daterange-in, #input-daterange-out').datetimepicker({
+        autoclose:true,
+        format:"hh:ii",
+        language:"zh-CN",
+        todayBtn:true,
+        minuteStep:1,
+        startView:1,
+        maxView:0,
+    });
+});
+</script>

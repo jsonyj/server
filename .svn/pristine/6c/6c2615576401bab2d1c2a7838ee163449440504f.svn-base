@@ -1,0 +1,68 @@
+	<div class="container padding-rl-0">
+        <div class="col-xs-12 padding-rl-0">
+            <video controls="controls" autoplay="autoplay" class="width-100 video" id="<{$opendId}>">
+                <!-- <source src="../res/V60616-184413.mp4"/> -->
+            </video>
+        </div>
+        <!-- <div class="col-xs-12 bgcolor-white state-height">
+        </div>
+        <div class="col-xs-12 bgcolor-white padding-r-0 padding-b-5">
+            开放时间：<span class="timeQuantum"></span>
+        </div> -->
+        <div class="col-xs-12 bgcolor-white top-5 padding-tb-8">
+            <p class="video-name margin-b-0"></p>
+            <p class="margin-b-0">开放时间：<span class="timeQuantum"></span></p>
+        </div>
+    </div>
+
+    <div class="margin-top-50 height-di-w  clear-both"></div>
+    <!--底部导航条-->
+    <footer class="footer footer_school">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+ 
+            <a href="?c=school&a=schoolStatistic&statistic_id=<{$loginUser.id}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+            
+            <a href="?c=school&a=schoolVideoDetails&statistic_id=<{$loginUser.id}>" class="<{if $smarty.get.a ==schoolVideoDetails && $smarty.get.c==school}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe610;</i><div>看宝宝</div></a>
+
+            <!-- 跳转到发布通知 -->
+            <a href="?c=school&a=deliverNotice&statistic_id=<{$loginUser.id}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>发送通知</div></a>
+        </div>
+    </footer>
+
+
+
+    <script>
+        var ws;
+        $(document).ready(function(){
+            var channelid = <{$channelId}>;
+            $.ajax({
+                type: "post",
+                url:"http://video.didano.com/video/client/post/channel_get_by_staff/"+<{$loginUser.id}>,
+                dataType: "json",
+                success: function(rs){
+                    $.each(rs.data, function(idx, obj) {
+                        console.log(rs.data);
+                        for(var i = 0; i < obj.length; i++){
+                            if(obj[i].channelId == channelid){
+                                var sourceStr = '<source src="'+obj[i].ossPlayUrl+'"/>';
+                                $(".video").append(sourceStr);
+                                //内容添加到页面上。
+                                $(".video-name").html(obj[i].name);
+                                var timeStr = obj[i].start_ends.join("，")
+                                $(".timeQuantum").html(timeStr);
+                                break;
+                            }
+                        }
+                    });
+
+                    
+                },
+                error: function(){
+                    alert("找不到该视频通道");
+                }
+            });
+
+
+        })
+    </script>

@@ -1,0 +1,141 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+  <ul class="breadcrumb">
+      <a href='javascript:history.go(-1)'><i class="fa fa-arrow-left"></i></a>&nbsp;&nbsp;
+    <li class="active">学生认领</li>
+  </ul><!-- /.breadcrumb -->
+</div>
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <h3>请老师将未识别的小朋友认领到相应班级，家长才能收到检测信息</h3> 
+</br>
+</br>
+<h2 class="text-center"><font color="#EE0000"><{if !empty($claimImg_list)}>请点击图片完成认领！<{else}>暂无数据！<{/if}></font></h2>
+</br>
+</br>
+      <div class='clearfix'></div>
+      <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+
+                    <col  width="100"/>
+                    <col  width="100"/>
+                    <col  width="100"/>
+                    <col  width="100"/>
+                    <col  width="100"/>
+                    <col  width="100"/>
+
+                    <{foreach from=$claimImg_list item=img key=key}>
+                    <{if $key%6 == 0}>
+                        <tr>
+                    <{/if}>
+                        <td  class="text-center worksbox">  
+                            <img id="<{$key}>" onclick="confirm(<{$img.id}>,'<{$smarty.const.APP_OSS_URL}><{$img.path}>',<{$img.detection_id}>,'<{$img.terminal_img_id}>',<{$img.file_img_id}>)" src="<{$smarty.const.APP_OSS_URL}><{$img.path}>"  class="img_claim">
+                        </td>
+
+                        <{if $key%6 == 0 && $i != 0}>
+                            </tr>
+                        <{/if}>
+                    <{/foreach}>
+          </table>
+      </div>
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+<div class="modal fade" id="order_server_confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <h2 class="text-center" ><font color="#8B0000">请选择学生</font></h2>
+      <div class="modal-body">
+          <form action="?c=student&a=claimInput" method="post" id="id">
+
+              <table class="table table-bordered table-condensed">
+                  <tr>
+                      <th  class="text-center worksbox">
+                          <img id="click_id"  class="img_claim">
+                      </th>
+                      <td>
+                      </br>
+                          <center>
+                          <table>
+                              <tr>
+                                <th><font color="#008B45">班级：</font></th>
+                                    <td>
+                                      <select class="form-control" id="class_id" style='width:230px;' id="class" onchange="selectClass(this.value)" name="form[class_id]">
+                                          <{brave_html_select code=$claimClass_list value=$form.value|escape empty=true}>
+                                      </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                <th><font color="#008B45">姓名：</font></th>
+                                <td>
+                                    <div class="student_list" style="display:none;">
+                                    </div>
+                                  <select class="form-control" id="student" style='width:230px;' onchange="selectStudent(this.value)" >
+                                      <{if empty($form.id) || $form.id== 0}>
+                                      <option value="">------</option>
+                                      <{else}>
+                                      <{brave_html_select code=$claimStudent_list value=$form.id|escape empty=true}>
+                                      <{/if}>
+                                  </select>
+                                </td>
+                              </tr>
+                          </table>
+                      </center>
+                      </td>
+                  </tr>
+              </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" form="id" class="btn btn-lg btn-default" onclick="cancel()">取消</button>
+        <button type="submit" form="id" class="btn btn-lg btn-danger" >认领</button>
+     </div>
+     </form>
+    </div>
+  </div>
+</div>
+<script>
+function confirm(img_id,img_path,detection_id,terminal_img_id,file_img_id) {
+
+    $('#click_id').attr('src',img_path);
+
+    $("#order_server_confirm").modal('show');
+
+
+    $('#class_id').change(getStudent);
+    
+    function getStudent() {
+      
+        var class_id = $(this).children('option:selected').val();
+        
+        $('.student_list').load('?c=student&a=getStudentList',{info:class_id,img_info:img_id,detection_info:detection_id,terminal_img_info:terminal_img_id,file_img_info:file_img_id},function(){
+          
+        $('.student_list').css("display","");
+        
+        $('#student').css("display","none");
+        
+        });
+    }
+}
+function cancel() {
+    $("#order_server_confirm").modal('hide');
+}
+function saveClaim() {
+  if(!$('#class').val()) {
+    $.notify('请选择班级。');
+    return;
+  }
+
+  else if(!$('#student').val()) {
+    $.notify('请选择学生。');
+    return;
+  }
+}
+
+</script>

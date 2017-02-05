@@ -1,0 +1,49 @@
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+  </script>
+
+  <ul class="breadcrumb">
+    <li>
+      <a href="?c=student&a=hobbyIndex">学生爱好</a>
+    </li>
+    <li class="active"><{if $smarty.get.id}>编辑<{else}>新增<{/if}>爱好</li>
+  </ul><!-- /.breadcrumb -->
+
+</div>
+
+<div class="page-content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+          <div class="tab-content">
+            <div class="tab-pane fade in active" id="base-tab">
+
+              <form name="help_form" method="post">
+                <table class="table table-bordered table-form">
+                    <tr>
+                      <th class="must">标题：</th>
+                      <td>
+                        <input type="text" name="form[title]" size="30" class="form-control text" value="<{$form.title|escape}>"/>
+                        <{brave_error_hint errors=$errors name=title}>
+                      </td>
+                    </tr>                    
+                    <tr class="option">
+                      <th></th>
+                      <td>
+                        <input type="submit" class="btn btn-primary" name="complete" value="保存" />
+                      </td>
+                    </tr>
+                </table>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->

@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title><{$page.title|escape}></title>
+<link rel="stylesheet" type="text/css" href="./css/common.css">
+<link rel="stylesheet" type="text/css" href="./css/ui.datepicker.css">
+<link rel="stylesheet" type="text/css" href="./css/thickbox.css">
+<script type="text/javascript" src="./js/jquery.js"></script>
+<script type="text/javascript" src="./js/common.js"></script>
+<script type="text/javascript" src="./js/ui.datepicker.js"></script>
+<script type="text/javascript" src="./js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript" src="./js/thickbox.js"></script>
+<{foreach from=$extra_js item=js}>
+<script type="text/javascript" src="./js/<{$js|escape}>"></script>
+<{/foreach}>
+<{foreach from=$extra_css item=css}>
+<link rel="stylesheet" href="./css/<{$css|escape}>" type="text/css" />
+<{/foreach}>
+<base target="_self">
+</head>
+<body>
+<div id="window">
+<{$main}>
+</div>
+</body>
+</html>

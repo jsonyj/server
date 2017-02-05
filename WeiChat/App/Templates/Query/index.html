@@ -1,0 +1,329 @@
+
+    <{if $student_list}>
+        <{foreach from=$student_list item=val}>
+            <div class="text-center">
+                <a class="btn btn-lg btn-default width-100 <{if $student_list|count == 1}>hidden<{/if}> <{if $val.id ==$student.id}>btn-green-bk<{/if}>" href="?c=query&a=index&studentId=<{$val.id}>"><{$val.name}></a>
+            </div>
+        <{/foreach}>
+    <{/if}>
+    <!---每次刷新为当前时间-->
+    <div class="section">
+        <div class="container">
+            <div class="row padding-none">
+                <div class="col-xs-12 text-center query-head padding-none">
+                    <span class="col-xs-3"><a <{if $student.query_type == $smarty.const.SERVICE_TYPE_STATURE}> class="active" <{/if}>  href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_STATURE}>&day=<{date('Y-m-d',time())}>&studentId=<{$student.id}>&date_month=&date_year=">身高</a></span>
+                    <span class="col-xs-3"><a <{if $student.query_type == $smarty.const.SERVICE_TYPE_WEIGHT}> class="active" <{/if}>  href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_WEIGHT}>&day=<{date('Y-m-d',time())}>&studentId=<{$student.id}>&date_month=&date_year=">体重</a></span>	
+                    <span class="col-xs-3"><a <{if $student.query_type == $smarty.const.SERVICE_TYPE_TEMPERATURE}> class="active" <{/if}>  href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_TEMPERATURE}>&day=<{date('Y-m-d',time())}>&studentId=<{$student.id}>&date_month=&date_year=">温度</a></span>
+                    <span class="col-xs-3"><a <{if $student.query_type == $smarty.const.SERVICE_TYPE_IMG}> class="active" <{/if}>  href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_IMG}>&day=<{date('Y-m-d',time())}>&studentId=<{$student.id}>&date_month=&date_year=">照片</a></span>	
+                </div>
+            </div>
+        </div>
+    </div> 
+    
+    <!--
+    <div class="section">
+        <div class="container">
+            <div class="row padding-none">
+                <div class="col-xs-12 text-center query-head padding-none">
+                    <span class="col-xs-3"><a <{if $student.query_type == $smarty.const.SERVICE_TYPE_STATURE}> class="active" <{/if}>  href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_STATURE}>&day=<{$student.day}>&studentId=<{$student.id}>&date_month=&date_year=">身高</a></span>
+                    <span class="col-xs-3"><a <{if $student.query_type == $smarty.const.SERVICE_TYPE_WEIGHT}> class="active" <{/if}>  href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_WEIGHT}>&day=<{$student.day}>&studentId=<{$student.id}>&date_month=&date_year=">体重</a></span>	
+                    <span class="col-xs-3"><a <{if $student.query_type == $smarty.const.SERVICE_TYPE_TEMPERATURE}> class="active" <{/if}>  href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_TEMPERATURE}>&day=<{$student.day}>&studentId=<{$student.id}>&date_month=&date_year=">温度</a></span>
+                    <span class="col-xs-3"><a <{if $student.query_type == $smarty.const.SERVICE_TYPE_IMG}> class="active" <{/if}>  href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_IMG}>&day=<{$student.day}>&studentId=<{$student.id}>&date_month=&date_year=">照片</a></span>	
+                </div>
+            </div>
+        </div>
+    </div> 
+    ---->
+    
+    <{if $student.query_type == $smarty.const.SERVICE_TYPE_STATURE}>
+    <div class="section">
+        <div class="container">
+            <div class="row parent-index-div">
+                <div class="col-xs-12">
+                    <div class="col-xs-12  parent-navdiv position-relative">
+                        <label class="index-h4"> </label>
+                    </div>
+                    <div class="col-xs-12 text-center padding-lr-none">
+                        <div class="cur-report-content">
+                            <div class="report-body padding-bottom-0">
+                                <b class="col-xs-12 query_title" >入园以来身高曲线图</b>
+                            </div>
+
+                            <div class="panel panel-default panel-margin">
+                              <img class="img-rounded width-100" src="?c=report&a=queryChart&studentId=<{$student.id}>&query_type=<{$smarty.const.SERVICE_TYPE_STATURE}>&day=<{$student.day}>&table_type=<{$smarty.const.QUERY_TABLE_TOTAL}>">
+                            </div>
+                        
+                            <div class="report-body padding-bottom-0">
+                                <a class="col-xs-3 query_span" href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_STATURE}>&date_year=<{$student.last_year}>&studentId=<{$student.id}>"><i class="iconfont iconfont-color-hei">&#xe622;</i>上一年</a>
+                                <b class="col-xs-6 query_title al-table-title"><{if $student.date_year}><{$student.date_year|date_format:"Y"}><{else}><{$student.day|date_format:"Y"}><{/if}>年身高曲线图</b>
+                                <a class="col-xs-3 query_span" <{if date('Y', strtotime($student.next_year)) <= date('Y', time())}>  href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_STATURE}>&date_year=<{$student.next_year}>&studentId=<{$student.id}>" <{/if}>>下一年<i class="iconfont iconfont-color-hei">&#xe621;</i></a>
+                            </div>
+
+                            <div class="panel panel-default panel-margin">
+                              <img class="img-rounded width-100" src="?c=report&a=queryChart&studentId=<{$student.id}>&query_type=<{$smarty.const.SERVICE_TYPE_STATURE}>&day=<{if $student.date_year}><{$student.date_year}><{else}><{$student.day}><{/if}>&table_type=<{$smarty.const.QUERY_TABLE_YEAR}>">
+                            </div>
+
+                            <div class="report-body padding-bottom-0">
+                                <a class="col-xs-3 query_span" href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_STATURE}>&date_month=<{$student.last_month}>&studentId=<{$student.id}>"><i class="iconfont iconfont-color-hei">&#xe622;</i>上一月</a>
+                                <b class="col-xs-6 query_title al-table-title"><{if $student.date_month}><{$student.date_month|date_format:"Y-m"}><{else}><{$student.day|date_format:"Y-m"}><{/if}>月身高曲线图</b>
+                                <a class="col-xs-3 query_span" <{if date('Y-m', strtotime($student.next_month)) <= date('Y-m', time())}>  href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_STATURE}>&date_month=<{$student.next_month}>&studentId=<{$student.id}>" <{/if}> >下一月<i class="iconfont iconfont-color-hei">&#xe621;</i></a>
+                            </div>
+
+                            <div class="panel panel-default panel-margin">
+                              <img class="img-rounded width-100" src="?c=report&a=queryChart&studentId=<{$student.id}>&query_type=<{$smarty.const.SERVICE_TYPE_STATURE}>&day=<{if $student.date_month}><{$student.date_month}><{else}><{$student.day}><{/if}>&table_type=<{$smarty.const.QUERY_TABLE_MONTH}>">
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <{/if}>
+    
+    <{if $student.query_type == $smarty.const.SERVICE_TYPE_WEIGHT}>
+    <div class="section">
+        <div class="container">
+            <div class="row parent-index-div">
+                <div class="col-xs-12">
+                    <div class="col-xs-12  parent-navdiv position-relative">
+                        <label class="index-h4"> </label>
+                    </div>
+                    <div class="col-xs-12 text-center padding-lr-none">
+                        <div class="cur-report-content">
+                            <div class="report-body padding-bottom-0">
+                                <b class="col-xs-12 query_title al-table-title" >入园以来体重曲线图</b>
+                            </div>
+
+                            <div class="panel panel-default panel-margin">
+                              <img class="img-rounded width-100" src="?c=report&a=queryChart&studentId=<{$student.id}>&query_type=<{$smarty.const.SERVICE_TYPE_WEIGHT}>&day=<{$student.day}>&table_type=<{$smarty.const.QUERY_TABLE_TOTAL}>">
+                            </div>
+                        
+                            <div class="report-body padding-bottom-0">
+                                <a class="col-xs-3 query_span" href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_WEIGHT}>&date_year=<{$student.last_year}>&studentId=<{$student.id}>"><i class="iconfont iconfont-color-hei">&#xe622;</i>上一年</a>
+                                <b class="col-xs-6 query_title al-table-title"><{if $student.date_year}><{$student.date_year|date_format:"Y"}><{else}><{$student.day|date_format:"Y"}><{/if}>年体重曲线图</b>
+                                <a class="col-xs-3 query_span" <{if date('Y', strtotime($student.next_year)) <= date('Y', time())}> href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_WEIGHT}>&date_year=<{$student.next_year}>&studentId=<{$student.id}>" <{/if}>>下一年<i class="iconfont iconfont-color-hei">&#xe621;</i></a>
+                            </div>
+
+                            <div class="panel panel-default panel-margin">
+                              <img class="img-rounded width-100" src="?c=report&a=queryChart&studentId=<{$student.id}>&query_type=<{$smarty.const.SERVICE_TYPE_WEIGHT}>&day=<{if $student.date_year}><{$student.date_year}><{else}><{$student.day}><{/if}>&table_type=<{$smarty.const.QUERY_TABLE_YEAR}>">
+                            </div>
+
+                            <div class="report-body padding-bottom-0">
+                                <a class="col-xs-3 query_span" href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_WEIGHT}>&date_month=<{$student.last_month}>&studentId=<{$student.id}>"><i class="iconfont iconfont-color-hei">&#xe622;</i>上一月</a>
+                                <b class="col-xs-6 query_title al-table-title"><{if $student.date_month}><{$student.date_month|date_format:"Y-m"}><{else}><{$student.day|date_format:"Y-m"}><{/if}>月体重曲线图</b>
+                                <a class="col-xs-3 query_span" <{if date('Y-m', strtotime($student.next_month)) <= date('Y-m', time())}> href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_WEIGHT}>&date_month=<{$student.next_month}>&studentId=<{$student.id}>" <{/if}> >下一月<i class="iconfont iconfont-color-hei">&#xe621;</i></a>
+                            </div>
+
+                            <div class="panel panel-default panel-margin">
+                              <img class="img-rounded width-100" src="?c=report&a=queryChart&studentId=<{$student.id}>&query_type=<{$smarty.const.SERVICE_TYPE_WEIGHT}>&day=<{if $student.date_month}><{$student.date_month}><{else}><{$student.day}><{/if}>&table_type=<{$smarty.const.QUERY_TABLE_MONTH}>">
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <{/if}>
+    
+    
+    <{if $student.query_type == $smarty.const.SERVICE_TYPE_TEMPERATURE}>
+    <div class="section">
+        <div class="container">
+            <div class="row parent-index-div">
+                <div class="col-xs-12">
+                    <div class="col-xs-12 padding-lr-none">
+                        <form action="" method="get">
+                            <input type="hidden" name="c" value="query" />
+                            <input type="hidden" name="a" value="index" />
+                            <input type="hidden" name="studentId" value="<{$student.id}>" />
+                            <input type="hidden" name="query_type" value="<{$smarty.const.SERVICE_TYPE_TEMPERATURE}>" />
+                            <div class="query-riqi col-xs-8 padding-lr-none  position-relative">
+                                <i class="iconfont iconfont-color-blue">&#xe618;</i>
+                                <input id="sh_date" class="riqi-control" type="text" name="date_week" value="<{$student.date_week}>" />
+                            </div>
+                            <div class="col-xs-4 query-riqi">
+                                <input type="submit" class="btn btn-success riqi-submit" value="查询">
+                            </div>
+                        </form>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <div class="section">
+        <div class="container">
+            <div class="row parent-index-div">
+                <div class="col-xs-12">
+                    <div class="col-xs-12  parent-navdiv position-relative">
+                        <label class="index-h4"> </label>
+                    </div>
+                    <div class="col-xs-12 text-center padding-lr-none">
+                        <div class="cur-report-content">
+                            <div class="report-body padding-bottom-0">
+                                <a class="col-xs-3 query_span" href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_TEMPERATURE}>&date_week=<{$student.last_week}>&studentId=<{$student.id}>"><i class="iconfont iconfont-color-hei">&#xe622;</i>上一周</a>
+                                <b class="col-xs-6 query_title al-table-title">当前一周温度曲线图</b>
+                                <a class="col-xs-3 query_span" href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_TEMPERATURE}>&date_week=<{$student.next_week}>&studentId=<{$student.id}>">下一周<i class="iconfont iconfont-color-hei">&#xe621;</i></a>
+                            </div>
+
+                            <div class="panel panel-default panel-margin">
+                              <img class="img-rounded width-100" src="?c=report&a=queryChart&studentId=<{$student.id}>&query_type=<{$smarty.const.SERVICE_TYPE_TEMPERATURE}>&day=<{if $student.date_week}><{$student.date_week}><{else}><{$student.day}><{/if}>">
+                            </div>
+                        
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <{/if}>
+    
+    <{if $student.query_type == $smarty.const.SERVICE_TYPE_IMG}>
+    <div class="section">
+        <div class="container">
+            <div class="row parent-index-div">
+                <div class="col-xs-12">
+                    <div class="col-xs-12 padding-lr-none">
+                        <form action="" method="get">
+                            <input type="hidden" name="c" value="query" />
+                            <input type="hidden" name="a" value="index" />
+                            <input type="hidden" name="studentId" value="<{$student.id}>" />
+                            <input type="hidden" name="query_type" value="<{$smarty.const.SERVICE_TYPE_IMG}>" />
+                            <div class="query-riqi col-xs-8 padding-lr-none  position-relative">
+                                <i class="iconfont iconfont-color-blue">&#xe618;</i>
+                                <input id="sh_date_img" class="riqi-control" type="text" name="date_week" value="<{$student.date_week}>" />
+                            </div>
+                            <div class="col-xs-4 query-riqi">
+                                <input type="submit" class="btn btn-success riqi-submit" value="查询">
+                            </div>
+                        </form>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="container">
+            <div class="row parent-index-div">
+                <div class="col-xs-12 query-div-img">
+                    <div class="col-xs-12  parent-navdiv position-relative">
+                        <label class="index-h4"> </label>
+                    </div>
+                    <div class="col-xs-12 text-center padding-lr-none">
+                        <div class="cur-report-content">
+                            <div class="report-body padding-bottom-0">
+                                <a class="col-xs-3 query_span" href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_IMG}>&day=<{$student.last_week}>&studentId=<{$student.id}>"><i class="iconfont iconfont-color-hei">&#xe622;</i>上一周</a>
+                                <b class="col-xs-6 query_title al-table-title">本周图片</b>
+                                <a class="col-xs-3 query_span" href="?c=query&a=index&query_type=<{$smarty.const.SERVICE_TYPE_IMG}>&day=<{$student.next_week}>&studentId=<{$student.id}>">下一周<i class="iconfont iconfont-color-hei">&#xe621;</i></a>
+                            </div>
+                            <div class="panel panel-default query-image">
+                                <{foreach from=$student.detectionImgList item=img}>
+                                    <img  class="image_q img_click_<{$img.id}>" src="<{$smarty.const.APP_OSS_URL}><{$img.file_path}>"/>
+                                    
+                                        <div class="modal fade " id="img_tishi_<{$img.id}>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <span class="close_bi hidden" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></span>
+                                                    <div class="modal-body" style="height:300px;">
+                                                       <img class="width-100" src="<{$smarty.const.APP_OSS_URL}><{$img.file_path}>"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            $(".img_click_<{$img.id}>").click(function(){
+                                                $("#img_tishi_<{$img.id}>").modal('show');
+                                                $('#img_tishi_<{$img.id}>').find('.modal-dialog').css({  
+                                                    'margin-top':'150px'
+                                                });
+                                            });
+                                        </script>
+                                <{/foreach}>
+                                <div class="clear-both margin-bottom-15"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <{/if}>
+    
+<div class="margin-top-50 height-di-w  clear-both"></div>
+<script>    
+
+    var mydate = new Date();
+    var year = "" + mydate.getFullYear();
+    var month = (mydate.getMonth()+1);
+    var day = mydate.getDate();
+    var daycount = new Date(year, 12, 0).getDate();
+    var monthcount = new Date(year, 0, 0).getMonth()+1;
+    var first_day = year + '-1-1 00:00:00'; // 当年第一天
+    var last_day = year + '-' + monthcount + '-' + daycount + ' 23:59:59'; // 当年最后一天
+    var timeDay = year+'-'+month+'-'+day;
+    
+   
+
+    
+    $(function() {
+        //初始化日期控件
+        var opt = {
+            preset: 'date', //日期
+            theme: 'android-ics light', //皮肤样式
+            display: 'modal', //显示方式
+            mode: 'scroller', //日期选择模式
+            lang:'zh',
+            dateFormat: 'yy-mm-dd', // 日期格式
+            setText: '确定', //确认按钮名称
+            cancelText: '取消',//取消按钮名籍我
+            dateOrder: 'yymmdd', //面板中日期排列格式
+            showNow: false,
+            maxDate: new Date(),
+        };
+        $("#sh_date").mobiscroll(opt);
+        $("#sh_date_img").mobiscroll(opt);
+        
+        $('#sh_date').change(function() {
+            var new_date = $('#sh_date').val();
+        });
+    });
+    
+
+
+   
+</script>
+
+    <footer class="footer">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+            <a href="?c=parent&a=index&studentId=<{$student.id}>"><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+            <!--跳转到接送报告-->
+            <a href="?c=parent&a=report&studentId=<{$student.id}>&type=<{$smarty.const.REPORT_TYPE_DAY}>"><i class="iconfont iconfont-color-hei">&#xe616;</i><div>报告</div></a>
+
+            <!--跳转到查询-->
+            <a href="?c=query&a=index&studentId=<{$student.id}>&query_type=<{$smarty.const.SERVICE_TYPE_STATURE}>" class="<{if $smarty.get.a ==index && $smarty.get.c==query}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe617;</i><div>查询</div></a>
+
+            <!--跳转到关系绑定-->
+            <a href="?c=group&a=index&id=<{$student.id}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>家庭管理</div></a>
+
+
+            <!--跳转到电话绑a定-->
+            <a href="?c=public&a=messageIndex&studentId=<{$student.id}>"><i class="iconfont iconfont-color-hei">&#xe614;</i><div>消息</div></a>
+        </div>
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+                var hm = document.createElement("script");
+                hm.src = "//hm.baidu.com/hm.js?06abfa8d15984e47d948d94dafbb9483";
+                var s = document.getElementsByTagName("script")[0]; 
+                s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+    </footer>

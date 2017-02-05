@@ -1,0 +1,149 @@
+<!-- logo -->
+<div class="row top-nav-bar">
+    <div class="text-left">
+    </div>
+    <div class="col-xs-9 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h4 class="text-center">签到统计</h4>
+    </div>
+</div>
+<!-- /.logo -->
+
+<div class="row user-profile-body  margin-lr-none">
+
+    <div class="row  margin-lr-none" style="margin-bottom:10px;">
+        <form id="sh_form" name="sh_form" method="get" action="?c=school&a=schoolDaySignStatistic">
+            <input type="hidden" name="c" value="school"/>
+            <input type="hidden" name="a" value="schoolDaySignStatistic"/>
+            
+            <input id="sh_date" class="form-control" type="text" name="sh[date]" value="" placeholder="点击选择查看其它日期记录"/>
+        </form>
+    </div>
+
+    <div class="panel-default no-margin">
+        <div class="text-center">
+            <h4><{$date|date_format:'Y年m月d日'}>职工签到情况</h4>
+        </div>
+    </div>
+
+    <div class="panel-group" id="accordion">
+        <table class="table table-bordered text-center" style="font-size: 14px;">
+            <tr>
+                <th colspan="2" class="text-center" style="line-height: 57px;">角色</th>
+                <th class="text-center" style="line-height: 57px;">当日到校</th>
+                <th class="text-center" style="line-height: 57px;">当日离校</th>
+            </tr>
+            
+            <{foreach from=$daySignStatisticList item=sign}>
+            
+            <{if $sign.type == $smarty.const.ACT_SCHOOL_DOCTOR}>
+            <tr>
+                <td colspan="2">保健医生（<{$sign.name}>）</td>
+                <td>
+                    <{if in_array($sign.sign_status, array($smarty.const.SIGN_STATUS_LATE_UNOUT,$smarty.const.SIGN_STATUS_LATE_OUT,$smarty.const.SIGN_STATUS_LATE_EARLY))}>
+                    迟到（<{$sign.in_time|date_format:'H:i'}>）
+                    <{else}>
+                        <{if $sign.sign_status != $smarty.const.SIGN_STATUS_UNIN_UNOUT}>
+                            <{$sign.in_time|date_format:'H:i'}>
+                        <{/if}>
+                    <{/if}>
+                </td>
+                <td>
+                    <{if in_array($sign.sign_status,array($smarty.const.SIGN_STATUS_IN_EARLY,$smarty.const.SIGN_STATUS_LATE_EARLY))}>
+                    早退（<{$sign.out_time|date_format:'H:i'}>）
+                    <{else}>
+                        <{if $sign.out_time != '00:00:00'}>
+                            <{$sign.out_time|date_format:'H:i'}>
+                        <{/if}>
+                    <{/if}>
+                </td>
+            </tr>
+            <{/if}>
+            
+            <{if $sign.type == $smarty.const.ACT_SCHOOL_SUPPORTER}>
+            <tr>
+                <td colspan="2">后勤人员（<{$sign.name}>）</td>
+                <td>
+                    <{if in_array($sign.sign_status, array($smarty.const.SIGN_STATUS_LATE_UNOUT,$smarty.const.SIGN_STATUS_LATE_OUT,$smarty.const.SIGN_STATUS_LATE_EARLY))}>
+                    迟到（<{$sign.in_time|date_format:'H:i'}>）
+                    <{else}>
+                        <{if $sign.sign_status != $smarty.const.SIGN_STATUS_UNIN_UNOUT}>
+                            <{$sign.in_time|date_format:'H:i'}>
+                        <{/if}>
+                    <{/if}>
+                </td>
+                <td>
+                    <{if in_array($sign.sign_status,array($smarty.const.SIGN_STATUS_IN_EARLY,$smarty.const.SIGN_STATUS_LATE_EARLY))}>
+                    早退（<{$sign.out_time|date_format:'H:i'}>）
+                    <{else}>
+                        <{if $sign.out_time != '00:00:00'}>
+                            <{$sign.out_time|date_format:'H:i'}>
+                        <{/if}>
+                    <{/if}>
+                </td>
+            </tr>
+            <{/if}>
+            
+            <{if $sign.type == $smarty.const.ACT_SCHOOL_TEACHER}>
+            <tr>
+                <td><{$sign.title}></td>
+                <td><{$sign.name}></td>
+                <td>
+                    <{if in_array($sign.sign_status, array($smarty.const.SIGN_STATUS_LATE_UNOUT,$smarty.const.SIGN_STATUS_LATE_OUT,$smarty.const.SIGN_STATUS_LATE_EARLY))}>
+                    迟到（<{$sign.in_time|date_format:'H:i'}>）
+                    <{else}>
+                        <{if $sign.sign_status != $smarty.const.SIGN_STATUS_UNIN_UNOUT}>
+                            <{$sign.in_time|date_format:'H:i'}>
+                        <{/if}>
+                    <{/if}>
+                </td>
+                <td>
+                    <{if in_array($sign.sign_status,array($smarty.const.SIGN_STATUS_IN_EARLY,$smarty.const.SIGN_STATUS_LATE_EARLY))}>
+                    早退（<{$sign.out_time|date_format:'H:i'}>）
+                    <{else}>
+                        <{if $sign.out_time != '00:00:00'}>
+                            <{$sign.out_time|date_format:'H:i'}>
+                        <{/if}>
+                    <{/if}>
+                </td>
+            </tr>
+            <{/if}>
+            <{/foreach}>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+var old_date = '<{$sh.date}>';
+
+$(function() {
+    //初始化日期控件
+    var opt = {
+        preset: 'date', //日期
+        theme: 'android-ics light', //皮肤样式
+        display: 'modal', //显示方式
+        mode: 'scroller', //日期选择模式
+        lang:'zh',
+        dateFormat: 'yyyy-mm-dd', // 日期格式
+        setText: '确定', //确认按钮名称
+        cancelText: '取消',//取消按钮名籍我
+        dateOrder: 'yyyymmdd', //面板中日期排列格式
+        showNow: false,
+        maxDate: new Date(),
+    };
+    $("#sh_date").mobiscroll(opt);
+    
+    $('#sh_date').change(function() {
+        var new_date = $('#sh_date').val();
+        
+        if (new_date != old_date) {
+            old_date = new_date;
+            $('#sh_form').submit();
+        }
+        
+    });
+    
+});
+</script>

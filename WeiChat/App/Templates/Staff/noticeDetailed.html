@@ -1,0 +1,510 @@
+ 
+    <!--首页 index -->
+    
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+    <{if $userClassNotice}>
+  <!--   <div class="al-notice-div"> 
+          <p class="al-notice-title"><{$userClassNotice.content}></p> 
+    </div> -->
+    <div class="">
+        <div class="container">
+            <div class="row padding-none al-row">
+                <div class=" margin-top-30 margin-bottom-30 al-notice-12">
+                  
+                    <div class="col-xs-12 detailed-comment-left position-relative">
+                      <div class="col-xs-2 al-notice-2"> 
+                        <span class="detailed-s-img"><img src="<{$smarty.const.APP_OSS_URL}>./system/32.png"/></span>
+                      </div>
+                      <div class="col-xs-9 al-notice-9 al-notice-before1"> 
+                        <div class="comment-p  comment-zhuyao">
+                          <div class="al-white-bgColor al-green-bgColor1">
+                            <p class="al-notice-name"><{$user.name}>：</p>
+                            <{if $userClassNotice.type_c == 2}>
+                            <p class="list-group-item-audio">
+                                <div class="audio-message" onclick="audioPlayFromUrl(this,'<{$smarty.const.APP_OSS_URL}><{$userClassNotice.voice.voice_path}>')">
+                                  <img src="img/audio.gif">
+                                </div>
+                            </p>
+                            <{else}>
+                            <p class="al-notice-content"><{$userClassNotice.content}></p>
+                            <{/if}>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <{if $userClassNotice.classNoticeReplyParentList}>
+                        <{foreach from=$userClassNotice.classNoticeReplyParentList item=noticeReplyList key=key}>
+                            <div class="col-xs-12 detailed-comment-right position-relative">
+                              <div class="col-xs-9 col-xs-offset-1 al-offset-1">
+                                <div class="al-green-bgColor al-white-bgColor1">
+                                  <p class="al-notice-name"><{$noticeReplyList.reply_user_name}>：</p>
+                                  <{if $noticeReplyList.comment_type == 2}>
+                                    <p class="list-group-item-audio">
+                                        <div class="audio-message" onclick="audioPlayFromUrl(this,'<{$smarty.const.APP_OSS_URL}><{$noticeReplyList.voice.voice_path}>')">
+                                          <img src="img/audio.gif">
+                                        </div>
+                                    </p>
+                                    <{else}>
+                                    <p class="al-notice-content"><{$noticeReplyList.content}></p>
+                                    <{/if}>
+                                </div>
+                              </div>
+                              <div class="col-xs-2 al-notice-2 al-img-before1">
+                                <span class="detailed-img-span al-text-center">
+                                    <img src="<{$smarty.const.APP_OSS_URL}><{$studentDeleteion.file_path}>"/>  
+                                </span>
+                              </div>
+                            </div>
+                               
+                            <{if $noticeReplyList}>
+                            <{foreach from=$noticeReplyList.classNoticeReplyList item=noticeReply}>
+                                <{if $noticeReply.reply_utype != $smarty.const.ACT_SCHOOL_TEACHER}>
+                                    <div class="col-xs-12 detailed-comment-right position-relative">
+                                      <div class="col-xs-9 col-xs-offset-1 al-offset-1"> 
+                                        <div class="al-green-bgColor al-white-bgColor1">
+                                          <p class="al-notice-name"><{$noticeReply.reply_user_name}>：</p>
+                                          <{if $noticeReply.comment_type == 2}>
+                                            <p class="list-group-item-audio">
+                                                <div class="audio-message al-audio-first" onclick="audioPlayFromUrl(this,'<{$smarty.const.APP_OSS_URL}><{$noticeReply.voice.voice_path}>')">
+                                                  <img src="img/audio.gif">
+                                                </div>
+                                            </p>
+                                            <{else}>
+                                            <p class="al-notice-content"><{$noticeReply.content}></p>
+                                            <{/if}>
+                                        </div>
+                                      </div>
+                                      <div class="col-xs-2 al-notice-2 al-img-before1">
+                                        <span class="detailed-img-span">
+                                            <img src="<{$smarty.const.APP_OSS_URL}><{$studentDeleteion.file_path}>"/>
+                                        </span>
+                                      </div>
+                                    </div>
+                                <{else}>
+                                    <div class="col-xs-12 detailed-comment-left position-relative">
+                                      <div class="col-xs-2 al-notice-2"> 
+                                        <span class="detailed-s-img detailed-span-left">
+                                            <img src="<{$smarty.const.APP_OSS_URL}>./system/<{$noticeReply.reply_utype}>.png"/>
+                                            
+                                        </span>
+                                      </div>
+                                      <div class="col-xs-9 al-notice-9 al-notice-before1"> 
+                                        <div class="al-white-bgColor al-green-bgColor1">
+                                          <p class="al-notice-name"><{$noticeReply.reply_user_name}>：</p>
+                                          <{if $noticeReply.comment_type == 2}>
+                                            <p class="list-group-item-audio">
+                                                <div class="audio-message" onclick="audioPlayFromUrl(this,'<{$smarty.const.APP_OSS_URL}><{$noticeReply.voice.voice_path}>')">
+                                                  <img src="img/audio.gif">
+                                                </div>
+                                            </p>
+                                            <{else}>
+                                            <p class="al-notice-content"><{$noticeReply.content}></p>
+                                            <{/if}>
+                                        </div>
+                                      </div>
+                                    </div>
+                                <{/if}>
+                            <{/foreach}>
+                            <{/if}>
+
+                            <{if $type!= 32}>
+                                <div class="col-xs-12">
+                                   
+                                    <!-- Standard button -->
+                                    <button type="button" class="btn btn-success al-reply-btn" onclick="noticeHuifuComment(<{$noticeReplyList.reply_uid}>)">回复</button>
+
+                                </div>
+                            <{/if}>
+                            </div>
+                        <{/foreach}>
+                    <{/if}>
+                    
+                </div>
+            </div>
+        </div>
+    </div> 
+    <{/if}>
+    
+    <div id="audio-player" class="hidden"></div>
+    
+    <nav class="nav-notice hidden">
+        <div class="container">
+            <div class="row padding-none">
+               <form id="classNoticeReply_form" class="notice-form"  name="classNoticeReply_form" action="" method="post">
+                    <input type="hidden" name="form[reply_uid]" value="<{$user.id}>"/>
+                    <input type="hidden" name="complete" value="1">
+                    <input type="hidden" name="form[class_notice_id]" value="<{$userClassNotice.id}>">
+                    <input id="parent_id" type="hidden" name="form[parent_id]" value=""/>
+                    <input id="voice_id" type="hidden" name="form[voice_id]" value=""/>
+                    <input id="studentId" type="hidden" name="form[studentId]" value="<{$studentId}>"/>
+                            <input id="is_comment_type" type="hidden" name="form[comment_type]" value="">
+                    
+                    <div class="col-xs-2 padding-none">
+                        <div class="voice-input" comment-type="2" type="button" name="form[voice]" onclick="audioMessage()"><img class="audio-img" src="img/notice05.png"></div>
+                    </div>
+                    <div class="col-xs-8 padding-none">
+                        <input id="notice_comment" name="form[content]" comment-type="1"  class="al-notice-info" type="text" placeholder="请输入聊天信息" value="">
+                        <div class="al-input-aline"></div>
+                    </div>
+                    <div class="col-xs-2 padding-none notice-button">
+                        <button onclick="quxian()" class="btn btn-danger" type="button">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="margin-top-50 height-di-w  clear-both"></div>
+    <!--底部导航条-->
+    <{if $type}>
+    <footer class="footer footer_school">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+            <a href="?c=school&a=schoolStatistic&statistic_id=<{$loginUser.id}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+            <!--跳转到发布通知-->
+            <a href="?c=school&a=deliverNotice&statistic_id=<{$loginUser.id}>" class="<{if $smarty.get.a ==deliverNotice && $smarty.get.c==school}>color-green <{/if}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>发送通知</div></a>
+
+            <!--跳转到留言消息-->
+        </div>
+    </footer>
+    <{else}>
+    <footer class="footer footer_teacher">
+        <!--跳转到首页-->
+        <div class="col-xs-12 text-center padding-lrq-10">
+            <a href="?c=school&a=classStatistic&teacher_id=<{$loginUser.id}>" ><i class="iconfont iconfont-color-hei">&#xe613;</i><div>首页</div></a>
+
+            <!--跳转到发布通知-->
+            <a href="?c=staff&a=deliverNotice&teacher_id=<{$loginUser.id}>"><i class="iconfont iconfont-color-hei">&#xe615;</i><div>发送通知</div></a>
+
+            <!--跳转到留言消息-->
+            <a href="?c=staff&a=notice&teacher_id=<{$loginUser.id}>" class="<{if $smarty.get.a ==notice && $smarty.get.c==staff}>color-green <{/if}>"><span class="xiaoxi-tishi hidden"></span><i class="iconfont iconfont-color-hei">&#xe614;</i><div>消息</div></a>
+        </div>
+    </footer>
+    <{/if}>
+    
+    
+    <!-- 退回 -->
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> 
+ <script> 
+  var noticeTitle = $('.al-notice-titie').width();
+  $('.al-notice-div').css('marginRight',-(noticeTitle/2));
+  // console.log(noticeTitle );
+    $(function() {
+        xiaoxiTishi();
+        function  xiaoxiTishi(){
+            $.get('?c=staff&a=ajaxMessageTishi', function(rs){
+                if(rs.code == 0){
+                    $('.xiaoxi-tishi').removeClass('hidden');
+                }else{
+                    $('.xiaoxi-tishi').addClass('hidden');
+                }
+            }, 'json');
+        }
+    });
+    
+    
+<{if $signPackage}>
+
+wx.config({
+    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+    appId: '<{$smarty.const.WX_APP_ID}>', // 必填，公众号的唯一标识
+    timestamp: <{$signPackage.timestamp}>, // 必填，生成签名的时间戳
+    nonceStr: '<{$signPackage.nonceStr}>', // 必填，生成签名的随机串
+    signature: '<{$signPackage.signature}>',// 必填，签名，见附录1
+    jsApiList: ['startRecord', 'stopRecord', 'playVoice', 'pauseVoice', 'stopVoice', 'onVoicePlayEnd', 'uploadVoice', 'onVoiceRecordEnd', 'downloadVoice'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+});
+
+<{/if}>
+ 
+ 
+ //*******************微信语音上传 ************************//
+
+var recoderStatus = false;
+var audioPlayStatus = false;
+var audioPlayer = null;
+var audioLocalId = null;
+var recorderDialog = null;
+var textDialog = null;
+
+function audioMessage() {
+  recorderDialog = BootstrapDialog.show({
+    title: '',
+    cssClass: 'dialog-no-title',
+    message: '<div id="dialog-audio-recorder"><div id="recorder-audio-player">请点击按钮开始录音（请限制在 60 秒以内，超出部分，小诺说不完哦）</div><div id="dialog-audio-recorder-btn" class="width-100 text-center"><button type="button" class="btn btn-lg btn-default" onclick="recorder(this)"><i class="iconfont">&#xe610;</i> 开始录音</button></div></div>',
+    onshow: function(dialog) {
+        dialog.getButton('voice-message-btn-ok').disable();
+    },
+    buttons: [{
+      id: 'btn-cancel',
+      label: '取消',
+      cssClass: 'btn btn-default',
+      autospin: false,
+      action: function(dialogRef){
+          if(audioPlayStatus) {
+            audioPlayStatus = false;
+            wx.stopVoice({
+                localId: audioLocalId // 需要停止的音频的本地ID，由stopRecord接口获得
+            });
+          }
+          dialogRef.close();
+      }
+    },
+    {
+      id: 'voice-message-btn-ok',
+      label: '确定',
+      cssClass: 'btn btn-success', 
+      autospin: false,
+      action: function(dialogRef){
+          if(audioPlayStatus) {
+            audioPlayStatus = false;
+            wx.stopVoice({
+                localId: audioLocalId // 需要停止的音频的本地ID，由stopRecord接口获得
+            });
+          }
+          wx.uploadVoice({
+              localId: audioLocalId, // 需要上传的音频的本地ID，由stopRecord接口获得
+              isShowProgressTips: 1, // 默认为1，显示进度提示
+              success: function (res) {
+                  var serverId = res.serverId; // 返回音频的服务器端ID
+                  $.get('?c=staff&a=downloadVoice&teacher_id=<{$loginUser.id}>&serverId=' + serverId, function(resp) {
+                  
+                      if(resp.code == 0) {
+                          $('#voice_id').val(resp.voice_id);
+                          $('.notice-button').html('<button onclick="submitDliverNotice(this)" class="btn btn-success" type="button">确认</button>');
+                          //增加语音消息
+                          $('#empty-message-list').remove();
+                          $('#message-list').prepend(resp.html);
+                      } else {
+                          toast(resp.message);
+                      }
+                  }, 'json');
+                  
+              }
+          });
+          dialogRef.close();
+      }
+    }]
+  });
+}
+
+function recorder(btn) {
+  if(recoderStatus) {
+    recoderStatus = false;
+    $(btn).removeClass('btn-danger');
+    $(btn).addClass('btn-default');
+    $(btn).html('<i class="iconfont">&#xe610;</i> 开始录音</button>');
+
+    wx.stopRecord({
+        success: function (res) {
+            audioLocalId = res.localId;
+            $('#recorder-audio-player').html('<div class="audio-message" onclick="audioPlay(this, \'' + audioLocalId + '\')"><img src="img/audio.gif"></div>');
+            recorderDialog.enableButtons(true);
+        }
+    });
+  } else {
+    recoderStatus = true;
+    $(btn).removeClass('btn-default');
+    $(btn).addClass('btn-danger');
+    $(btn).html('<i class="iconfont">&#xe611;</i> 停止录音</button>');
+    $('#recorder-audio-player').html('录音中...');
+
+    wx.startRecord();
+
+    wx.onVoiceRecordEnd({
+        // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+        complete: function (res) {
+            audioLocalId = res.localId;
+            $('#recorder-audio-player').html('<div class="audio-message" onclick="audioPlay(this, \'' + audioLocalId + '\')"><img src="img/audio.gif"></div>');
+            recorderDialog.enableButtons(true);
+
+            recoderStatus = false;
+            $(btn).removeClass('btn-danger');
+            $(btn).addClass('btn-default');
+            $(btn).html('<i class="iconfont">&#xe610;</i> 开始录音</button>');
+        }
+    });
+  }
+}
+
+function audioPlay(o, id) {
+  if(audioPlayer == null) {
+    audioPlayer = o;
+  } else {
+    $(audioPlayer).html('<img src="img/audio.gif">');
+    audioPlayer = o;
+  }
+  
+  if(audioPlayStatus) {
+    audioPlayStatus = false;
+    wx.stopVoice({
+        localId: id // 需要停止的音频的本地ID，由stopRecord接口获得
+    });
+  } else {
+    audioPlayStatus = true;
+    $(o).html('<img src="img/audio-ani.gif">');
+    wx.playVoice({
+        localId: id // 需要播放的音频的本地ID，由stopRecord接口获得
+    });
+
+    wx.onVoicePlayEnd({
+      success: function (res) {
+        if(audioPlayer != null) {
+          $(audioPlayer).html('<img src="img/audio.gif">');
+        }
+      }
+    });
+  }
+}
+
+function checkTextMessage(o) {
+  if($(o).val() == null || $(o).val().trim().length == 0) {
+    textDialog.getButton('text-message-btn-ok').disable();
+  } else {
+    textDialog.enableButtons(true);
+  }
+}
+
+function downloadAudioPlay(o, serverId) {
+  if(audioPlayer == null) {
+    audioPlayer = o;
+  } else {
+  
+    $(audioPlayer).html('<img src="img/audio.gif">');
+    if(audioPlayStatus && audioPlayer != o) {
+      wx.stopVoice({
+        localId: audioLocalId // 需要停止的音频的本地ID，由stopRecord接口获得
+      });
+      audioPlayStatus = false;
+    }
+    audioPlayer = o;
+  }
+  
+  if(audioPlayStatus) {
+    audioPlayStatus = false;
+    wx.stopVoice({
+        localId: audioLocalId // 需要停止的音频的本地ID，由stopRecord接口获得
+    });
+  } else {
+    wx.downloadVoice({
+        serverId: serverId, // 需要下载的音频的服务器端ID，由uploadVoice接口获得
+        isShowProgressTips: 1, // 默认为1，显示进度提示
+        success: function (res) {
+        
+            audioLocalId = res.localId; // 返回音频的本地ID
+
+            audioPlayStatus = true;
+            $(o).html('<img src="img/audio-ani.gif">');
+            wx.playVoice({
+                localId: audioLocalId // 需要播放的音频的本地ID，由stopRecord接口获得
+            });
+
+            wx.onVoicePlayEnd({
+              success: function (res) {
+                if(audioPlayer != null) {
+                  $(audioPlayer).html('<img src="img/audio.gif">');
+                }
+              }
+            });
+        }
+    });
+  }
+
+}
+
+
+    
+    function audioPlayFromUrl(o, url) {
+      if(audioPlayer == null) {
+        audioPlayer = o;
+      } else {
+        $(audioPlayer).html('<img src="img/audio.gif">');
+        if(audioPlayStatus && audioPlayer != o) {
+          $('#audio-player').html('');
+          audioPlayStatus = false;
+        }
+        audioPlayer = o;
+      }
+      
+      if(audioPlayStatus) {
+        audioPlayStatus = false;
+        $('#audio-player').html('');
+        $(o).html('<img src="img/audio.gif">')
+      } else {
+        audioPlayStatus = true;
+        $('#audio-player').html('<audio src="' + url + '" autoplay="autoplay"></audio>');
+        $(o).html('<img src="img/audio-ani.gif">')
+      }
+    }
+/******************************************************************/
+ 
+ 
+ 
+    function modalTan(){
+        $("#notice_modal").modal('show');
+        $('#notice_modal').find('.modal-dialog').css({  
+            'margin-top':'50px'
+        });
+    }
+    
+    function  deliverNoticeSubmit(){
+        $('.nav-notice').removeClass('hidden');
+        
+    }
+    
+    $("#notice_comment").keyup(function(){
+        var val_n = $(this).val();
+        if(val_n.length >0){
+            $('.notice-button').html('<button onclick="submitDliverNotice(this)" class="btn btn-success" type="button">确认</button>');
+        }else{
+            $('.notice-button').html('<button onclick="quxian()" class="btn btn-danger" type="button">取消</button>');
+        }
+    });
+    
+    function noticeHuifuComment(parent_id){
+        $("#parent_id").val(parent_id);
+        $('#notice_comment').val('');
+        $('.nav-notice').removeClass('hidden');
+    }
+    
+    var number = 1;
+    function submitDliverNotice(obg){
+        var l = Ladda.create(obg);
+        l.start();
+        
+        var is_comment_type= "";
+        if($.trim($('#notice_comment').val()).length > 0 ){
+            is_comment_type = 1;
+        }else if($.trim($('#voice_id').val()).length > 0 ){
+            is_comment_type = 2;
+        }else{
+            is_comment_type = 0;
+        }
+        $('#is_comment_type').val(is_comment_type);
+        
+        
+        if(number == 1){
+            number = 2;
+            $.post('?c=staff&a=ajaxClassNoticeReplyComment', $('#classNoticeReply_form').serialize(), function(rs){
+               if(rs.code == 0){
+                    alert('回复成功。');
+                    location.reload();
+               }else{
+                    toast(rs.message);
+               }
+               number = 1;
+            },'json');
+        }else{
+            toast('不能重复提交。')
+        }
+        l.stop();
+    }
+    
+    function quxian(){
+        $("#notice_comment").val('');
+        $('.nav-notice').addClass('hidden');
+    }
+  
+    
+    </script>

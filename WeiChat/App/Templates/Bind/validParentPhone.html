@@ -1,0 +1,62 @@
+<!-- logo -->
+<div class="row top-nav-bar">
+    <div class="text-left">
+    </div>
+    <div class="col-xs-9 text-center">
+        <{include file="../Common/logo.html"}>
+    </div>
+    <div class="col-xs-3 text-right logo-title">
+        <h4 class="text-center">家长电话</h4>
+    </div>
+</div>
+<!-- /.logo -->
+
+<div class="row user-profile-body">
+
+  <div class="panel panel-default no-margin">
+    
+    <div class="panel-heading no-bottom">
+        <form name="role_form" id="role_form" method="post">
+            <input type="hidden" name="complete" value="complete">
+        
+            <div id="parent-role">
+                <div class="form-group">
+                  <label for="form-phone">请输入<{$student_name}>小朋友<{$relation_title}>的电话号码：</label>
+                  <div style="font-size: 16px;"><{$phone_front}>  <input id="phone_middle" type="tel" class="form-control" size="5" style="width: inherit;display: inline-block;font-size: 16px;" placeholder="请输入" name="form[phone_middle]">  <{$phone_end}></div>
+                </div>
+            </div>
+            
+            <div class="text-center padding-top-15">
+                <button type="button" class="btn btn-danger width-100 ladda-button" data-style="expand-left" data-size="l" onclick="javascript:submitBind();">确定</button>
+            </div>
+        </form>
+    </div>
+    
+  </div>
+
+</div>
+
+<script type="text/javascript">
+
+function submitBind() {
+    var valid = true;
+    var phone_middle = $('#phone_middle').val()
+
+    if(phone_middle == '' || phone_middle.length != 4) {
+        toast('请输入正确的号码');
+        valid = false;
+    }
+
+    if(valid) {
+        $.post('?c=bind&a=validParentPhone&sid=<{$smarty.get.sid}>&pid=<{$smarty.get.pid}>', $('#role_form').serialize(), function(resp) {
+            if(resp.code == 0) {
+                location.href = '?c=index&a=message';
+            }
+            else {
+                toast(resp.message);
+            }
+        }, 'json');
+    }
+}
+
+</script>
